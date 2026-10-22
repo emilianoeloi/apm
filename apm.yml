@@ -1,0 +1,11 @@
+name: harness
+version: "0.1.0"
+description: Dev harness (fase proposal/apply, guards de escrita/bash, skills de SDLC e fitness functions) extraído do projeto cowboy.
+author: Emiliano Barbosa
+license: MIT
+type: hybrid
+targets: [claude, copilot]
+includes: auto
+dependencies:
+  apm: []
+  mcp: []
