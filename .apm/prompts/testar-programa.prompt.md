@@ -4,7 +4,7 @@ description: Testa o programa COBOL com diferentes cenários
 mode: agent
 ---
 
-# 🖥️ Missão: Testar a Calculadora COBOL
+# 🖥 Missão: Testar a Calculadora COBOL
 
 ## Contexto
 
@@ -151,7 +151,7 @@ Após todos os testes, crie um resumo:
 ## Conclusão
 [Aprovado/Reprovado com observações]
 
-Calculadora COBOL testada e funcionando! 🖥️
+Calculadora COBOL testada e funcionando! 🖥
 ```
 
 ## Após Completar
@@ -160,4 +160,4 @@ Apresente o relatório completo de testes.
 Sugira revisar com `@cobol-reviewer` se desejar.
 Celebre o sucesso do projeto!
 
-Vamos testar como um mainframe! 🖥️
+Vamos testar como um mainframe! 🖥

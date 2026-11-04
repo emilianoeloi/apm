@@ -4,7 +4,7 @@ description: Cria a estrutura inicial do programa COBOL para a calculadora
 mode: agent
 ---
 
-# 🖥️ Missão: Criar Estrutura do Programa COBOL
+# 🖥 Missão: Criar Estrutura do Programa COBOL
 
 ## Contexto
 
@@ -102,4 +102,4 @@ O arquivo deve conter:
 Informe que a estrutura foi criada e sugira usar o próximo prompt:
 `implementar-soma.prompt.md`
 
-Vamos criar código COBOL! 🖥️
+Vamos criar código COBOL! 🖥

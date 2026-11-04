@@ -4,7 +4,7 @@ description: Adiciona a operação de subtração na Calculadora COBOL com menu 
 mode: agent
 ---
 
-# 🖥️ Missão: Implementar Função de Subtração
+# 🖥 Missão: Implementar Função de Subtração
 
 ## Contexto
 
@@ -202,4 +202,4 @@ Programa encerrado com sucesso!
 Mostre o código completo e as saídas dos dois casos de teste.
 Sugira revisar com o agente `cobol-reviewer.agent.md`.
 
-Vamos subtrair em COBOL! 🖥️
+Vamos subtrair em COBOL! 🖥

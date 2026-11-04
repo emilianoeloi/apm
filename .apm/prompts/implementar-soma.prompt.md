@@ -4,7 +4,7 @@ description: Implementa a função de soma na Calculadora COBOL
 mode: agent
 ---
 
-# 🖥️ Missão: Implementar Função de Soma
+# 🖥 Missão: Implementar Função de Soma
 
 ## Contexto
 
@@ -112,4 +112,4 @@ Programa encerrado com sucesso!
 Mostre o código completo e a saída do programa.
 Sugira usar o próximo prompt: `testar-programa.prompt.md`
 
-Vamos somar em COBOL! 🖥️
+Vamos somar em COBOL! 🖥
