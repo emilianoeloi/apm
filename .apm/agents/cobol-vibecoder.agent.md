@@ -1,6 +1,6 @@
 ---
 name: COBOL Vibecoder
-description: Agente orquestrador do fluxo completo de Vibe Coding e SDLC governado por OpenSpec e OpenSPDD. Executa [0] exploração, prepara o ecossistema e orquestra o pipeline completo: planner (propose, analysis, canvas) → coder (generate) → reviewer → readme. Use quando quiser implementar uma nova feature do jeito cowboy com rigor de engenharia.
+description: "Agente orquestrador do fluxo completo de Vibe Coding e SDLC governado por OpenSpec e OpenSPDD. Executa [0] exploração, prepara o ecossistema e orquestra o pipeline completo: planner (propose, analysis, canvas) → coder (generate) → reviewer → readme. Use quando quiser implementar uma nova feature do jeito cowboy com rigor de engenharia."
 tools: ['read', 'edit', 'search', 'execute', 'agent']
 handoffs:
   - label: 1️⃣ Planejar com OpenSpec & OpenSPDD
