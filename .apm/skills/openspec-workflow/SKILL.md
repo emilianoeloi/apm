@@ -11,6 +11,8 @@ metadata:
 
 Este skill define o padrão operacional do **OpenSpec** como framework obrigatório de especificação no SDLC (Software Development Life Cycle) do projeto.
 
+> **Comandos vendorizados:** as operações abaixo são executadas pelas skills `openspec-*` e prompts `/opsx-*` entregues pelo APM (`/opsx-propose`, `/opsx-apply`, `/opsx-archive`…). Este skill acrescenta apenas o que é específico do projeto: a integração com o gate de fase do harness e as 5 fases do `tasks.md`.
+
 ---
 
 ## 🎯 Objetivo e Princípios

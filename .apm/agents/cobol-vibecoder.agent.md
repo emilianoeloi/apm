@@ -93,7 +93,7 @@ python3 scripts/harness/phase_cli.py set proposal <nome-da-change>
 *O hook `pre-tool-write-guard.py` garante que escrita em código (`src/`, `docs/`) seja bloqueada, permitindo apenas artefatos de planejamento (`openspec/`, `spdd/`).*
 
 ### 4. Preparar o Ecossistema de Customizações
-Verifique se `AGENTS.md`, `copilot-instructions.md` e as skills relevantes (`cobol-calculadora`, `openspec-workflow`, `openspdd-workflow`) precisam de novos exemplos ou parâmetros.
+Verifique se `AGENTS.md`, `copilot-instructions.md` e as skills relevantes (`cobol-calculadora`, `openspec-workflow`) precisam de novos exemplos ou parâmetros.
 
 ### 5. Disparar o Planejamento (Handoff para Planner)
 Transfira para o **COBOL Planner** com o resultado da sua exploração:
