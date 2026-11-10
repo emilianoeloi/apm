@@ -156,7 +156,7 @@ description: Descrição clara do que o skill faz
 |-------|-----------|-----------|
 | **cobol-calculadora** | Criar calculadoras em COBOL | [.github/skills/cobol-calculadora/SKILL.md](.github/skills/cobol-calculadora/SKILL.md) |
 | **openspec-workflow** | Governança SDLC com OpenSpec (opsx-propose, tasks, validation) | [.github/skills/openspec-workflow/SKILL.md](.github/skills/openspec-workflow/SKILL.md) |
-| **openspdd-workflow** | Engenharia de prompts estruturados via REASONS Canvas (spdd-analysis, spdd-reasons-canvas, spdd-generate) | [.github/skills/openspdd-workflow/SKILL.md](.github/skills/openspdd-workflow/SKILL.md) |
+| **spdd-analysis / spdd-reasons-canvas / spdd-generate** | OpenSPDD original: análise estratégica, REASONS Canvas e geração de código a partir do canvas | [.github/skills/spdd-reasons-canvas/SKILL.md](.github/skills/spdd-reasons-canvas/SKILL.md) |
 | **readme-manutencao** | Manter 3 READMEs sincronizados | [.github/skills/readme-manutencao/SKILL.md](.github/skills/readme-manutencao/SKILL.md) |
 | **vibe-coding-fundamentals** | Entender VibeCoding e Agent Mode | Este arquivo |
 | **architecture-fitness-functions** | Fitness functions e sensores determinísticos | [.github/skills/architecture-fitness-functions/SKILL.md](.github/skills/architecture-fitness-functions/SKILL.md) |
@@ -255,7 +255,7 @@ AGENTS.md
 ├── Skills/
 │   ├── cobol-calculadora/
 │   ├── openspec-workflow/        ← Spec-Driven Development (opsx-propose, tasks)
-│   ├── openspdd-workflow/        ← REASONS Canvas (analysis, canvas, generate)
+│   ├── spdd-*/                   ← OpenSPDD original (analysis, canvas, generate, sync)
 │   ├── readme-manutencao/
 │   └── vibe-coding-fundamentals/
 │       ↓ Conhecimento de domínio

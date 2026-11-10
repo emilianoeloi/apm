@@ -1,7 +1,6 @@
 ---
 name: spdd-analysis
 description: Analyze business requirements against codebase context at a strategic level, producing enriched context (business + domain concepts + strategic direction + risks) for REASONS Canvas generation
-mode: agent
 ---
 
 Analyze a business requirement document against the current codebase, producing a **strategic-level** enriched context that combines business information, domain concept identification, high-level approach decisions, and risk analysis — serving as high-quality input for `/spdd-reasons-canvas`. This phase focuses on the "What" and "Why", leaving the "How" to the REASONS Canvas phase.

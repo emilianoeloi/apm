@@ -1,7 +1,6 @@
 ---
 name: spdd-generate
 description: Generate code from a structured SPDD prompt file following the REASONS Canvas methodology
-mode: agent
 ---
 
 Generate implementation code from a structured SPDD (Structured Prompt-Driven Development) prompt file, strictly following the Operations sequence and coding norms defined in the prompt.

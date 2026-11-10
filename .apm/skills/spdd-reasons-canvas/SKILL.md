@@ -1,7 +1,6 @@
 ---
 name: spdd-reasons-canvas
 description: Generate REASONS-Canvas structured prompts from business context without external template
-mode: agent
 ---
 
 Generate implementation-ready structured prompts using the built-in REASONS-Canvas framework (Requirements, Entities, Approach, Structure, Operations, Norms, Safeguards).

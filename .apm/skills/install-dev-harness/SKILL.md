@@ -38,7 +38,7 @@ Quatro peças, cada uma com um dono:
 |---|---|---|
 | **APM** (`apm.yml`) | distribuição | entrega skills, agents, prompts e hooks para `claude` e `copilot` com um único `apm install` |
 | **OpenSpec** | especificação | skills `openspec-*` e prompts `/opsx-*` **vendorizados neste repo**; o CLI `openspec` cria `openspec/` e roda `validate`/`archive` |
-| **OpenSPDD** | prompt estruturado | prompts `/spdd-analysis`, `/spdd-reasons-canvas`, `/spdd-generate`, `/spdd-sync`, `/spdd-prompt-update` **vendorizados neste repo**; não exige o CLI `openspdd` no projeto consumidor |
+| **OpenSPDD** | prompt estruturado | skills originais `spdd-analysis`, `spdd-reasons-canvas`, `spdd-generate`, `spdd-sync`, `spdd-prompt-update` **vendorizadas neste repo**, sem alterações; não exige o CLI `openspdd` no projeto consumidor |
 | **Harness gate** (hooks + `phase_cli.py`) | enforcement | bloqueia código em `proposal`, bloqueia `git push`/`rm -rf`/credenciais sempre |
 
 Via APM os comandos têm o mesmo nome nos dois hosts: `/opsx-*` e `/spdd-*`
@@ -57,10 +57,11 @@ como processo externo — funcionam para qualquer stack do projeto alvo.
 As skills/prompts de OpenSpec e OpenSPDD são cópias controladas, geradas
 por `python3 scripts/sync-vendor.py` (exige os CLIs `openspec` e `openspdd`
 instalados). O script roda os geradores num repo temporário, copia o
-resultado para `.apm/skills/openspec-*` e `.apm/prompts/{opsx,spdd}-*.prompt.md`
-e registra as versões em `vendor.json`. Faça isso ao atualizar os CLIs, revise
+resultado para `.apm/skills/openspec-*`, `.apm/prompts/opsx-*.prompt.md` e
+`.apm/skills/spdd-*` (OpenSPDD no formato original de skills, sem edição) e
+registra as versões em `vendor.json`. Faça isso ao atualizar os CLIs, revise
 o diff e só então publique. Customizações locais devem ir para as skills
-autorais (`openspec-workflow`, `openspdd-workflow`), nunca para os arquivos
+autorais (`openspec-workflow`), nunca para os arquivos
 vendorizados — o próximo sync os sobrescreve.
 
 ## Quando usar isto vs. quando não
@@ -112,8 +113,8 @@ faltar, informe ao usuário e pare — não instale ferramentas globais sem pedi
    apm install emilianoeloi/apm#<tag>     # ou adicione em apm.yml → dependencies.apm
    apm install --target claude,copilot    # reaplica para os hosts escolhidos
    ```
-   Resultado: `.claude/commands/{opsx,spdd}-*.md`,
-   `.claude/skills/openspec-*` e `.github/prompts/{opsx,spdd}-*.prompt.md`.
+   Resultado: `.claude/commands/opsx-*.md`, `.claude/skills/{openspec,spdd}-*`
+   e `.github/prompts/opsx-*.prompt.md`.
    Hooks são código executável: se o APM pedir, use `apm approve` depois de
    revisar. Use `apm install --dry-run` antes quando o projeto já tiver
    arquivos locais.
@@ -152,7 +153,7 @@ faltar, informe ao usuário e pare — não instale ferramentas globais sem pedi
    echo '{"source":"new"}' | python3 scripts/hooks/session-start.py
    openspec list
    python3 scripts/harness/phase_cli.py show
-   ls .claude/commands/spdd-*.md .github/prompts/opsx-*.prompt.md
+   ls .claude/skills/spdd-*/SKILL.md .github/prompts/opsx-*.prompt.md
    ```
    O primeiro comando deve imprimir JSON com `additionalContext` (fase não
    declarada + checklist de guias); o `ls` confirma que o APM entregou os

@@ -1,7 +1,6 @@
 ---
 name: spdd-prompt-update
 description: Update an existing SPDD prompt file with new requirements or architectural changes while preserving the REASONS Canvas structure
-mode: agent
 ---
 
 Update an existing SPDD (Structured Prompt-Driven Development) prompt file with new requirements, architectural changes, or refinements while maintaining the REASONS Canvas structure and following all specification rules.
