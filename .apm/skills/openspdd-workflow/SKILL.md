@@ -11,6 +11,8 @@ metadata:
 
 Este skill define o padrão do **OpenSPDD** (Spec-Driven Prompt Development), a metodologia de transição entre a especificação arquitetural e a geração determinística de código COBOL.
 
+> **Comandos vendorizados:** `/spdd-analysis`, `/spdd-reasons-canvas`, `/spdd-generate`, `/spdd-sync` e `/spdd-prompt-update` são prompts entregues pelo APM (genéricos, mantidos via `scripts/sync-vendor.py`). Este skill descreve a **especialização COBOL** do fluxo — IDs `COB-XXX`, colunas e quality gates — para ser aplicada junto a eles.
+
 ---
 
 ## 🎯 Por que OpenSPDD?

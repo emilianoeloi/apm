@@ -37,12 +37,12 @@ bloqueia `git commit`/`add`/`merge`/`rebase`. Consulte a fase atual com
 
 | Etapa | Comando | Fase |
 |---|---|---|
-| Propor | `/opsx:propose` (Copilot: `/opsx-propose`) | `proposal` |
+| Propor | `/opsx-propose` | `proposal` |
 | Validar | `openspec validate <change> --strict` | `proposal` |
 | Analisar | `/spdd-analysis openspec/changes/<change>` | `proposal` |
 | Canvas | `/spdd-reasons-canvas spdd/analysis/<arquivo>` | `proposal` |
 | Gerar | `/spdd-generate spdd/prompt/<canvas>` | `apply` |
-| Fechar tasks | `/opsx:apply` + `openspec validate <change> --strict` | `apply` |
+| Fechar tasks | `/opsx-apply` + `openspec validate <change> --strict` | `apply` |
 | Arquivar | `openspec archive <change>` | `set done <change>` |
 
 ## Quality gates mínimos

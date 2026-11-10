@@ -24,7 +24,7 @@ implementação**:
  fase "proposal" (escrita em código bloqueada)          fase "apply"
 ┌───────────────────────────────────────────────┐   ┌──────────────────────────────┐
 │ OpenSpec      OpenSPDD            OpenSPDD    │   │ OpenSPDD       OpenSpec      │
-│ /opsx:propose → /spdd-analysis → /spdd-       │ → │ /spdd-generate → /opsx:apply │ → /opsx:archive
+│ /opsx-propose → /spdd-analysis → /spdd-       │ → │ /spdd-generate → /opsx-apply │ → /opsx-archive
 │ (proposal,      (contexto,        reasons-    │   │ (código a      (marca tasks, │   (fase limpa)
 │  design, tasks)  riscos)          canvas)     │   │  partir do     validate)     │
 │                                   (contrato)  │   │  canvas)                     │
@@ -36,17 +36,32 @@ Quatro peças, cada uma com um dono:
 
 | Peça | Dono | O que fornece |
 |---|---|---|
-| **APM** (`apm.yml`) | distribuição | skills, agents, prompts e hooks do harness para `claude` e `copilot` (`targets`) |
-| **OpenSpec** (`openspec` CLI) | especificação | `openspec/`, comandos `/opsx:*` (Claude) e `/opsx-*` (Copilot), `validate`/`archive` |
-| **OpenSPDD** (`openspdd` CLI) | prompt estruturado | comandos `/spdd-analysis`, `/spdd-reasons-canvas`, `/spdd-generate`, `/spdd-sync`, `/spdd-prompt-update` |
+| **APM** (`apm.yml`) | distribuição | entrega skills, agents, prompts e hooks para `claude` e `copilot` com um único `apm install` |
+| **OpenSpec** | especificação | skills `openspec-*` e prompts `/opsx-*` **vendorizados neste repo**; o CLI `openspec` cria `openspec/` e roda `validate`/`archive` |
+| **OpenSPDD** | prompt estruturado | prompts `/spdd-analysis`, `/spdd-reasons-canvas`, `/spdd-generate`, `/spdd-sync`, `/spdd-prompt-update` **vendorizados neste repo**; não exige o CLI `openspdd` no projeto consumidor |
 | **Harness gate** (hooks + `phase_cli.py`) | enforcement | bloqueia código em `proposal`, bloqueia `git push`/`rm -rf`/credenciais sempre |
+
+Via APM os comandos têm o mesmo nome nos dois hosts: `/opsx-*` e `/spdd-*`
+(o `/opsx:*` com dois-pontos é do `openspec init` nativo do Claude).
 
 Os hooks são scripts Python stdlib-only (só `python3` é requisito) e rodam
 como processo externo — funcionam para qualquer stack do projeto alvo.
 
-> **Não instale o harness “à mão” se o APM já o entrega.** Os arquivos em
-> `templates/` são o fallback para projetos que não usam APM ou para o
-> passo 5 (scripts de hook), que o APM ainda não materializa sozinho.
+> **Não rode `openspec init --tools claude,...` nem `openspdd generate` no
+> projeto consumidor** — o APM já entrega esses arquivos e uma segunda cópia
+> duplica comandos. Os arquivos em `templates/` são o fallback para os
+> scripts de hook, que o APM ainda não materializa sozinho.
+
+## Mantendo o vendor (mantenedores deste repo)
+
+As skills/prompts de OpenSpec e OpenSPDD são cópias controladas, geradas
+por `python3 scripts/sync-vendor.py` (exige os CLIs `openspec` e `openspdd`
+instalados). O script roda os geradores num repo temporário, copia o
+resultado para `.apm/skills/openspec-*` e `.apm/prompts/{opsx,spdd}-*.prompt.md`
+e registra as versões em `vendor.json`. Faça isso ao atualizar os CLIs, revise
+o diff e só então publique. Customizações locais devem ir para as skills
+autorais (`openspec-workflow`, `openspdd-workflow`), nunca para os arquivos
+vendorizados — o próximo sync os sobrescreve.
 
 ## Quando usar isto vs. quando não
 
@@ -54,21 +69,22 @@ Use quando o projeto quer **gate de fase real** + fluxo SDD. Se o objetivo é
 só documentar convenções, um `AGENTS.md`/`CLAUDE.md` basta — não instale
 hooks que o time não vai entender por que estão bloqueando.
 
-Já tem OpenSpec/OpenSPDD instalados de forma legada (pré-APM)? Rode os
-passos 2–3 mesmo assim: `openspec init` detecta e migra arquivos legados, e
-`openspdd generate -f` atualiza os templates.
+Já tem OpenSpec/OpenSPDD instalados de forma legada (pré-APM), com
+`.claude/commands/opsx/`, `.claude/commands/spdd-*.md` ou
+`.github/copilot-prompts/`? Avise o usuário que o `apm install` vai entregar
+`/opsx-*` e `/spdd-*` e que os arquivos legados ficam duplicados — proponha
+removê-los, mas só depois de confirmar.
 
 ## Pré-requisitos
 
 ```bash
 apm --version        # Agent Package Manager
-openspec --version   # >= 1.x
-openspdd --version
+openspec --version   # >= 1.x (init, validate, archive)
 python3 --version
 ```
 
-Se algum faltar, informe ao usuário e pare — não instale ferramentas globais
-sem pedir.
+`openspdd` não é necessário no projeto consumidor. Se algum pré-requisito
+faltar, informe ao usuário e pare — não instale ferramentas globais sem pedir.
 
 ## Passos
 
@@ -88,40 +104,31 @@ sem pedir.
    - Diretórios reais de código e testes (`code_prefixes`).
    - Idioma dos artefatos OpenSpec (`--language`), se não for o padrão.
    - Quer só os hooks de segurança sem gate de fase? Então deixe
-     `planning_write_prefixes`/`code_prefixes` como `[]` e pule o SPDD.
+     `planning_write_prefixes`/`code_prefixes` como `[]` e pule os passos 4–5.
 
-3. **Instale o harness via APM** (skills, agents, prompts, hooks):
+3. **Instale o harness via APM** — entrega as skills `openspec-*`, os prompts
+   `/opsx-*` e `/spdd-*`, agents e hooks para os hosts escolhidos:
    ```bash
    apm install emilianoeloi/apm#<tag>     # ou adicione em apm.yml → dependencies.apm
    apm install --target claude,copilot    # reaplica para os hosts escolhidos
    ```
+   Resultado: `.claude/commands/{opsx,spdd}-*.md`,
+   `.claude/skills/openspec-*` e `.github/prompts/{opsx,spdd}-*.prompt.md`.
    Hooks são código executável: se o APM pedir, use `apm approve` depois de
    revisar. Use `apm install --dry-run` antes quando o projeto já tiver
    arquivos locais.
 
-4. **Inicialize o OpenSpec** para os hosts escolhidos:
+4. **Crie o estado do OpenSpec** (só `openspec/`; os comandos já vieram do APM):
    ```bash
-   openspec init --tools claude,github-copilot --no-animation --no-copilot-cloud
+   openspec init --tools none --no-animation --no-copilot-cloud
    ```
-   Cria `openspec/{config.yaml,specs/,changes/archive/}`, skills
-   `openspec-*` e os comandos `/opsx:*` (Claude, em `.claude/commands/opsx/`)
-   e `/opsx-*` (Copilot, em `.github/prompts/`). Use `--tools all|none` ou
-   outra lista conforme o passo 2. Depois, registre em
+   Gera `openspec/{config.yaml,specs/,changes/archive/}`. Depois, registre em
    `openspec/config.yaml` (`context:`/`rules:`) apenas o que o agente não
    infere do código — por exemplo, “propostas devem listar quality gates”.
 
-5. **Inicialize o OpenSPDD** (um `generate` por host — `--all` exige `-t`):
-   ```bash
-   openspdd generate --all -f -t claude-code      # → .claude/commands/spdd-*.md
-   openspdd generate --all -f -t github-copilot   # → .github/copilot-prompts/spdd-*.md
-   ```
-   Crie também as pastas de artefatos (`spdd/analysis/`, `spdd/prompt/`) —
-   elas precisam estar em `planning_write_prefixes` para a fase `proposal`
-   permitir escrita nelas.
-   *Nota Copilot:* `openspdd` grava em `.github/copilot-prompts/`, mas o VS
-   Code só descobre prompts em `.github/prompts/*.prompt.md`. Se o usuário
-   quiser `/spdd-*` no chat do Copilot, copie/renomeie os arquivos para
-   `.github/prompts/<nome>.prompt.md` e confirme.
+5. **Crie as pastas de artefatos do SPDD**: `spdd/analysis/` e `spdd/prompt/`
+   (com `.gitkeep`). Elas precisam estar em `planning_write_prefixes` para a
+   fase `proposal` permitir escrita nelas.
 
 6. **Instale o gate de fase** copiando `templates/` para o projeto:
 
@@ -143,24 +150,24 @@ sem pedir.
 7. **Verifique**:
    ```bash
    echo '{"source":"new"}' | python3 scripts/hooks/session-start.py
-   openspec validate --all 2>&1 | tail -3   # sem changes ainda: ok/vazio
    openspec list
-   openspdd list
    python3 scripts/harness/phase_cli.py show
+   ls .claude/commands/spdd-*.md .github/prompts/opsx-*.prompt.md
    ```
    O primeiro comando deve imprimir JSON com `additionalContext` (fase não
-   declarada + checklist de guias).
+   declarada + checklist de guias); o `ls` confirma que o APM entregou os
+   prompts nos dois hosts.
 
 8. **Ensine o mapeamento fluxo ↔ fase** (inclua no `AGENTS.md`/`CLAUDE.md`):
 
    | Etapa do fluxo | Comando | Fase do harness |
    |---|---|---|
-   | Propor | `/opsx:propose` (Claude) · `/opsx-propose` (Copilot) | `phase_cli.py set proposal <change>` **antes** |
+   | Propor | `/opsx-propose` | `phase_cli.py set proposal <change>` **antes** |
    | Validar spec | `openspec validate <change> --strict` | `proposal` |
    | Analisar | `/spdd-analysis openspec/changes/<change>` → `spdd/analysis/` | `proposal` |
    | Canvas | `/spdd-reasons-canvas spdd/analysis/<arquivo>` → `spdd/prompt/` | `proposal` |
    | Gerar | `/spdd-generate spdd/prompt/<canvas>` | `phase_cli.py set apply <change>` **antes** |
-   | Aplicar/fechar tasks | `/opsx:apply` · `/opsx-apply` + `openspec validate <change> --strict` | `apply` |
+   | Aplicar/fechar tasks | `/opsx-apply` + `openspec validate <change> --strict` | `apply` |
    | Reconciliar | `/spdd-sync` (código → canvas) | `apply` |
    | Arquivar | `openspec archive <change>` | `phase_cli.py set done <change>` (qualquer fase ≠ `proposal` libera) |
 
