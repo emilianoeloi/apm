@@ -7,7 +7,7 @@ Consumo (no projeto):
 ```yaml
 dependencies:
   apm:
-    - emilianoeloi/apm#v0.2.0
+    - emilianoeloi/apm#v0.3.0
 ```
 
 Layout: `.apm/skills/*`, `.apm/prompts/*`, `.apm/agents/*`, `.apm/hooks/*.json`, `.apm/scripts/*` (hooks, phase_cli, pre-commit), `.apm/templates/*` (harness.config.json, quadrante).
