@@ -1,0 +1,24 @@
+name: release-please
+
+# Abre (e mantém) um "PR de release" com a versão e o CHANGELOG calculados pelos commits
+# convencionais. Mesclar esse PR cria a tag vX.Y.Z e o GitHub Release.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json

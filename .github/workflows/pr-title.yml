@@ -1,0 +1,24 @@
+name: pr-title
+
+# O título do PR vira a mensagem do commit (squash) e alimenta o cálculo da versão:
+# feat -> MINOR, fix -> PATCH, "!" ou BREAKING CHANGE -> MAJOR.
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  conventional-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Conferir o título (Conventional Commits)
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if ! printf '%s' "$TITLE" | grep -Eq '^(feat|fix|docs|chore|refactor|test|ci|build|perf|revert|style)(\([a-z0-9._/-]+\))?!?: .+'; then
+            echo "Título fora do padrão: $TITLE"
+            echo "Use: tipo(escopo opcional): descrição. Tipos: feat, fix, docs, chore, refactor, test, ci, build, perf, revert, style."
+            exit 1
+          fi
