@@ -6,7 +6,10 @@
       "package-name": "harness",
       "include-v-in-tag": true,
       "changelog-path": "CHANGELOG.md",
-      "extra-files": ["apm.yml"]
+      "extra-files": [
+        "apm.yml"
+      ],
+      "include-component-in-tag": false
     }
   }
 }
