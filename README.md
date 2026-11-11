@@ -33,3 +33,14 @@ git diff                         # revise antes de publicar
 As versões usadas ficam em [vendor.json](vendor.json). Não edite à mão os arquivos vendorizados — o próximo sync os sobrescreve; customizações vão nas skills autorais.
 
 Pendente: confirmar como o APM entrega scripts de hook (ver perguntas na sessão).
+
+## Releases (automáticos)
+
+Os releases saem do GitHub Actions com o [release-please](https://github.com/googleapis/release-please-action):
+
+1. Use **Conventional Commits** nos títulos dos PRs (`feat:`, `fix:`, `docs:`, `chore:`…). O workflow `pr-title` confere.
+2. Ao mesclar na `main`, o bot abre ou atualiza um **PR de release** com a versão nova (`feat` → MINOR, `fix` → PATCH, `!` → MAJOR) e o `CHANGELOG.md`.
+3. **Revisar e mesclar o PR de release** é o ato humano. Ao mesclar, o bot cria a tag `vX.Y.Z` e o GitHub Release.
+4. No consumidor, atualize o `ref` no `apm.yml`, rode `apm install` e commite `apm.yml`, `apm.lock.yaml` e os diretórios implantados.
+
+A versão do `apm.yml` é atualizada pelo bot (linha marcada com `x-release-please-version`); não edite a versão à mão. Tags `v*` são protegidas contra apagar e mover.

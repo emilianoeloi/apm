@@ -1,5 +1,5 @@
 name: harness
-version: "0.3.0"
+version: "0.3.0" # x-release-please-version
 description: Dev harness (fase proposal/apply, guards de escrita/bash, skills de SDLC e fitness functions) extraído do projeto cowboy.
 author: Emiliano Barbosa
 license: MIT
