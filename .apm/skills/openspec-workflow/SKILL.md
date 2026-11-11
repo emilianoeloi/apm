@@ -110,6 +110,9 @@ Quando a change é finalizada e mergeada:
 openspec archive <change-name>
 ```
 
+Depois do merge, rode a **retrospectiva de skills** (skill `skill-retrospective`): decida se algum
+skill conhecido precisa de atualização ou se um skill novo deve nascer, e registre a decisão.
+
 ---
 
 ## 🛡️ Regras de Ouro OpenSpec
