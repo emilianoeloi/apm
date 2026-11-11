@@ -1,5 +1,5 @@
 name: harness
-version: 0.3.0
+version: 0.3.1
 description: >-
   Dev harness (fase proposal/apply, guards de escrita/bash, skills de SDLC e
   fitness functions) extraído do projeto cowboy.
