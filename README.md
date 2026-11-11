@@ -21,6 +21,8 @@ O pacote mantém **vendorizadas** as skills e prompts de OpenSpec e OpenSPDD, en
 | OpenSpec | `skills/openspec-*` (6) e `prompts/opsx-*.prompt.md` | `/opsx-propose`, `/opsx-explore`, `/opsx-apply`, `/opsx-update`, `/opsx-sync`, `/opsx-archive` |
 | OpenSPDD (original, `openspdd generate -t codex`) | `skills/spdd-*` (5) | `/spdd-analysis`, `/spdd-reasons-canvas`, `/spdd-generate`, `/spdd-sync`, `/spdd-prompt-update` |
 
+Depois de cada feature, o skill `skill-retrospective` fecha o ciclo: decide se skills existentes devem ser atualizados ou se um novo deve ser criado.
+
 Skills autorais (`openspec-workflow`, `install-dev-harness`) integram o fluxo com o gate de fase do harness; o OpenSPDD é mantido sem alterações. O estado por projeto (`openspec/`) é criado com `openspec init --tools none`.
 
 ### Atualizando o vendor

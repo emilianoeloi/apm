@@ -44,6 +44,7 @@ bloqueia `git commit`/`add`/`merge`/`rebase`. Consulte a fase atual com
 | Gerar | `/spdd-generate spdd/prompt/<canvas>` | `apply` |
 | Fechar tasks | `/opsx-apply` + `openspec validate <change> --strict` | `apply` |
 | Arquivar | `openspec archive <change>` | `set done <change>` |
+| Retrospectiva de skills | `skill-retrospective` (depois do merge) | `done` |
 
 ## Quality gates mínimos
 
