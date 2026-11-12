@@ -1,5 +1,41 @@
 # Changelog
 
+## Onda 1 — F1: limpeza do cowboy (2026-11-12)
+
+Change `limpeza-do-cowboy`. Ainda sem tag e sem push; a F2, a F3 e o pré-lançamento `1.0.0-alpha.1` vêm depois.
+
+### ⚠ BREAKING
+
+* Removidos os agentes `cobol-vibecoder`, `cobol-planner`, `cobol-coder`, `cobol-reviewer` e `readme-writer`.
+* Removidos os prompts `criar-programa`, `implementar-soma`, `implementar-subtracao`, `implementar-log`, `testar-programa`, `atualizar-readme` e `manutencao-repositorio`.
+* Removidas as skills `cobol-calculadora`, `vibe-coding-fundamentals` e `readme-manutencao`.
+* Removidos o pre-commit que compilava COBOL e o guia `cowboy.instructions.md`. O hook `cowboy.json` já saíra na Onda 0.
+* Quem depende da 0.3.x deve manter a tag `v0.3.1` (aviso de migração no README).
+
+### Mudanças
+
+* `openspec-workflow` sem exemplos COBOL; `HARNESS_QUADRANTE.md` virou modelo com campos a preencher.
+* `apm.yml`: nome `apm` e descrição genérica (a versão segue com o release-please). README público, sem "extraído do cowboy", com aviso de migração.
+* `.harness/` no `.gitignore`.
+* Pacote reimplantado com `apm install --target claude,copilot`: 36 arquivos antigos limpos de `.claude/`, `.agents/` e `.github/`.
+
+### Verificação
+
+* Busca por "cowboy", "cobol", "cobc" e "calculadora" em `.apm/`, `.claude/`, `.agents/`, `.github/agents`, `.github/prompts` e `apm.lock.yaml`: vazia.
+* `session-start.py`, `openspec list`, `phase_cli.py show` e `openspec validate limpeza-do-cowboy --strict`: ok.
+* `.apm/agents/` ficou sem arquivos e a pasta deixou de existir no git (o APM avisa sobre `.gitkeep` em pasta de agentes); a F3 a recria com os agentes `sdlc-*`.
+
+### Observações
+
+* O `apm install` (0.35.0) mostra, a partir da segunda rodada, o aviso "Skill 'harness' replaced overlapping files from another package". Os arquivos implantados estão corretos e o lockfile só lista o pacote local; causa não identificada, vale reportar ao projeto do APM se persistir.
+* Testes numa cópia temporária deixaram 6 recibos de implantação em `~/.apm/deployment-receipts` (arquivos sem efeito neste repositório); não foram removidos.
+
+### Retrospectiva de skills
+
+* `openspec-workflow` (autoral): manda criar `.openspec.yaml` e as pastas à mão, mas o `openspec new change` já faz isso; e a lista de fases das tasks (Propose, Analysis, Canvas, Generate, Review) não bate com os grupos que o schema `spec-driven` pede (cada grupo com seus testes e documentação). Proposta: atualizar o skill (público). Nada publicado.
+* `spdd-reasons-canvas` e `spdd-generate` (vendorizados): os modelos são de backend Java (controller, service, anotações) e servem mal a mudanças de empacotamento ou documentação; adaptei as seções à mão. Como são vendorizados, a orientação para esses casos deve ir no `openspec-workflow` (público), não nos arquivos do vendor.
+* `install-dev-harness`: os furos da Onda 0 seguem abertos (guia de pre-commit no template, fonte local no passo 3, chave `_comment` do `settings.hooks.json`). Skill novo: nenhum necessário.
+
 ## Onda 0 — preparo do repositório (2026-11-12)
 
 Spec: APM_SETUP V1.2. Nenhuma tag e nenhum push; a Onda 1 (1.0.0-alpha.1) ainda não começou.

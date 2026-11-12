@@ -1,8 +1,8 @@
-name: harness
+name: apm
 version: 0.3.1
 description: >-
-  Dev harness (fase proposal/apply, guards de escrita/bash, skills de SDLC e
-  fitness functions) extraído do projeto cowboy.
+  Pacote APM genérico com Lean Inception, Harness e SDLC, em skills, agentes e
+  hooks, para qualquer stack.
 author: Emiliano Barbosa
 license: MIT
 type: hybrid

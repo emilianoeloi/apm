@@ -66,14 +66,14 @@ Objetivo: Criar e validar os artefatos de planejamento sem tocar em código de p
    - `## Impact`: Dependências, arquivos afetados, risco.
 6. **Criar `design.md`**:
    - `## Context`: Estado atual do sistema.
-   - `## Architecture & Design Decisions`: Decisões técnicas (ex.: variáveis COBOL em Working-Storage, novas instruções PROCEDURE DIVISION, tratamento de erro de divisão por zero).
+   - `## Architecture & Design Decisions`: Decisões técnicas (ex.: estruturas de dados, interfaces entre módulos, tratamento de erro).
    - `## Trade-offs & Alternatives Considered`: Alternativas avaliadas.
 7. **Criar `tasks.md`**:
    Checklist hierárquico estruturado pelas fases:
    - `## 1. Fase 1 - Propose (OpenSpec)`
    - `## 2. Fase 2 - Analysis (OpenSPDD)`
    - `## 3. Fase 3 - Canvas (OpenSPDD REASONS)`
-   - `## 4. Fase 4 - Generate (Implementação COBOL)`
+   - `## 4. Fase 4 - Generate (Implementação)`
    - `## 5. Fase 5 - Review & Docs (Validação)`
 8. **Validar a Change**:
    ```bash
@@ -92,9 +92,9 @@ Objetivo: Validar que todas as tarefas foram cumpridas pelo agente de código e 
    - [x] 1.1 Criar proposta OpenSpec
    - [x] 2.1 Concluir análise SPDD
    - [x] 3.1 Gerar REASONS Canvas
-   - [x] 4.1 Implementar em src/CALCULADORA.cbl
-   - [x] 4.2 Compilar com cobc -x
-   - [x] 4.3 Passar nas fitness functions (make fitness)
+   - [x] 4.1 Implementar as Operations do canvas
+   - [x] 4.2 Rodar o build do projeto
+   - [x] 4.3 Passar nos sensores do projeto (comando em harness.config.json)
    ```
 2. Executar validação final:
    ```bash
