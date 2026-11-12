@@ -19,7 +19,8 @@ Change `versao-final-1-0-0`. A prova da calculadora em Go foi aprovada pelo Eló
 
 ### Depois do merge
 
-1. Conferir que o bot atualizou o PR de release para `1.0.0` (título, `apm.yml`, manifesto e CHANGELOG): tags `v*` não se apagam nem se movem.
+1. **Correção (achado depois do merge do #18):** o bot não abriu PR de release, porque os commits desde a tag (`docs`, `docs`, `ci`) não são liberáveis; o log do workflow diz "No user facing commits found". Um `fix` com o rodapé `Release-As: 1.0.0` no commit de squash provoca o PR de release `1.0.0` (documentado no README e no `CLAUDE.md`).
+   Depois disso, conferir o PR de release (título, `apm.yml`, manifesto e CHANGELOG): tags `v*` não se apagam nem se movem.
 2. O Elói mescla o PR de release; nascem a tag `v1.0.0` e o GitHub Release.
 3. Depois da tag: trocar o exemplo de consumo do README para `#v1.0.0`, apontar o `calculadora_go` para a `v1.0.0`, remover `versioning` e `prerelease-type` (com o teste ajustado) e arquivar a change.
 
