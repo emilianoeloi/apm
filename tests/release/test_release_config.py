@@ -16,15 +16,16 @@ def package() -> dict:
     return json.loads(CONFIG.read_text(encoding="utf-8"))["packages"]["."]
 
 
-class PreLancamentoTest(unittest.TestCase):
-    def test_estrategia_de_pre_lancamento(self):
-        pkg = package()
-        self.assertEqual(pkg.get("versioning"), "prerelease")
-        self.assertIs(pkg.get("prerelease"), True)
+class VersaoFinalTest(unittest.TestCase):
+    def test_a_configuracao_propoe_a_versao_final(self):
+        # Prova aprovada: com prerelease falso o bot descarta o sufixo e propõe 1.0.0 a partir de 1.0.0-alpha.N.
+        self.assertIs(package().get("prerelease"), False)
 
-    def test_tipo_gera_exatamente_alpha_1_na_primeira_vez(self):
-        # O tipo vira o primeiro sufixo: 0.3.1 + mudança incompatível = 1.0.0-alpha.1; depois o número sobe sozinho.
-        self.assertEqual(package().get("prerelease-type"), "alpha.1")
+    def test_estrategia_de_pre_lancamento_fica_ate_a_tag_final(self):
+        # Sem a estratégia, a partir de 1.0.0-alpha.1 o bot proporia 2.0.0-alpha.1 ou 1.1.0-alpha.1, e não a 1.0.0.
+        versao = json.loads(MANIFEST.read_text(encoding="utf-8"))["."]
+        if "-" in versao:
+            self.assertEqual(package().get("versioning"), "prerelease")
 
     def test_nenhuma_versao_fixa_pendente(self):
         # release-as esquecido repetiria a mesma versão em toda proposta seguinte.

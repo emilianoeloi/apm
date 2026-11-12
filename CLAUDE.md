@@ -56,7 +56,7 @@ bloqueia `git commit`/`add`/`merge`/`rebase`. Consulte a fase atual com
 ## Cuidados de release
 
 - Não reintroduza `release-as` no `release-please-config.json` (o teste em `tests/release/` falha se voltar) e não mescle o PR de release sem conferir a versão proposta: tags `v*` não se apagam nem se movem.
-- O pré-lançamento `1.0.0-alpha.1` vale até a prova em projeto real; a `1.0.0` final sai trocando `"prerelease"` para `false`.
+- O pré-lançamento `1.0.0-alpha.1` foi publicado e a prova em projeto real foi aprovada; a configuração já está na versão final (`"prerelease": false`). Mantenha `"versioning": "prerelease"` até a tag `v1.0.0` existir (sem ela, o bot propõe `2.0.0-alpha.1` a partir do alpha); depois da tag, remova `versioning` e `prerelease-type` e ajuste o teste.
 - Publicar (mesclar o PR de release) e dar push são atos do desenvolvedor.
 
 ## Escopo

@@ -110,11 +110,10 @@ A linha `version:` do `apm.yml` é atualizada pelo bot (pelo `extra-files` do `r
 
 ### Pré-lançamento da 1.0.0
 
-A primeira publicação da `1.0.0` é um **pré-lançamento**, a `1.0.0-alpha.1`, e a `1.0.0` final só sai depois da prova em um projeto real.
+A `1.0.0-alpha.1` foi o pré-lançamento da `1.0.0`. A prova em um projeto real (a calculadora em Go) foi aprovada, e a configuração do release-please já propõe a `1.0.0` final.
 
 - **Última versão estável:** a `v0.3.1`, até a `1.0.0` sair. O GitHub Release do pré-lançamento é marcado como "pre-release"; a tag `v1.0.0-alpha.1` já está publicada e quem quiser testá-lo aponta para ela de forma explícita (`emilianoeloi/apm#v1.0.0-alpha.1`). Quem não fixa a tag não deve esperar receber um pré-lançamento.
-- **Numeração:** os pré-lançamentos seguintes numeram sozinhos (`1.0.0-alpha.2`, `1.0.0-alpha.3`, …), em qualquer tipo de commit.
-- **Configuração:** `versioning: "prerelease"`, `prerelease: true` e `prerelease-type: "alpha.1"` em `release-please-config.json`. O valor `alpha.1` é proposital: o tipo vira o primeiro sufixo (com `alpha` a primeira versão seria `1.0.0-alpha`, sem número) e, depois, o último número do sufixo sobe a cada release.
-- **Versão final:** depois da prova, troque `"prerelease"` para `false`; o PR de release seguinte descarta o sufixo e propõe `1.0.0`. Nenhuma outra mudança é necessária.
+- **Estado:** a configuração está na versão final (`prerelease: false`): o próximo PR de release propõe a `1.0.0`. Ao mesclá-lo, o Elói publica a tag `v1.0.0` e um GitHub Release completo, sem a marca de pré-lançamento. Não haverá `1.0.0-alpha.2`.
+- **Configuração:** `versioning: "prerelease"` e `prerelease-type: "alpha.1"` continuam em `release-please-config.json` até a tag `v1.0.0` existir: sem a estratégia de pré-lançamento, o bot proporia `2.0.0-alpha.1` ou `1.1.0-alpha.1` a partir de um alpha. Depois da tag, as duas chaves saem. Um teste (`tests/release/`) guarda isso.
 - **Não use `release-as`:** ele fixa a versão e, se ninguém o remover depois do release, todo PR de release repete a mesma versão. Um teste (`tests/release/`) impede que ele entre na configuração.
 - **Antes de mesclar o PR de release,** confira o título, a versão no `apm.yml` e no `.release-please-manifest.json` e o CHANGELOG: uma tag publicada não se apaga nem se move. Mesclar continua sendo ato humano; nenhuma etapa automática faz isso.

@@ -1,5 +1,33 @@
 # Changelog
 
+## Preparação da 1.0.0 final (2026-11-12)
+
+Change `versao-final-1-0-0`. A prova da calculadora em Go foi aprovada pelo Elói; esta change faz a configuração propor a `1.0.0`. Nada é publicado até o Elói mesclar este PR e, depois, o PR de release.
+
+### O que muda
+
+* `release-please-config.json`: `"prerelease"` passa de `true` para `false`. As chaves `"versioning": "prerelease"` e `"prerelease-type": "alpha.1"` **ficam** até a tag `v1.0.0` existir.
+* O teste de configuração (`tests/release/`) passa a guardar a versão final e a armadilha da saída precoce da estratégia de pré-lançamento.
+* README e `CLAUDE.md` descrevem o estado novo; a spec `release-versioning` troca os dois requisitos do período de pré-lançamento (cumpridos) pelo requisito da versão final.
+
+### Verificação
+
+* Simulação executando a biblioteca `release-please` nas versões `17.6.0` e `17.11.2` (12 de 12 cenários ok): de `1.0.0-alpha.1`, com commits só de documentação, com `feat` ou com mudança incompatível, a próxima versão é `1.0.0`; depois dela, `feat` resulta em `1.1.0`, `fix` em `1.0.1` e incompatível em `2.0.0`.
+* Armadilha medida: se `versioning` fosse removido antes da tag final, o bot proporia `2.0.0-alpha.1` (incompatível) ou `1.1.0-alpha.1` (`feat`) a partir de `1.0.0-alpha.1`. Por isso a chave fica, e o teste falha se ela sair enquanto o manifesto tiver um sufixo de pré-lançamento.
+* `python3 -m unittest discover -s tests -t .` e `openspec validate versao-final-1-0-0 --strict`: ok.
+* **Não verificado (depende do GitHub):** o PR de release real propondo `1.0.0`, a linha `version:` do `apm.yml` sem sufixo e o GitHub Release publicado sem a marca de pré-lançamento. A conferência é depois do merge, antes de mesclar o PR de release.
+
+### Depois do merge
+
+1. Conferir que o bot atualizou o PR de release para `1.0.0` (título, `apm.yml`, manifesto e CHANGELOG): tags `v*` não se apagam nem se movem.
+2. O Elói mescla o PR de release; nascem a tag `v1.0.0` e o GitHub Release.
+3. Depois da tag: trocar o exemplo de consumo do README para `#v1.0.0`, apontar o `calculadora_go` para a `v1.0.0`, remover `versioning` e `prerelease-type` (com o teste ajustado) e arquivar a change.
+
+### Retrospectiva de skills
+
+* A simulação com a biblioteca (incluindo a armadilha da estratégia padrão) é o procedimento certo para qualquer mudança de versionamento do release-please; candidato a skill público de CI (Onda 3).
+* Nenhum skill foi publicado sem o "ok" do Elói.
+
 ## Onda 1 — fechamento (2026-11-12)
 
 A Onda 1 (MVP: F1, F2 e F3) foi publicada como o pré-lançamento `1.0.0-alpha.1`. Roteiro de teste em [docs/roteiro-de-teste.md](docs/roteiro-de-teste.md).
