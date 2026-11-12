@@ -180,6 +180,19 @@ Spec: APM_SETUP V1.2. Nenhuma tag e nenhum push; a Onda 1 (1.0.0-alpha.1) ainda 
 * `install-dev-harness`: o template `harness.config.json.template` lista `.pre-commit-config.yaml` em `guide_files` mesmo sem o arquivo existir, gerando um "MISSING" falso (removido à mão aqui). O passo 3 só cobre `apm install <repo>#<tag>`, não a fonte local. `settings.hooks.json` traz uma chave `_comment` que precisou ser tirada ao criar `.claude/settings.json`. Proposta: atualizar o skill (público, serve a qualquer projeto). Nada publicado.
 * Skill novo: nenhum necessário nesta onda.
 
+## [1.0.0-alpha.1](https://github.com/emilianoeloi/apm/compare/v0.3.1...v1.0.0-alpha.1) (2026-11-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* agentes, prompts e skills do cowboy deixam de existir; quem depende deles deve manter a tag v0.3.1.
+
+### Features
+
+* agentes de SDLC genéricos sdlc-planner, coder, reviewer e auditor (F3) ([#14](https://github.com/emilianoeloi/apm/issues/14)) ([ff3afa6](https://github.com/emilianoeloi/apm/commit/ff3afa62fd13d61f98868b6722f8e7938791356a))
+* hooks genéricos com sensores configuráveis e entrega pelo APM (F2) ([#13](https://github.com/emilianoeloi/apm/issues/13)) ([db5389e](https://github.com/emilianoeloi/apm/commit/db5389efa36b29f3808c578638d75781d91b7cf0))
+* remove o conteúdo do cowboy e neutraliza o pacote (F1) ([#11](https://github.com/emilianoeloi/apm/issues/11)) ([021fc8c](https://github.com/emilianoeloi/apm/commit/021fc8c123a121023a7da923cbf8b92777b0a43d))
+
 ## [0.3.1](https://github.com/emilianoeloi/apm/compare/v0.3.0...v0.3.1) (2026-11-11)
 
 
