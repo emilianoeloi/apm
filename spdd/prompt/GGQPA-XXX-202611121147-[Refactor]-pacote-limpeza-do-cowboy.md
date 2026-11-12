@@ -116,8 +116,8 @@ Nenhuma estrutura nova é criada: só arquivos existentes são apagados ou edita
 ### Remove Content - Agentes do cowboy
 1. Responsibility: tirar os 5 agentes da fonte.
 2. Paths: `.apm/agents/cobol-vibecoder.agent.md`, `cobol-planner.agent.md`, `cobol-coder.agent.md`, `cobol-reviewer.agent.md`, `readme-writer.agent.md`.
-3. Logic: apagar com `git rm`; a pasta `.apm/agents/` pode ficar vazia (mantida com `.gitkeep` para a F3).
-4. Verification: `ls .apm/agents` não lista `cobol-*` nem `readme-writer`.
+3. Logic: apagar com `git rm`; a pasta `.apm/agents/` deixa de existir no git (um `.gitkeep` ali faz o `apm install` avisar de "non-agent asset"); a F3 recria a pasta com os agentes `sdlc-*`.
+4. Verification: `ls .apm/agents 2>/dev/null` não lista `cobol-*` nem `readme-writer`.
 
 ### Remove Content - Prompts do cowboy
 1. Responsibility: tirar os 7 prompts do cowboy.
