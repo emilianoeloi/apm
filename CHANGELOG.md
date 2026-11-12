@@ -1,5 +1,42 @@
 # Changelog
 
+## Onda 1 — fechamento (2026-11-12)
+
+A Onda 1 (MVP: F1, F2 e F3) foi publicada como o pré-lançamento `1.0.0-alpha.1`. Roteiro de teste em [docs/roteiro-de-teste.md](docs/roteiro-de-teste.md).
+
+### Publicado
+
+* Tag `v1.0.0-alpha.1` (commit `8c3f94a`), com o GitHub Release marcado como **Pre-release**; a `v0.3.1` segue como a última versão estável (`Latest`). O manifesto e a linha `version:` do `apm.yml` estão em `1.0.0-alpha.1`.
+* A seção `1.0.0-alpha.1` gerada pelo release-please lista a remoção do cowboy como mudança incompatível, como a spec pede.
+* Fecha o que estava "não verificado" na change do pré-lançamento: o bot atualizou o PR #12 para `1.0.0-alpha.1`, o `apm.yml` aceitou a versão com sufixo e o Release saiu como pré-lançamento.
+
+### Verificação (roteiro de teste)
+
+* Instalação real da tag num repositório vazio (`apm install --target claude,copilot` com `emilianoeloi/apm#v1.0.0-alpha.1`): 6 prompts, 8 agentes (4 por host), 6 comandos, 18 skills e os hooks nos dois hosts, sem nenhum termo do cowboy. Os scripts de hook implantados passaram nas 8 verificações (Stop sem configuração sai 0, Stop com sensor que falha sai 2 com a saída, `git push` e `.env` bloqueados, configuração corrompida não trava, Copilot devolve JSON `deny`).
+* Gate de fase no projeto instalado: em `proposal`, a escrita de um arquivo `.go` é bloqueada; artefatos de planejamento passam; em `apply` o mesmo arquivo passa.
+* O `apm install` não exigiu `apm approve` (o APM informa "Executable-trust gate disabled" quando o `apm.yml` não declara `executables:`).
+* Resultado por passo: itens 1 a 5 passaram, o gate do item 7 passou, o item 9 ficou parcial (o reviewer já rodou no Claude Code, falta sobre a calculadora) e os itens 6, 8 e 10 dependem do projeto `calculadora_go`.
+
+### Retrospectiva de skills da Onda 1
+
+* **Usados:** `openspec-explore`, `openspec-propose`, `openspec-apply-change`, `openspec-archive-change`, `openspec-workflow`, `spdd-analysis`, `spdd-reasons-canvas`, `spdd-generate`, `install-dev-harness` e, só de leitura, `skill-retrospective`. Nenhum skill do repositório privado serviu.
+* **Desatualizado ou incompleto:**
+  * `openspec-workflow` divergiu do schema nas quatro changes (criação manual do `.openspec.yaml`, fases das tasks, canvas pensado para backend). É a atualização de maior prioridade (público).
+  * `spdd-reasons-canvas` e `spdd-generate` (vendorizados) exigiram adaptação à mão para mudanças que não são de backend; a orientação deve morar no `openspec-workflow`, nunca nos arquivos vendorizados.
+  * `install-dev-harness` foi atualizado na Onda 0, na F2 e na F3 (hooks e agentes pelo APM, `sensors_command`, `allowed_write_roots`); falta publicar uma versão do skill.
+* **Procedimentos que serviriam a outros projetos (públicos):**
+  * teste de fumaça de agente no host (`claude -p --agent <nome>` com permissões só de leitura, comparando o `git status`), para `dev-harness-architect` e `harness-quadrant-process`;
+  * checagem do hook disparando de verdade no host, e não só os testes de saída;
+  * como configurar e verificar o pré-lançamento do release-please executando a biblioteca, para o skill de CI da Onda 3.
+* **Skill novo:** o `sdlc-orchestrator` já está previsto para a Onda 2 (F4). Nada foi publicado sem o "ok" do Elói.
+
+### Pendências e próximos passos
+
+* Prova com a calculadora em Go (`emilianoeloi/calculadora_go`) sobre a `1.0.0-alpha.1`; só depois, `"prerelease": false` para a `1.0.0`.
+* Onda 2 (F4, F5 e F8), incluindo a imposição mecânica de somente leitura para os agentes de leitura.
+* Lacunas dos guardas de hook apontadas na F3 (`.env.local`, escrita por Bash, ferramentas de MCP, `.gitignore` sem regra de credenciais).
+* O guarda de escrita barra caminhos fora do repositório; quem quiser salvar arquivos fora dele (por exemplo, a pasta de memória do assistente) precisa listá-los em `allowed_write_roots`.
+
 ## Onda 1 — Pré-lançamento 1.0.0-alpha.1 (2026-11-12)
 
 Change `prelancamento-alpha`. Última peça do MVP da Onda 1 (F1, F2 e F3). Ainda sem tag e sem push; a tag `v1.0.0-alpha.1` só nasce quando o Elói mesclar o PR de release.
