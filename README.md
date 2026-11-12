@@ -104,4 +104,15 @@ Os releases saem do GitHub Actions com o [release-please](https://github.com/goo
 3. **Revisar e mesclar o PR de release** é o ato humano. Ao mesclar, o bot cria a tag `vX.Y.Z` e o GitHub Release.
 4. No consumidor, atualize o `ref` no `apm.yml`, rode `apm install` e commite `apm.yml`, `apm.lock.yaml` e os diretórios implantados.
 
-A versão do `apm.yml` é atualizada pelo bot (linha marcada com `x-release-please-version`); não edite a versão à mão. Tags `v*` são protegidas contra apagar e mover.
+A linha `version:` do `apm.yml` é atualizada pelo bot (pelo `extra-files` do `release-please-config.json`, sem marcador no arquivo); não edite a versão à mão. Tags `v*` são protegidas contra apagar e mover.
+
+### Pré-lançamento da 1.0.0
+
+A primeira publicação da `1.0.0` é um **pré-lançamento**, a `1.0.0-alpha.1`, e a `1.0.0` final só sai depois da prova em um projeto real.
+
+- **Última versão estável:** a `v0.3.1`, até a `1.0.0` sair. O GitHub Release do pré-lançamento é marcado como "pre-release"; quem quiser testá-lo aponta para a tag explícita (`emilianoeloi/apm#v1.0.0-alpha.1`, depois que ela for publicada). Quem não fixa a tag não deve esperar receber um pré-lançamento.
+- **Numeração:** os pré-lançamentos seguintes numeram sozinhos (`1.0.0-alpha.2`, `1.0.0-alpha.3`, …), em qualquer tipo de commit.
+- **Configuração:** `versioning: "prerelease"`, `prerelease: true` e `prerelease-type: "alpha.1"` em `release-please-config.json`. O valor `alpha.1` é proposital: o tipo vira o primeiro sufixo (com `alpha` a primeira versão seria `1.0.0-alpha`, sem número) e, depois, o último número do sufixo sobe a cada release.
+- **Versão final:** depois da prova, troque `"prerelease"` para `false`; o PR de release seguinte descarta o sufixo e propõe `1.0.0`. Nenhuma outra mudança é necessária.
+- **Não use `release-as`:** ele fixa a versão e, se ninguém o remover depois do release, todo PR de release repete a mesma versão. Um teste (`tests/release/`) impede que ele entre na configuração.
+- **Antes de mesclar o PR de release,** confira o título, a versão no `apm.yml` e no `.release-please-manifest.json` e o CHANGELOG: uma tag publicada não se apaga nem se move. Mesclar continua sendo ato humano; nenhuma etapa automática faz isso.

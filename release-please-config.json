@@ -9,7 +9,10 @@
       "extra-files": [
         "apm.yml"
       ],
-      "include-component-in-tag": false
+      "include-component-in-tag": false,
+      "versioning": "prerelease",
+      "prerelease": true,
+      "prerelease-type": "alpha.1"
     }
   }
 }

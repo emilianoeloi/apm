@@ -1,5 +1,37 @@
 # Changelog
 
+## Onda 1 — Pré-lançamento 1.0.0-alpha.1 (2026-11-12)
+
+Change `prelancamento-alpha`. Última peça do MVP da Onda 1 (F1, F2 e F3). Ainda sem tag e sem push; a tag `v1.0.0-alpha.1` só nasce quando o Elói mesclar o PR de release.
+
+### Novidades
+
+* `release-please-config.json` passa a usar a estratégia de pré-lançamento (`versioning: "prerelease"`, `prerelease: true`, `prerelease-type: "alpha.1"`). O PR de release #12, que propunha `1.0.0`, passa a propor `1.0.0-alpha.1`; a tag será `v1.0.0-alpha.1` (sem componente) e o GitHub Release sai marcado como pré-lançamento.
+* Os pré-lançamentos seguintes numeram sozinhos (`alpha.2`, `alpha.3`, …), sem `release-as` para lembrar de remover.
+* A `1.0.0` final fica a uma mudança de configuração (`"prerelease": false`), depois da prova da calculadora em Go.
+* Teste de configuração em `tests/release/` (nenhum `release-as`, chaves do pré-lançamento, tag sem componente, `apm.yml` e manifesto em sincronia, workflow sem mesclagem automática); a suíte passa a ter 110 testes.
+* README: seção de pré-lançamento (última estável `v0.3.1`, como consumir a tag, como a final sai) e correção da frase sobre o marcador, que não existe no `apm.yml`.
+
+### Verificação
+
+* A pesquisa fecha o "não informado" da spec: o tipo `alpha` sem número daria `1.0.0-alpha`; `alpha.1` dá `1.0.0-alpha.1` e depois o último número sobe. Confirmado lendo o código da estratégia e **executando a biblioteca** `release-please` nas versões `17.6.0` (piso da ação) e `17.11.2`: 16 de 16 cenários ok (primeira publicação, `alpha.2` a `alpha.5` com `feat`, `fix`, `chore`/`ci` e incompatível, e `1.0.0` com `prerelease` falso).
+* A configuração valida contra o schema oficial (`schemas/config.json`) com `jsonschema`.
+* `python3 -m unittest discover -s tests -t .`: todos ok; busca por "cowboy", "cobol", "cobc" e "calculadora" em `.apm/`, `.claude/`, `.agents/` e `.github/`: vazia.
+* **Não verificado (depende do GitHub):** o efeito no PR #12 real, a linha `version:` do `apm.yml` com sufixo de pré-lançamento no diff do PR de release e a criação do GitHub Release como pré-lançamento. A conferência é depois do merge, antes de mesclar o PR de release.
+
+### Depois do merge
+
+1. O bot atualiza o PR #12 sozinho (push na `main`). Conferir título, `apm.yml`, manifesto e CHANGELOG: tags `v*` não se apagam nem se movem.
+2. O Elói mescla o PR de release; a tag `v1.0.0-alpha.1` e o GitHub Release de pré-lançamento nascem.
+3. Fechar a Onda 1: README com o consumo da tag nova, CHANGELOG, roteiro de teste manual e retrospectiva.
+4. Prova da calculadora em Go sobre a `1.0.0-alpha.1`; só depois, `"prerelease": false` para a `1.0.0`.
+
+### Retrospectiva de skills
+
+* O "não informado" da spec virou procedimento reutilizável (ler a estratégia de versionamento do release-please e executá-la fora do repositório). Candidato a skill público ou a um passo do `install-dev-harness` quando a F6 (CI em camadas) chegar.
+* `install-dev-harness`: sem mudança nesta change.
+* `openspec-workflow`: continua pendente de atualização (ver as retrospectivas anteriores).
+
 ## Onda 1 — F3: agentes de SDLC (2026-11-12)
 
 Change `agentes-sdlc`. Ainda sem tag e sem push; só falta a change de pré-lançamento (`1.0.0-alpha.1`) para fechar o MVP da Onda 1.
