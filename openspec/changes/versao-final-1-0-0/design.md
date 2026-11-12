@@ -32,13 +32,13 @@ Resultados da simulação com a configuração candidata (`prerelease: false`, e
 
 - [Mesclar o PR de release sem conferir publicaria uma versão errada, e tags `v*` não se apagam] → conferir título, `apm.yml`, manifesto e CHANGELOG do PR antes de mesclar; a simulação e o teste já fixam `1.0.0`.
 - [Alguém limpar `versioning` antes da tag e fazer o bot propor `2.0.0-alpha.1`] → o teste novo falha enquanto o manifesto for um pré-lançamento; o README e o `CLAUDE.md` avisam.
-- [O bot não recalcular o PR de release de imediato] → o push na `main` dispara o workflow; o log mostra o motivo, e nada é publicado sem o merge humano.
+- [O bot não abrir PR de release depois do merge desta change] → **aconteceu**: só há commits `docs` e `ci` desde a tag, e o release-please ignora esses tipos. Mitigação: um `fix` com `Release-As: 1.0.0` no commit de squash, num PR próprio; nada é publicado sem o merge humano do PR de release.
 - [Consumidores que apontam para a `main` passam a receber a `1.0.0` quando ela sair] → é o comportamento esperado de uma versão final; os pré-lançamentos continuam disponíveis pela tag.
 
 ## Migration Plan
 
 1. Atualizar o teste (falhando), mudar `prerelease` para `false` e fazer o teste passar.
 2. Atualizar README, `CLAUDE.md` e CHANGELOG; abrir o PR `ci(release):`; mesclar é ato do Elói.
-3. Depois do merge: conferir o PR de release atualizado para `1.0.0`; o Elói o mescla e a tag `v1.0.0` nasce.
+3. Depois do merge: o bot **não** abre PR de release sozinho, porque os commits desde a tag (`docs`, `docs`, `ci`) não são liberáveis (log do workflow: "No user facing commits found since 8c3f94a"). É preciso um `fix` com o rodapé `Release-As: 1.0.0` no commit de squash; com ele o bot abre o PR de release `1.0.0`, que o Elói confere e mescla, e a tag `v1.0.0` nasce.
 4. Depois da tag: trocar o exemplo de consumo do README para `#v1.0.0`, apontar o `calculadora_go` para a `v1.0.0` e remover `versioning` e `prerelease-type` (com o teste ajustado).
 5. Rollback: reverter o commit; o bot volta a propor `1.0.0-alpha.2`; nada foi publicado enquanto o PR de release não for mesclado.

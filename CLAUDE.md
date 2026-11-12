@@ -57,6 +57,7 @@ bloqueia `git commit`/`add`/`merge`/`rebase`. Consulte a fase atual com
 
 - Não reintroduza `release-as` no `release-please-config.json` (o teste em `tests/release/` falha se voltar) e não mescle o PR de release sem conferir a versão proposta: tags `v*` não se apagam nem se movem.
 - O pré-lançamento `1.0.0-alpha.1` foi publicado e a prova em projeto real foi aprovada; a configuração já está na versão final (`"prerelease": false`). Mantenha `"versioning": "prerelease"` até a tag `v1.0.0` existir (sem ela, o bot propõe `2.0.0-alpha.1` a partir do alpha); depois da tag, remova `versioning` e `prerelease-type` e ajuste o teste.
+- O PR de release só abre com um commit liberável (`feat`, `fix` ou incompatível) desde a última tag; `docs`, `chore` e `ci` ficam escondidos do CHANGELOG e não o provocam. Para forçar uma versão, use `fix` com o rodapé `Release-As: <versão>` na mensagem do commit de squash (nunca `release-as` na configuração).
 - Publicar (mesclar o PR de release) e dar push são atos do desenvolvedor.
 
 ## Escopo

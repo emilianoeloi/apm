@@ -24,6 +24,17 @@ Enquanto a versão do manifesto for um pré-lançamento, a configuração SHALL 
 - **WHEN** a versão do manifesto contém um sufixo de pré-lançamento
 - **THEN** `versioning` é `prerelease`
 
+### Requirement: A versão final é provocada por um commit liberável com Release-As
+O release-please SHALL abrir o PR de release da versão final apenas depois de um commit liberável (`fix` ou `feat`) desde a última tag, e esse commit SHALL levar o rodapé `Release-As: 1.0.0` na mensagem do commit de squash.
+
+#### Scenario: Só commits escondidos
+- **WHEN** os commits desde a tag são só `docs`, `chore` e `ci`
+- **THEN** o workflow termina com sucesso, informa que não há commits visíveis e nenhum PR de release é aberto
+
+#### Scenario: Commit liberável com Release-As
+- **WHEN** a `main` recebe um commit `fix` cuja mensagem termina com `Release-As: 1.0.0`
+- **THEN** o bot abre o PR de release propondo `1.0.0`
+
 ## REMOVED Requirements
 
 ### Requirement: Primeira publicação do 1.0.0 é um pré-lançamento
