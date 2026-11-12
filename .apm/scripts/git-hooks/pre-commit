@@ -1,0 +1,47 @@
+#!/bin/sh
+# ==============================================================================
+# Pre-commit genérico do harness
+# ==============================================================================
+# Roda o comando de sensores do projeto (campo "sensors_command" do
+# harness.config.json) antes de permitir o commit. É o mesmo comando que o hook
+# de Stop usa ao encerrar a sessão.
+#
+# Nunca trava sem configuração: sem arquivo, sem python3, com configuração
+# corrompida, sem o campo ou com o campo vazio, o commit passa.
+#
+# Instalação (no projeto):
+#   cp <caminho do pacote>/.apm/scripts/git-hooks/pre-commit .githooks/pre-commit
+#   git config core.hooksPath .githooks
+# ==============================================================================
+
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+CONFIG="${HARNESS_CONFIG_PATH:-$ROOT/harness.config.json}"
+
+[ -f "$CONFIG" ] || exit 0
+command -v python3 >/dev/null 2>&1 || exit 0
+
+CMD=$(python3 - "$CONFIG" <<'PY'
+import json
+import sys
+
+try:
+    with open(sys.argv[1], encoding="utf-8") as handle:
+        data = json.load(handle)
+    value = data.get("sensors_command", "") if isinstance(data, dict) else ""
+    print(value.strip() if isinstance(value, str) else "")
+except Exception:
+    print("")
+PY
+)
+
+[ -n "$CMD" ] || exit 0
+
+cd "$ROOT" || exit 0
+echo "[harness] rodando os sensores do projeto: $CMD"
+sh -c "$CMD"
+CODE=$?
+if [ "$CODE" -ne 0 ]; then
+    echo "[harness] sensores falharam (código $CODE); commit abortado." >&2
+    exit 1
+fi
+exit 0

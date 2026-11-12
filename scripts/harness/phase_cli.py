@@ -2,7 +2,7 @@
 """Minimal, dependency-free CLI to declare/read the current change phase.
 
 The phase state file is the single source of truth shared with the
-PreToolUse hooks in scripts/hooks/ — they read it independently (stdlib
+PreToolUse hooks delivered by the package (.apm/hooks/scripts/) — they read it independently (stdlib
 only, no import of this module) so the *path* is the only contract. See
 harness.config.json → "phase_state_path".
 
@@ -36,18 +36,24 @@ def _project_root() -> Path:
 
 
 def _load_config(root: Path) -> dict:
-    config_path = Path(os.environ.get("HARNESS_CONFIG_PATH", root / "harness.config.json"))
+    """Configuração ausente, corrompida ou que não é um objeto vira {} (nunca quebra)."""
+    config_path = Path(os.environ.get("HARNESS_CONFIG_PATH") or (root / "harness.config.json"))
     try:
         with open(config_path, encoding="utf-8") as handle:
-            return json.load(handle)
-    except (OSError, json.JSONDecodeError):
+            data = json.load(handle)
+    except (OSError, ValueError, RecursionError):
         return {}
+    return data if isinstance(data, dict) else {}
 
 
 def _state_path(root: Path, config: dict) -> Path:
-    relative = config.get("phase_state_path", DEFAULT_PHASE_STATE_PATH)
+    relative = config.get("phase_state_path")
+    if not isinstance(relative, str) or not relative:
+        relative = DEFAULT_PHASE_STATE_PATH
     resolved = (root / relative).resolve()
-    if not str(resolved).startswith(str(root)):
+    try:
+        resolved.relative_to(root.resolve())  # contenção exata: nunca por prefixo de texto
+    except ValueError:
         raise SystemExit(f"phase_state_path '{relative}' escapa da raiz do repositório — recuse.")
     return resolved
 
@@ -80,7 +86,13 @@ def main(argv: list[str]) -> int:
         if not state_path.exists():
             print("Fase: não declarada")
             return 0
-        data = json.loads(state_path.read_text(encoding="utf-8"))
+        try:
+            data = json.loads(state_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            data = None
+        if not isinstance(data, dict):
+            print("Fase: estado inválido — use 'phase_cli.py set' para redeclarar")
+            return 0
         print(f"Fase: {data.get('phase', '?')} (change: {data.get('change_name', '')})")
         return 0
 

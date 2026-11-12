@@ -1,0 +1,33 @@
+{
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "command": "python3 \".github/hooks/scripts/apm/.apm/hooks/scripts/session-start.py\"",
+        "timeout": 5
+      }
+    ],
+    "preToolUse": [
+      {
+        "matcher": "Write|Edit|NotebookEdit",
+        "type": "command",
+        "command": "python3 \".github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-write-guard.py\"",
+        "timeout": 5
+      },
+      {
+        "matcher": "Bash",
+        "type": "command",
+        "command": "python3 \".github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-bash-guard.py\"",
+        "timeout": 5
+      }
+    ],
+    "agentStop": [
+      {
+        "type": "command",
+        "command": "python3 \".github/hooks/scripts/apm/.apm/hooks/scripts/stop-sensors.py\"",
+        "timeout": 60
+      }
+    ]
+  },
+  "version": 1
+}

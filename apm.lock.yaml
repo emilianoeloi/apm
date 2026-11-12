@@ -57,6 +57,51 @@ deployments:
   content_hash: sha256:fb24721463e58a3d102c3d08117deebdbb09eb33e072743f31b31ccc006e4afc
 - kind: project-relative
   target: claude
+  value: .claude/hooks/apm/.apm/hooks/scripts/_common.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
+- kind: project-relative
+  target: claude
+  value: .claude/hooks/apm/.apm/hooks/scripts/pre-tool-bash-guard.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:de9414085402d88aa8d03628b299d90e05344e4ace6319b339a980d1f11ab652
+- kind: project-relative
+  target: claude
+  value: .claude/hooks/apm/.apm/hooks/scripts/pre-tool-write-guard.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b4b769559f947bcf50b400d2cf9e222f459c4d6704eacba8f389913a0cc352fe
+- kind: project-relative
+  target: claude
+  value: .claude/hooks/apm/.apm/hooks/scripts/session-start.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
+- kind: project-relative
+  target: claude
+  value: .claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0d4856d982916d10475d67ca26068c79c1336c2c08bebbea760a2f125dc5574e
+- kind: project-relative
+  target: claude
   value: .claude/skills/architecture-fitness-functions
   runtime: null
   scope: project
@@ -171,7 +216,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:49cc24864c11f1e1885725109b51e8460c023d039551147e046dcbd5001d0063
+  content_hash: sha256:20da91c1312a9f490d850740f016c715d3a51d8fb2ca89ff7e3650cfd7508d57
 - kind: project-relative
   target: claude
   value: .claude/skills/install-dev-harness/templates/CLAUDE.md.template
@@ -189,34 +234,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:61a8aa71730a9524d5ddbaedb95b20301ccdf159ae908ddb30c51b7e6062a580
-- kind: project-relative
-  target: claude
-  value: .claude/skills/install-dev-harness/templates/hooks/pre-tool-bash-guard.py
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:aec7e2e9d68cfbc8d96253b990345554ab1cce070d9923865a4e7efa241203b1
-- kind: project-relative
-  target: claude
-  value: .claude/skills/install-dev-harness/templates/hooks/pre-tool-write-guard.py
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:ff2334e3ecc6c8cab617099ab3c3e18f5bb374d56224c6c76bc9970e76068cf6
-- kind: project-relative
-  target: claude
-  value: .claude/skills/install-dev-harness/templates/hooks/session-start.py
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:da487387d86fc5391fe63b3f96cd5a27b0eae76a1acbee6498ce5c730f43e73d
+  content_hash: sha256:8444f21dd26a4be25bd79f3d47cc0c0c42e357faba0acfd0a71cdfbc52e196b2
 - kind: project-relative
   target: claude
   value: .claude/skills/install-dev-harness/templates/phase_cli.py
@@ -225,16 +243,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:1605b3c614d59b1aac572a0be0003b4827746405746eab81c60b989bf855ec20
-- kind: project-relative
-  target: claude
-  value: .claude/skills/install-dev-harness/templates/settings.hooks.json
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:6c72cd2e30e3091daca498ae38caaa3bba8a9b51ba36a6ac43299e80c9aabfe0
+  content_hash: sha256:f72504b8e0523b1b2cd1405f3baeb49a13da4031639be7d61d9ab9da96af02f3
 - kind: project-relative
   target: claude
   value: .claude/skills/openspec-apply-change
@@ -630,7 +639,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:49cc24864c11f1e1885725109b51e8460c023d039551147e046dcbd5001d0063
+  content_hash: sha256:20da91c1312a9f490d850740f016c715d3a51d8fb2ca89ff7e3650cfd7508d57
 - kind: project-relative
   target: copilot
   value: .agents/skills/install-dev-harness/templates/CLAUDE.md.template
@@ -648,34 +657,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:61a8aa71730a9524d5ddbaedb95b20301ccdf159ae908ddb30c51b7e6062a580
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/install-dev-harness/templates/hooks/pre-tool-bash-guard.py
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:aec7e2e9d68cfbc8d96253b990345554ab1cce070d9923865a4e7efa241203b1
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/install-dev-harness/templates/hooks/pre-tool-write-guard.py
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:ff2334e3ecc6c8cab617099ab3c3e18f5bb374d56224c6c76bc9970e76068cf6
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/install-dev-harness/templates/hooks/session-start.py
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:da487387d86fc5391fe63b3f96cd5a27b0eae76a1acbee6498ce5c730f43e73d
+  content_hash: sha256:8444f21dd26a4be25bd79f3d47cc0c0c42e357faba0acfd0a71cdfbc52e196b2
 - kind: project-relative
   target: copilot
   value: .agents/skills/install-dev-harness/templates/phase_cli.py
@@ -684,16 +666,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:1605b3c614d59b1aac572a0be0003b4827746405746eab81c60b989bf855ec20
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/install-dev-harness/templates/settings.hooks.json
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:6c72cd2e30e3091daca498ae38caaa3bba8a9b51ba36a6ac43299e80c9aabfe0
+  content_hash: sha256:f72504b8e0523b1b2cd1405f3baeb49a13da4031639be7d61d9ab9da96af02f3
 - kind: project-relative
   target: copilot
   value: .agents/skills/openspec-apply-change
@@ -975,6 +948,60 @@ deployments:
   content_hash: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
 - kind: project-relative
   target: copilot
+  value: .github/hooks/apm-harness.json
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1844939cb35265f9c3628080a5ffba8d4ec890f75cfc9cd8a8dddd35a654b726
+- kind: project-relative
+  target: copilot
+  value: .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
+- kind: project-relative
+  target: copilot
+  value: .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-bash-guard.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:de9414085402d88aa8d03628b299d90e05344e4ace6319b339a980d1f11ab652
+- kind: project-relative
+  target: copilot
+  value: .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-write-guard.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b4b769559f947bcf50b400d2cf9e222f459c4d6704eacba8f389913a0cc352fe
+- kind: project-relative
+  target: copilot
+  value: .github/hooks/scripts/apm/.apm/hooks/scripts/session-start.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
+- kind: project-relative
+  target: copilot
+  value: .github/hooks/scripts/apm/.apm/hooks/scripts/stop-sensors.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0d4856d982916d10475d67ca26068c79c1336c2c08bebbea760a2f125dc5574e
+- kind: project-relative
+  target: copilot
   value: .github/prompts/opsx-apply.prompt.md
   runtime: null
   scope: project
@@ -1043,11 +1070,7 @@ local_deployed_files:
 - .agents/skills/install-dev-harness/SKILL.md
 - .agents/skills/install-dev-harness/templates/CLAUDE.md.template
 - .agents/skills/install-dev-harness/templates/harness.config.json.template
-- .agents/skills/install-dev-harness/templates/hooks/pre-tool-bash-guard.py
-- .agents/skills/install-dev-harness/templates/hooks/pre-tool-write-guard.py
-- .agents/skills/install-dev-harness/templates/hooks/session-start.py
 - .agents/skills/install-dev-harness/templates/phase_cli.py
-- .agents/skills/install-dev-harness/templates/settings.hooks.json
 - .agents/skills/openspec-apply-change
 - .agents/skills/openspec-apply-change/SKILL.md
 - .agents/skills/openspec-archive-change
@@ -1085,6 +1108,11 @@ local_deployed_files:
 - .claude/commands/opsx-propose.md
 - .claude/commands/opsx-sync.md
 - .claude/commands/opsx-update.md
+- .claude/hooks/apm/.apm/hooks/scripts/_common.py
+- .claude/hooks/apm/.apm/hooks/scripts/pre-tool-bash-guard.py
+- .claude/hooks/apm/.apm/hooks/scripts/pre-tool-write-guard.py
+- .claude/hooks/apm/.apm/hooks/scripts/session-start.py
+- .claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py
 - .claude/skills/architecture-fitness-functions
 - .claude/skills/architecture-fitness-functions/SKILL.md
 - .claude/skills/dev-harness-architect
@@ -1100,11 +1128,7 @@ local_deployed_files:
 - .claude/skills/install-dev-harness/SKILL.md
 - .claude/skills/install-dev-harness/templates/CLAUDE.md.template
 - .claude/skills/install-dev-harness/templates/harness.config.json.template
-- .claude/skills/install-dev-harness/templates/hooks/pre-tool-bash-guard.py
-- .claude/skills/install-dev-harness/templates/hooks/pre-tool-write-guard.py
-- .claude/skills/install-dev-harness/templates/hooks/session-start.py
 - .claude/skills/install-dev-harness/templates/phase_cli.py
-- .claude/skills/install-dev-harness/templates/settings.hooks.json
 - .claude/skills/openspec-apply-change
 - .claude/skills/openspec-apply-change/SKILL.md
 - .claude/skills/openspec-archive-change
@@ -1136,6 +1160,12 @@ local_deployed_files:
 - .claude/skills/spdd-sync
 - .claude/skills/spdd-sync/SKILL.md
 - .claude/skills/spdd-sync/agents/openai.yaml
+- .github/hooks/apm-harness.json
+- .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py
+- .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-bash-guard.py
+- .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-write-guard.py
+- .github/hooks/scripts/apm/.apm/hooks/scripts/session-start.py
+- .github/hooks/scripts/apm/.apm/hooks/scripts/stop-sensors.py
 - .github/prompts/opsx-apply.prompt.md
 - .github/prompts/opsx-archive.prompt.md
 - .github/prompts/opsx-explore.prompt.md
@@ -1150,14 +1180,10 @@ local_deployed_file_hashes:
   .agents/skills/harness-quadrant-process/references/quadrant-doc-template.md: sha256:d78f00562fefba88b9ac6b8f25385c7f0b2b828a4098235539095e92ac1f6ae7
   .agents/skills/harness/SKILL.md: sha256:9d3ad4069e638e900567a44cd643bfda9ab46a44a06fe7df98fbd919d2331b82
   .agents/skills/harness/references/dev-harness-kit-export.md: sha256:eb3b27fd4526f2fcaa15f6ae2fc45111a7575cc09ee3f020b524e7adbab4e662
-  .agents/skills/install-dev-harness/SKILL.md: sha256:49cc24864c11f1e1885725109b51e8460c023d039551147e046dcbd5001d0063
+  .agents/skills/install-dev-harness/SKILL.md: sha256:20da91c1312a9f490d850740f016c715d3a51d8fb2ca89ff7e3650cfd7508d57
   .agents/skills/install-dev-harness/templates/CLAUDE.md.template: sha256:6e34319b9979e1b774ada7e34898e8640e20615ece50406bad80fec44a9da336
-  .agents/skills/install-dev-harness/templates/harness.config.json.template: sha256:61a8aa71730a9524d5ddbaedb95b20301ccdf159ae908ddb30c51b7e6062a580
-  .agents/skills/install-dev-harness/templates/hooks/pre-tool-bash-guard.py: sha256:aec7e2e9d68cfbc8d96253b990345554ab1cce070d9923865a4e7efa241203b1
-  .agents/skills/install-dev-harness/templates/hooks/pre-tool-write-guard.py: sha256:ff2334e3ecc6c8cab617099ab3c3e18f5bb374d56224c6c76bc9970e76068cf6
-  .agents/skills/install-dev-harness/templates/hooks/session-start.py: sha256:da487387d86fc5391fe63b3f96cd5a27b0eae76a1acbee6498ce5c730f43e73d
-  .agents/skills/install-dev-harness/templates/phase_cli.py: sha256:1605b3c614d59b1aac572a0be0003b4827746405746eab81c60b989bf855ec20
-  .agents/skills/install-dev-harness/templates/settings.hooks.json: sha256:6c72cd2e30e3091daca498ae38caaa3bba8a9b51ba36a6ac43299e80c9aabfe0
+  .agents/skills/install-dev-harness/templates/harness.config.json.template: sha256:8444f21dd26a4be25bd79f3d47cc0c0c42e357faba0acfd0a71cdfbc52e196b2
+  .agents/skills/install-dev-harness/templates/phase_cli.py: sha256:f72504b8e0523b1b2cd1405f3baeb49a13da4031639be7d61d9ab9da96af02f3
   .agents/skills/openspec-apply-change/SKILL.md: sha256:3ebe3a76be0c4078dc330b4aff30980eb515c6e8824366246d4ee86daa5c983e
   .agents/skills/openspec-archive-change/SKILL.md: sha256:29f0434179cbc97eda127cbd01ff898534e76126bf8b396d6ea932b554873003
   .agents/skills/openspec-explore/SKILL.md: sha256:6474fc37184d469b0ef58c66b4d905b2f82f11e50d029fe7a2cc5835307c8c23
@@ -1182,6 +1208,11 @@ local_deployed_file_hashes:
   .claude/commands/opsx-propose.md: sha256:5b7510b3a2ac57f1bc959b5f3667b88a187ad196c3994ea056062c2f62e8b75e
   .claude/commands/opsx-sync.md: sha256:dea22f65e19200e435c25b86d813ca20aefcb4a868ec08ef85bda4742a399775
   .claude/commands/opsx-update.md: sha256:fb24721463e58a3d102c3d08117deebdbb09eb33e072743f31b31ccc006e4afc
+  .claude/hooks/apm/.apm/hooks/scripts/_common.py: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
+  .claude/hooks/apm/.apm/hooks/scripts/pre-tool-bash-guard.py: sha256:de9414085402d88aa8d03628b299d90e05344e4ace6319b339a980d1f11ab652
+  .claude/hooks/apm/.apm/hooks/scripts/pre-tool-write-guard.py: sha256:b4b769559f947bcf50b400d2cf9e222f459c4d6704eacba8f389913a0cc352fe
+  .claude/hooks/apm/.apm/hooks/scripts/session-start.py: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
+  .claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py: sha256:0d4856d982916d10475d67ca26068c79c1336c2c08bebbea760a2f125dc5574e
   .claude/skills/architecture-fitness-functions/SKILL.md: sha256:125386113324fd42cb369c00767d961cf8239def9723588b10914f2d42f7f8f2
   .claude/skills/dev-harness-architect/SKILL.md: sha256:780b39fccaad446344f10e23a4a89db58ec12756c099a40b9e89473eab8a38e7
   .claude/skills/dev-harness-architect/reference/harness-model.md: sha256:dec69e4001f697fd334c8c0237f622163462078d96e6f3718d1f93e62e740b59
@@ -1189,14 +1220,10 @@ local_deployed_file_hashes:
   .claude/skills/harness-quadrant-process/references/quadrant-doc-template.md: sha256:d78f00562fefba88b9ac6b8f25385c7f0b2b828a4098235539095e92ac1f6ae7
   .claude/skills/harness/SKILL.md: sha256:9d3ad4069e638e900567a44cd643bfda9ab46a44a06fe7df98fbd919d2331b82
   .claude/skills/harness/references/dev-harness-kit-export.md: sha256:eb3b27fd4526f2fcaa15f6ae2fc45111a7575cc09ee3f020b524e7adbab4e662
-  .claude/skills/install-dev-harness/SKILL.md: sha256:49cc24864c11f1e1885725109b51e8460c023d039551147e046dcbd5001d0063
+  .claude/skills/install-dev-harness/SKILL.md: sha256:20da91c1312a9f490d850740f016c715d3a51d8fb2ca89ff7e3650cfd7508d57
   .claude/skills/install-dev-harness/templates/CLAUDE.md.template: sha256:6e34319b9979e1b774ada7e34898e8640e20615ece50406bad80fec44a9da336
-  .claude/skills/install-dev-harness/templates/harness.config.json.template: sha256:61a8aa71730a9524d5ddbaedb95b20301ccdf159ae908ddb30c51b7e6062a580
-  .claude/skills/install-dev-harness/templates/hooks/pre-tool-bash-guard.py: sha256:aec7e2e9d68cfbc8d96253b990345554ab1cce070d9923865a4e7efa241203b1
-  .claude/skills/install-dev-harness/templates/hooks/pre-tool-write-guard.py: sha256:ff2334e3ecc6c8cab617099ab3c3e18f5bb374d56224c6c76bc9970e76068cf6
-  .claude/skills/install-dev-harness/templates/hooks/session-start.py: sha256:da487387d86fc5391fe63b3f96cd5a27b0eae76a1acbee6498ce5c730f43e73d
-  .claude/skills/install-dev-harness/templates/phase_cli.py: sha256:1605b3c614d59b1aac572a0be0003b4827746405746eab81c60b989bf855ec20
-  .claude/skills/install-dev-harness/templates/settings.hooks.json: sha256:6c72cd2e30e3091daca498ae38caaa3bba8a9b51ba36a6ac43299e80c9aabfe0
+  .claude/skills/install-dev-harness/templates/harness.config.json.template: sha256:8444f21dd26a4be25bd79f3d47cc0c0c42e357faba0acfd0a71cdfbc52e196b2
+  .claude/skills/install-dev-harness/templates/phase_cli.py: sha256:f72504b8e0523b1b2cd1405f3baeb49a13da4031639be7d61d9ab9da96af02f3
   .claude/skills/openspec-apply-change/SKILL.md: sha256:3ebe3a76be0c4078dc330b4aff30980eb515c6e8824366246d4ee86daa5c983e
   .claude/skills/openspec-archive-change/SKILL.md: sha256:29f0434179cbc97eda127cbd01ff898534e76126bf8b396d6ea932b554873003
   .claude/skills/openspec-explore/SKILL.md: sha256:6474fc37184d469b0ef58c66b4d905b2f82f11e50d029fe7a2cc5835307c8c23
@@ -1215,6 +1242,12 @@ local_deployed_file_hashes:
   .claude/skills/spdd-reasons-canvas/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .claude/skills/spdd-sync/SKILL.md: sha256:c2f05f038be42c58ff80058c00e5096b0db5a9144ad436a979084964095eebe9
   .claude/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
+  .github/hooks/apm-harness.json: sha256:1844939cb35265f9c3628080a5ffba8d4ec890f75cfc9cd8a8dddd35a654b726
+  .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
+  .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-bash-guard.py: sha256:de9414085402d88aa8d03628b299d90e05344e4ace6319b339a980d1f11ab652
+  .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-write-guard.py: sha256:b4b769559f947bcf50b400d2cf9e222f459c4d6704eacba8f389913a0cc352fe
+  .github/hooks/scripts/apm/.apm/hooks/scripts/session-start.py: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
+  .github/hooks/scripts/apm/.apm/hooks/scripts/stop-sensors.py: sha256:0d4856d982916d10475d67ca26068c79c1336c2c08bebbea760a2f125dc5574e
   .github/prompts/opsx-apply.prompt.md: sha256:606297a1b99418258590e4e3642a46312651b41d26fb3f7bd9b4e50658d7029c
   .github/prompts/opsx-archive.prompt.md: sha256:2898d1ee82fcb51a3b1d6d138eb677ace07aac5389fbab956cb9bac5cbb5d419
   .github/prompts/opsx-explore.prompt.md: sha256:8bb750373850a644a06aea38992b4cda7f8efc4ea2758507c96e14118387159e

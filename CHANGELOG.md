@@ -1,5 +1,51 @@
 # Changelog
 
+## Onda 1 — F2: hooks genéricos (2026-11-12)
+
+Change `hooks-genericos`. Ainda sem tag e sem push; a F3 e o pré-lançamento `1.0.0-alpha.1` vêm depois.
+
+### Novidades
+
+* Hook de Stop `stop-sensors`: roda o `sensors_command` do `harness.config.json` (vazio por padrão). Sem comando, sem arquivo ou sem Makefile, o encerramento é permitido; sensor que falha ou estoura `sensors_timeout_seconds` bloqueia com código 2 e mostra a saída. Estouro de tempo mata o grupo de processos, sem sensor órfão.
+* Entrega pelo APM: hooks e scripts em `.apm/hooks/`; `apm install --target claude,copilot` registra `SessionStart`, `PreToolUse` e `Stop` em `.claude/settings.json` e `.github/hooks/` e implanta os scripts, sem cópia manual. O risco 1 da spec está resolvido.
+* Pre-commit genérico em `.apm/scripts/git-hooks/pre-commit`, que roda o mesmo `sensors_command`.
+* `allowed_write_roots` (opt-in, vazio por padrão) para escrita fora do projeto, como `/tmp`.
+* Primeira bateria de testes do pacote (`tests/`, `unittest`, 81 testes), usada como `sensors_command` do próprio repositório.
+
+### Correções
+
+* Hooks não quebram mais com configuração ou payload ausente, corrompido ou de tipo errado; as defesas embutidas seguem valendo sem configuração.
+* Contenção de caminho exata (`/tmp/proj-outro` deixou de passar como se fosse `/tmp/proj`), nos guardas e no `phase_cli.py`; `phase_cli.py show` aguenta estado corrompido.
+* Bloqueio no formato de cada host: código 2 e motivo em stderr no Claude Code; JSON `deny` no Copilot. Antes só existia o JSON, que o Claude Code não usa para bloquear.
+* Padrões de comando ancorados na posição de comando: `git push` citado em texto (mensagem de commit, corpo de PR) não bloqueia mais.
+* Padrão de `git branch` só bloqueia `-D`; `git branch -a` e `-vv` passam.
+* O skill `install-dev-harness` deixou de copiar scripts e de mesclar `settings.json`; o modelo de `harness.config.json` perdeu a entrada de pre-commit inexistente.
+
+### Mudanças de quem usa o pacote
+
+* Projetos que copiaram `scripts/hooks/` (0.3.x) devem apagar a cópia e deixar o `apm install` registrar os hooks, para não duplicar. Os padrões de comando nos `harness.config.json` existentes não mudam sozinhos: copie os novos do modelo.
+* O `.claude/hooks/<pacote>/` e `.github/hooks/scripts/<pacote>/` passam a existir no projeto; o caminho usa o nome do pacote (`apm`).
+
+### Verificação
+
+* `python3 -m unittest discover -s tests -t .`: 81 testes ok. Busca por "cowboy", "cobol", "cobc" e "calculadora" em `.apm/`, `.claude/`, `.agents/`, `.github/` e `apm.lock.yaml`: vazia.
+* Projeto consumidor temporário que depende do pacote: instalação ok e 8/8 verificações dos scripts implantados (Stop sem configuração sai 0; Stop com sensor que falha sai 2 com a saída; Bash bloqueado; escrita em `.env` bloqueada; configuração corrompida não trava; Copilot devolve JSON `deny`).
+* **Claude Code real:** com os hooks entregues pelo APM ativos na sessão, o guarda de Bash e o de escrita bloquearam comandos reais (código 2, motivo em stderr). Foi assim que apareceram a menção em texto e a pasta temporária fora do projeto.
+* **Não verificado:** o formato do Copilot (`.github/hooks/`) e a decisão `agentStop` dele num Copilot real; só há testes de saída. O comportamento de `apm approve` para pacotes remotos também não foi exercitado (a dependência local foi aceita sem aprovação).
+
+### Observações
+
+* O aviso do APM "Skill 'harness' replaced overlapping files" segue aparecendo a partir da segunda rodada do `apm install` (registrado na F1).
+* Meus testes numa cópia temporária deixaram recibos em `~/.apm/deployment-receipts` (sem efeito neste repositório; não removidos).
+* Sem hooks ativos no repositório, `git push` e demais comandos destrutivos passam a ser bloqueados nas sessões do Claude Code: o push precisa ser feito pelo desenvolvedor.
+
+### Retrospectiva de skills
+
+* `install-dev-harness`: atualizado nesta change (hooks pelo APM, `sensors_command`, pre-commit opcional, `allowed_write_roots`); os furos da Onda 0 foram fechados. Falta publicar o skill; nada foi publicado sem o "ok".
+* `dev-harness-architect` e `harness-quadrant-process`: devem pedir um teste de fumaça de que o hook dispara no host (aqui o formato errado passou despercebido porque o bloqueio nunca era exercitado). Proposta de atualização, skill público.
+* `openspec-workflow`: continua com os pontos da F1 (criação manual do `.openspec.yaml`, fases das tasks); candidato a receber também a orientação de adaptar o canvas a mudanças que não são de backend.
+* Skill novo: nenhum necessário.
+
 ## Onda 1 — F1: limpeza do cowboy (2026-11-12)
 
 Change `limpeza-do-cowboy`. Ainda sem tag e sem push; a F2, a F3 e o pré-lançamento `1.0.0-alpha.1` vêm depois.
