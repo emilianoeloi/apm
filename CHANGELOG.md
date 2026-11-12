@@ -278,6 +278,13 @@ Spec: APM_SETUP V1.2. Nenhuma tag e nenhum push; a Onda 1 (1.0.0-alpha.1) ainda 
 * `install-dev-harness`: o template `harness.config.json.template` lista `.pre-commit-config.yaml` em `guide_files` mesmo sem o arquivo existir, gerando um "MISSING" falso (removido à mão aqui). O passo 3 só cobre `apm install <repo>#<tag>`, não a fonte local. `settings.hooks.json` traz uma chave `_comment` que precisou ser tirada ao criar `.claude/settings.json`. Proposta: atualizar o skill (público, serve a qualquer projeto). Nada publicado.
 * Skill novo: nenhum necessário nesta onda.
 
+## [1.0.0](https://github.com/emilianoeloi/apm/compare/v1.0.0-alpha.1...v1.0.0) (2026-11-12)
+
+
+### Bug Fixes
+
+* **release:** documenta que o PR de release exige commit liberavel e propoe a 1.0.0 ([#19](https://github.com/emilianoeloi/apm/issues/19)) ([d3f0678](https://github.com/emilianoeloi/apm/commit/d3f067833435df691d47d718a2663a1d4b682f71))
+
 ## [1.0.0-alpha.1](https://github.com/emilianoeloi/apm/compare/v0.3.1...v1.0.0-alpha.1) (2026-11-12)
 
 
