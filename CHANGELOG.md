@@ -1,5 +1,41 @@
 # Changelog
 
+## Onda 1 — F3: agentes de SDLC (2026-11-12)
+
+Change `agentes-sdlc`. Ainda sem tag e sem push; só falta a change de pré-lançamento (`1.0.0-alpha.1`) para fechar o MVP da Onda 1.
+
+### Novidades
+
+* Quatro agentes de papel único e fonte única em `.apm/agents/`, entregues pelo `apm install` para `.claude/agents/` e `.github/agents/`:
+  * `sdlc-planner` (fase `proposal`): proposta OpenSpec validada, análise e REASONS Canvas; escreve só nas pastas de planejamento.
+  * `sdlc-coder` (fase `apply`): código pelas Operations do canvas, tasks marcadas e sensores antes de entregar; escreve só em `code_prefixes` e nos checkboxes do `tasks.md`; para sem canvas.
+  * `sdlc-reviewer` (somente leitura): confere código, Operations e tasks, roda a validação e os sensores e entrega relatório com veredito e achados (arquivo, linha e Operation).
+  * `sdlc-auditor` (somente leitura, opcional): responde e audita com evidências de arquivo e linha.
+* Formato único para os dois hosts: `name`, `description` e `tools` com nomes do Claude Code (o Copilot os aceita como alias), sem `model` e sem `handoffs`. Resolve o risco 2 da spec: os agentes antigos usavam `tools: ['read', 'search', 'execute']`, que o Claude Code não reconhece, e o APM copia o arquivo sem converter.
+* Os agentes não se chamam entre si: a sessão principal dispara cada um (`Agent` e `Task` fora de `tools`).
+* Testes de contrato em `tests/agents/` (formato, ferramentas por papel, neutralidade de stack, skills citadas existem, implantação idêntica à fonte); a suíte inteira tem 100 testes.
+* README com a lista de agentes, a ordem de disparo e os limites; modelo de `CLAUDE.md` e skill `install-dev-harness` com o fluxo por agentes.
+
+### Verificação
+
+* `python3 -m unittest discover -s tests -t .`: 100 testes ok. Busca por "cowboy", "cobol", "cobc" e "calculadora" em `.apm/`, `.claude/`, `.agents/` e `.github/`: vazia.
+* `claude plugin validate .claude/agents`: passou.
+* **Teste de fumaça no Claude Code** (`claude -p --agent … --permission-mode dontAsk`, permissões restritas a leitura e verificação): o `sdlc-reviewer` revisou esta própria change e devolveu o relatório com veredito, achados com arquivo, linha e Operation, e o resultado da validação e dos sensores; o `sdlc-auditor` respondeu a uma pergunta de segurança com evidências. Nos dois, o `git status --porcelain` ficou idêntico antes e depois.
+* **Não verificado:** o comportamento do `sdlc-planner` e do `sdlc-coder` (escrevem) fora de um projeto real, que é o que a prova com a calculadora em Go vai exercitar, e o carregamento dos quatro agentes num Copilot real.
+
+### Observações
+
+* O somente leitura do reviewer e do auditor vem de ferramentas mínimas e de texto; o `Bash` deles ainda poderia escrever. A imposição mecânica (uma fase de revisão no gate) fica para a Onda 2. O escopo do coder em `apply` não tem bloqueio mecânico e é conferido pelo reviewer.
+* O CLI headless do Claude Code não funcionou com o modelo padrão das settings locais do desenvolvedor (modelo local sem resposta); o teste de fumaça passou `--model sonnet`.
+* Lacunas dos guardas de hook que o auditor apontou, a tratar numa change própria: `.env.local` e `.env.production` não são bloqueados (só o nome exato `.env`); a escrita por Bash só é checada para `.env`; ferramentas de escrita de MCP não passam pelo guarda; o `.gitignore` do repositório não tem regra para credenciais.
+
+### Retrospectiva de skills
+
+* `openspec-workflow`: terceira change seguida em que o roteiro dele diverge do que o schema pede (criação manual do `.openspec.yaml`, fases das tasks, canvas pensado para backend). Prioridade para atualizar (público).
+* `spdd-reasons-canvas` e `spdd-generate` (vendorizados): de novo adaptados à mão para uma mudança que não é de backend; a orientação deve ir no `openspec-workflow`.
+* `dev-harness-architect` e `harness-quadrant-process`: devem recomendar o teste de fumaça de um agente no host (`claude -p --agent <nome> --allowedTools …`), que aqui provou o somente leitura e o formato, além de `claude plugin validate`. Proposta de atualização, skill público.
+* `install-dev-harness`: atualizado para o fluxo por agentes. Skill novo: o `sdlc-orchestrator` já está previsto para a Onda 2 (F4); nada além disso.
+
 ## Onda 1 — F2: hooks genéricos (2026-11-12)
 
 Change `hooks-genericos`. Ainda sem tag e sem push; a F3 e o pré-lançamento `1.0.0-alpha.1` vêm depois.

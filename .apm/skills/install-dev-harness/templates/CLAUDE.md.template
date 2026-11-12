@@ -46,6 +46,21 @@ bloqueia `git commit`/`add`/`merge`/`rebase`. Consulte a fase atual com
 | Arquivar | `openspec archive <change>` | `set done <change>` |
 | Retrospectiva de skills | `skill-retrospective` (depois do merge) | `done` |
 
+## Agentes de SDLC
+
+O pacote entrega quatro agentes (`sdlc-planner`, `sdlc-coder`, `sdlc-reviewer` e
+`sdlc-auditor`). A sessão principal dispara cada um; eles não se chamam entre si.
+Pastas, regras e comando de sensores vêm deste arquivo e do `harness.config.json`.
+
+1. Declare a fase `proposal` e dispare o `sdlc-planner` (proposta, análise e canvas).
+2. Revise e aprove o planejamento; só então declare `apply`
+   (`python3 scripts/harness/phase_cli.py set apply <change>`) e dispare o `sdlc-coder`.
+3. Dispare o `sdlc-reviewer` e leia o relatório antes de decidir o merge.
+4. Dispare o `sdlc-auditor` só quando quiser tirar uma dúvida ou auditar.
+
+O reviewer e o auditor não alteram arquivos; o coder escreve só em `{{CODE_PREFIXES_HUMAN}}`
+e nos checkboxes do `tasks.md`.
+
 ## Quality gates mínimos
 
 {{QUALITY_GATES}}

@@ -21,7 +21,7 @@ A limpeza do projeto de origem (`cowboy`, uma calculadora em COBOL) removeu, de 
 - as skills `cobol-calculadora`, `vibe-coding-fundamentals` e `readme-manutencao`;
 - o hook de encerramento `cowboy.json` (rodava `make fitness`) e o script de pre-commit que compilava COBOL.
 
-O conteúdo não foi movido: quem ainda precisa dele deve manter a dependência na tag `v0.3.1`, que guarda o estado antigo. O hook de encerramento que o substitui é genérico (veja "Hooks" abaixo); os agentes de SDLC chegam nas próximas versões.
+O conteúdo não foi movido: quem ainda precisa dele deve manter a dependência na tag `v0.3.1`, que guarda o estado antigo. O hook de encerramento que o substitui é genérico (veja "Hooks" abaixo), e os agentes de SDLC são os `sdlc-*` descritos em "Agentes de SDLC". Os agentes da 0.3.x não têm equivalente direto.
 
 ## Workflow SDD (OpenSpec + OpenSPDD)
 
@@ -44,6 +44,33 @@ git diff                         # revise antes de publicar
 ```
 
 As versões usadas ficam em [vendor.json](vendor.json). Não edite à mão os arquivos vendorizados — o próximo sync os sobrescreve; customizações vão nas skills autorais.
+
+## Agentes de SDLC
+
+Quatro agentes de papel único e fonte única (`.apm/agents/sdlc-*.agent.md`), que o `apm install` entrega para `claude` (`.claude/agents/`) e `copilot` (`.github/agents/`). **A sessão principal dispara cada um; eles não se chamam entre si** (cada um devolve o resultado a ela).
+
+| Agente | Fase | O que faz | Escreve | Ferramentas |
+|---|---|---|---|---|
+| `sdlc-planner` | `proposal` | proposta OpenSpec validada, análise e REASONS Canvas (skills `openspec-explore`, `openspec-propose`, `spdd-analysis`, `spdd-reasons-canvas`) | só `planning_write_prefixes` (por padrão `openspec/` e `spdd/`); nunca código | `Read, Grep, Glob, Write, Edit, Bash, Skill` |
+| `sdlc-coder` | `apply` | código pelas Operations do canvas (skills `spdd-generate` e `openspec-apply-change`), tasks marcadas e sensores antes de entregar; para e avisa se não houver canvas | só `code_prefixes` e os checkboxes do `tasks.md` | `Read, Grep, Glob, Write, Edit, Bash, Skill` |
+| `sdlc-reviewer` | depois da implementação | confere código, Operations e tasks, roda `openspec validate --strict` e os sensores e entrega um relatório com veredito e achados (arquivo, linha e Operation) | nada: somente leitura | `Read, Grep, Glob, Bash` |
+| `sdlc-auditor` | sob demanda (opcional) | responde dúvidas e audita conformidade, arquitetura e segurança com evidências de arquivo e linha | nada: somente leitura | `Read, Grep, Glob, Bash` |
+
+**Ordem de disparo**, sempre pela sessão principal:
+
+1. Pedido de funcionalidade: declare a fase (`python3 scripts/harness/phase_cli.py set proposal <change>`; o planner declara sozinho se não houver fase) e dispare o `sdlc-planner`.
+2. O humano revisa e aprova a proposta, a análise e o canvas.
+3. Declare `python3 scripts/harness/phase_cli.py set apply <change>` e dispare o `sdlc-coder`.
+4. Dispare o `sdlc-reviewer` e leia o relatório; o humano decide o merge. Depois, a sessão principal reconcilia com `/spdd-sync`, arquiva (`openspec archive`) e faz a retrospectiva de skills.
+5. Dispare o `sdlc-auditor` quando quiser tirar uma dúvida ou auditar.
+
+**Formato.** Um arquivo serve aos dois hosts: o frontmatter tem só `name`, `description` e `tools`, com nomes de ferramenta do Claude Code (o Copilot os aceita como alias), sem `model` e sem `handoffs`. Nenhum agente cita linguagem, pasta ou comando de um projeto: as pastas e o comando de sensores vêm do `harness.config.json`, e as regras, do arquivo raiz do agente (`CLAUDE.md` ou `AGENTS.md`).
+
+**Limites e verificação.**
+
+- O somente leitura do reviewer e do auditor vem de ferramentas mínimas (sem `Write` e `Edit`) e do texto; o `Bash` que eles têm ainda poderia escrever arquivos, por isso o relatório confirma que o `git status --porcelain` final é igual ao inicial. A imposição mecânica está prevista para a Onda 2.
+- O escopo do coder em `apply` não tem bloqueio mecânico; o reviewer o confere pelo diff e registra um achado de escopo.
+- Comprovado: o contrato (testes em `tests/agents/`), a validação do Claude Code (`claude plugin validate .claude/agents`) e um teste de fumaça do reviewer e do auditor no Claude Code, sem nenhuma alteração no repositório. **Não comprovado:** o comportamento do `sdlc-planner` e do `sdlc-coder` (que escrevem) fora de um projeto real, que é o que o projeto de prova vai exercitar, e o carregamento dos quatro no Copilot.
 
 ## Hooks
 

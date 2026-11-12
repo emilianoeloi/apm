@@ -49,6 +49,7 @@ bloqueia `git commit`/`add`/`merge`/`rebase`. Consulte a fase atual com
 ## Quality gates mínimos
 
 - Testes do pacote e dos hooks: `python3 -m unittest discover -s tests -t .` (é também o `sensors_command` do `harness.config.json`: o hook de Stop o roda sozinho ao encerrar a sessão).
+- Contrato dos agentes de SDLC: `python3 -m unittest tests.agents.test_contract` (já incluído no comando acima) e `claude plugin validate .claude/agents` depois de `apm install`.
 - Validação da change: `openspec validate <change> --strict`.
 - Neutralidade: `grep -rniE "cowboy|cobol|cobc|calculadora" .apm` deve voltar vazia.
 
