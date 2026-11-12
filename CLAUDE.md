@@ -53,6 +53,12 @@ bloqueia `git commit`/`add`/`merge`/`rebase`. Consulte a fase atual com
 - Validação da change: `openspec validate <change> --strict`.
 - Neutralidade: `grep -rniE "cowboy|cobol|cobc|calculadora" .apm` deve voltar vazia.
 
+## Cuidados de release
+
+- Não reintroduza `release-as` no `release-please-config.json` (o teste em `tests/release/` falha se voltar) e não mescle o PR de release sem conferir a versão proposta: tags `v*` não se apagam nem se movem.
+- O pré-lançamento `1.0.0-alpha.1` vale até a prova em projeto real; a `1.0.0` final sai trocando `"prerelease"` para `false`.
+- Publicar (mesclar o PR de release) e dar push são atos do desenvolvedor.
+
 ## Escopo
 
 Este arquivo é um guia básico para o Claude Code. Detalhes de arquitetura,
