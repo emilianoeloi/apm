@@ -17,7 +17,7 @@
   "code_prefixes": [".apm/", "scripts/", "tests/"],
 
   "_comment_roots": "allowed_write_roots: diretórios ABSOLUTOS fora da raiz do projeto onde a escrita é permitida (ex.: /tmp). Aceita ~ e variáveis de ambiente. Padrão: vazio = nada fora da raiz. Nunca libera arquivos de credencial.",
-  "allowed_write_roots": ["/tmp", "/private/tmp"],
+  "allowed_write_roots": ["/tmp", "/private/tmp", "~/.claude/projects/-Users-emiliano-barbosa-Pessoal-apm/memory"],
 
   "blocked_filenames": [
     ".env",

@@ -2,13 +2,15 @@
 
 Pacote APM público e genérico, com Lean Inception, Harness e SDLC em skills, agentes e hooks, para qualquer stack (iOS, Rust, JavaScript, Go e outras). É instalado por versão e entregue para `claude` e `copilot`.
 
-Consumo (no projeto):
+Consumo (no projeto), pelo pré-lançamento da `1.0.0`, que é a versão com os hooks genéricos e os agentes de SDLC:
 
 ```yaml
 dependencies:
   apm:
-    - emilianoeloi/apm#v0.3.1
+    - emilianoeloi/apm#v1.0.0-alpha.1
 ```
+
+Depois rode `apm install --target claude,copilot` e commite `apm.yml`, `apm.lock.yaml` e os diretórios implantados. A `v0.3.1` continua sendo a última versão **estável** (com o conteúdo do cowboy) até a `1.0.0` sair; veja "Pré-lançamento da 1.0.0" abaixo.
 
 Layout: `.apm/skills/*`, `.apm/prompts/*`, `.apm/agents/*`, `.apm/hooks/*` (registro e scripts de hook), `.apm/scripts/*` (`phase_cli.py` e pre-commit genérico) e `.apm/templates/*` (`harness.config.json` e modelo do quadrante).
 
@@ -74,7 +76,7 @@ Quatro agentes de papel único e fonte única (`.apm/agents/sdlc-*.agent.md`), q
 
 ## Hooks
 
-O pacote entrega os hooks pelo APM: `apm install --target claude,copilot` copia os scripts (com o helper `_common.py`) e os registra em `.claude/settings.json` e `.github/hooks/`, sem cópia manual. Hooks são código executável: revise os scripts e, se o APM pedir, rode `apm approve`.
+O pacote entrega os hooks pelo APM: `apm install --target claude,copilot` copia os scripts (com o helper `_common.py`) e os registra em `.claude/settings.json` e `.github/hooks/`, sem cópia manual. Hooks são código executável: revise os scripts antes de instalar. Por padrão o APM não exige aprovação (o `apm install` da tag `v1.0.0-alpha.1` instalou os hooks direto); se o `apm.yml` do projeto declara um bloco `executables:`, aprove o pacote com `apm approve emilianoeloi/apm`.
 
 | Evento | Script | O que faz |
 |---|---|---|
@@ -110,7 +112,7 @@ A linha `version:` do `apm.yml` é atualizada pelo bot (pelo `extra-files` do `r
 
 A primeira publicação da `1.0.0` é um **pré-lançamento**, a `1.0.0-alpha.1`, e a `1.0.0` final só sai depois da prova em um projeto real.
 
-- **Última versão estável:** a `v0.3.1`, até a `1.0.0` sair. O GitHub Release do pré-lançamento é marcado como "pre-release"; quem quiser testá-lo aponta para a tag explícita (`emilianoeloi/apm#v1.0.0-alpha.1`, depois que ela for publicada). Quem não fixa a tag não deve esperar receber um pré-lançamento.
+- **Última versão estável:** a `v0.3.1`, até a `1.0.0` sair. O GitHub Release do pré-lançamento é marcado como "pre-release"; a tag `v1.0.0-alpha.1` já está publicada e quem quiser testá-lo aponta para ela de forma explícita (`emilianoeloi/apm#v1.0.0-alpha.1`). Quem não fixa a tag não deve esperar receber um pré-lançamento.
 - **Numeração:** os pré-lançamentos seguintes numeram sozinhos (`1.0.0-alpha.2`, `1.0.0-alpha.3`, …), em qualquer tipo de commit.
 - **Configuração:** `versioning: "prerelease"`, `prerelease: true` e `prerelease-type: "alpha.1"` em `release-please-config.json`. O valor `alpha.1` é proposital: o tipo vira o primeiro sufixo (com `alpha` a primeira versão seria `1.0.0-alpha`, sem número) e, depois, o último número do sufixo sobe a cada release.
 - **Versão final:** depois da prova, troque `"prerelease"` para `false`; o PR de release seguinte descarta o sufixo e propõe `1.0.0`. Nenhuma outra mudança é necessária.
