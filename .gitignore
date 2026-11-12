@@ -1,3 +1,6 @@
 
 # APM dependencies
 apm_modules/
+
+# Estado de fase do harness (por sessao)
+.harness/

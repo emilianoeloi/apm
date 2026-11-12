@@ -1,16 +1,27 @@
-# apm — harness package
+# apm
 
-Pacote APM privado com o harness extraído do `cowboy`.
+Pacote APM público e genérico, com Lean Inception, Harness e SDLC em skills, agentes e hooks, para qualquer stack (iOS, Rust, JavaScript, Go e outras). É instalado por versão e entregue para `claude` e `copilot`.
 
 Consumo (no projeto):
 
 ```yaml
 dependencies:
   apm:
-    - emilianoeloi/apm#v0.3.0
+    - emilianoeloi/apm#v0.3.1
 ```
 
-Layout: `.apm/skills/*`, `.apm/prompts/*`, `.apm/agents/*`, `.apm/hooks/*.json`, `.apm/scripts/*` (hooks, phase_cli, pre-commit), `.apm/templates/*` (harness.config.json, quadrante).
+Layout: `.apm/skills/*`, `.apm/prompts/*`, `.apm/agents/*`, `.apm/scripts/*` (hooks e `phase_cli.py`) e `.apm/templates/*` (`harness.config.json` e modelo do quadrante).
+
+## Migração da 0.3.x
+
+A limpeza do projeto de origem (`cowboy`, uma calculadora em COBOL) removeu, de forma **incompatível**:
+
+- os agentes `cobol-vibecoder`, `cobol-planner`, `cobol-coder`, `cobol-reviewer` e `readme-writer`;
+- os prompts `criar-programa`, `implementar-soma`, `implementar-subtracao`, `implementar-log`, `testar-programa`, `atualizar-readme` e `manutencao-repositorio`;
+- as skills `cobol-calculadora`, `vibe-coding-fundamentals` e `readme-manutencao`;
+- o hook de encerramento `cowboy.json` (rodava `make fitness`) e o script de pre-commit que compilava COBOL.
+
+O conteúdo não foi movido: quem ainda precisa dele deve manter a dependência na tag `v0.3.1`, que guarda o estado antigo. Os hooks genéricos que substituem o de encerramento e os agentes de SDLC chegam nas próximas versões.
 
 ## Workflow SDD (OpenSpec + OpenSPDD)
 
