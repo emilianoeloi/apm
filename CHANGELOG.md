@@ -1,5 +1,37 @@
 # Changelog
 
+## Prova da calculadora em Go (2026-11-12)
+
+Projeto de prova: [`emilianoeloi/calculadora_go`](https://github.com/emilianoeloi/calculadora_go), criado do zero sobre o pré-lançamento `v1.0.0-alpha.1` (o código da calculadora nunca entra neste repositório). Resultados por passo em [docs/roteiro-de-teste.md](docs/roteiro-de-teste.md).
+
+### Resultado
+
+* **Onda 0 do projeto:** o skill `install-dev-harness` instalou o harness a partir da tag publicada, sem ajuste manual no pacote; a verificação passou inteira.
+* **Funcionalidade 1 (`calculadora-basica`):** `sdlc-planner` (proposta, specs, design, tasks, análise e canvas), `sdlc-coder` (código em `cmd/` e `internal/`) e `sdlc-reviewer` (relatório com veredito e achados com arquivo, linha e Operation) rodaram de verdade. Quatro operadores, divisão por zero devolve erro sem pânico. Publicada direto em `main`, sem pull request.
+* **Funcionalidade 2 (`numeros-especiais-e-formato`):** feita em branch e fechada no PR [calculadora_go#1](https://github.com/emilianoeloi/calculadora_go/pull/1), mesclado: entradas `nan`, `inf`, hexadecimais e sublinhados rejeitadas (saída 2), overflow vira erro (saída 1) e o zero negativo sai como `0`.
+* **Conferência independente, na `main` publicada (`3c06a5d`):** `go vet` e `go test -count=1 ./...` passam, com 100% de cobertura em `internal/calculo` e `internal/cli`; todos os cenários do roteiro batem; nenhum commit nem a descrição do PR cita o assistente.
+
+### Achados (para a Onda 2)
+
+* Hook de Stop sem `go.mod`: com `sensors_command` igual a `go test ./...`, o Stop bloqueia qualquer encerramento até o módulo existir. Falta um modo "sensor ainda não aplicável".
+* `go.mod` sem dono: nenhum agente cobre o arquivo de módulo (o coder só escreve em `code_prefixes`); a sessão principal teve de criá-lo.
+* Harness acoplado à pasta da sessão: uma sessão aberta em outro projeto não consegue disparar agentes para escrever na pasta da calculadora (o guarda de escrita bloqueia, corretamente); funciona abrindo a sessão no projeto.
+* Nada impede publicar direto em `main`: a 1ª funcionalidade saiu sem PR e não há correção retroativa sem reescrever o histórico. Proteção de branch ou o `sdlc-orchestrator` (F4) devem impor "uma funcionalidade, uma branch, um PR".
+* Os skills de SPDD geram nomes com `GGQPA-XXX` quando o projeto não tem ticket; vale um prefixo configurável.
+
+### Não verificado
+
+* O comportamento do `sdlc-planner` quando se pede de propósito um arquivo `.go` em `proposal` (o gate foi provado pelos hooks, e o planner real ficou dentro de `openspec/` e `spdd/`).
+* O formato dos agentes e dos hooks num Copilot real.
+* A aprovação da prova pelo Elói, que libera a `1.0.0` final.
+
+### Retrospectiva de skills (fecha a Onda 1)
+
+* **Funcionaram sem ajuste:** `install-dev-harness`, `sdlc-planner`, `sdlc-coder` e `sdlc-reviewer` no projeto de prova.
+* **A atualizar (público):** `openspec-workflow` (divergência do schema em todas as changes), orientação de adaptar o canvas a mudanças que não são de backend, e o `install-dev-harness` (pré-requisitos do projeto, como o `go.mod`, e a ordem de configurar o `sensors_command`).
+* **Procedimentos reutilizáveis:** teste de fumaça de agente no host, conferência independente numa cópia limpa da `main` e verificação do pré-lançamento executando a biblioteca do release-please.
+* Nada foi publicado sem o "ok" do Elói.
+
 ## Onda 1 — fechamento (2026-11-12)
 
 A Onda 1 (MVP: F1, F2 e F3) foi publicada como o pré-lançamento `1.0.0-alpha.1`. Roteiro de teste em [docs/roteiro-de-teste.md](docs/roteiro-de-teste.md).
