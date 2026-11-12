@@ -195,6 +195,15 @@ faltar, informe ao usuário e pare — não instale ferramentas globais sem pedi
    sem fase) tudo é liberado — o gate só existe durante planejamento. Por
    isso rode os passos 3–6 **antes** de declarar a primeira fase.
 
+   **Agentes (opcional).** O `apm install` também entrega `sdlc-planner`,
+   `sdlc-coder`, `sdlc-reviewer` e `sdlc-auditor` para `claude` e `copilot`. Eles
+   seguem o fluxo acima: a sessão principal declara a fase e dispara um por vez
+   (planner em `proposal`; depois da aprovação do humano e de `set apply`, o
+   coder; em seguida o reviewer; o auditor sob demanda). O modelo de
+   `CLAUDE.md` já traz esse roteiro. Os agentes leem as pastas e o comando de
+   sensores do `harness.config.json`: preencha `code_prefixes` e
+   `sensors_command` antes de usá-los.
+
 9. **Relate** os arquivos criados/modificados, os comandos de verificação
    executados e o próximo passo natural: `architecture-fitness-functions`
    (transformar as regras do arquivo raiz em testes, que viram os quality

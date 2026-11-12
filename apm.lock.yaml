@@ -3,6 +3,42 @@ dependencies: []
 deployments:
 - kind: project-relative
   target: claude
+  value: .claude/agents/sdlc-auditor.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
+- kind: project-relative
+  target: claude
+  value: .claude/agents/sdlc-coder.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a186d5bec1d0650c9a52dfbb1ddd36b5cc0eef5f11bc44c6d80a6f67331a84cb
+- kind: project-relative
+  target: claude
+  value: .claude/agents/sdlc-planner.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8cc0ac386466526530a5690cec180a98cdb3be99569306dd43b0561a9c56609a
+- kind: project-relative
+  target: claude
+  value: .claude/agents/sdlc-reviewer.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:bb349651361caa10d0eecc64dc8594026a407ddbd9e9e31a44b36a634b44999f
+- kind: project-relative
+  target: claude
   value: .claude/commands/opsx-apply.md
   runtime: null
   scope: project
@@ -216,7 +252,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:20da91c1312a9f490d850740f016c715d3a51d8fb2ca89ff7e3650cfd7508d57
+  content_hash: sha256:704cb980babe10a345c18bcf88d76ceb115e8e5427db1d6dd4d470abbe142554
 - kind: project-relative
   target: claude
   value: .claude/skills/install-dev-harness/templates/CLAUDE.md.template
@@ -225,7 +261,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:6e34319b9979e1b774ada7e34898e8640e20615ece50406bad80fec44a9da336
+  content_hash: sha256:b31e073bc4f80695bbd9e6afba8b517be3eac4cee2719dd3d0a99a871626d536
 - kind: project-relative
   target: claude
   value: .claude/skills/install-dev-harness/templates/harness.config.json.template
@@ -639,7 +675,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:20da91c1312a9f490d850740f016c715d3a51d8fb2ca89ff7e3650cfd7508d57
+  content_hash: sha256:704cb980babe10a345c18bcf88d76ceb115e8e5427db1d6dd4d470abbe142554
 - kind: project-relative
   target: copilot
   value: .agents/skills/install-dev-harness/templates/CLAUDE.md.template
@@ -648,7 +684,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:6e34319b9979e1b774ada7e34898e8640e20615ece50406bad80fec44a9da336
+  content_hash: sha256:b31e073bc4f80695bbd9e6afba8b517be3eac4cee2719dd3d0a99a871626d536
 - kind: project-relative
   target: copilot
   value: .agents/skills/install-dev-harness/templates/harness.config.json.template
@@ -948,6 +984,42 @@ deployments:
   content_hash: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
 - kind: project-relative
   target: copilot
+  value: .github/agents/sdlc-auditor.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
+- kind: project-relative
+  target: copilot
+  value: .github/agents/sdlc-coder.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a186d5bec1d0650c9a52dfbb1ddd36b5cc0eef5f11bc44c6d80a6f67331a84cb
+- kind: project-relative
+  target: copilot
+  value: .github/agents/sdlc-planner.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8cc0ac386466526530a5690cec180a98cdb3be99569306dd43b0561a9c56609a
+- kind: project-relative
+  target: copilot
+  value: .github/agents/sdlc-reviewer.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:bb349651361caa10d0eecc64dc8594026a407ddbd9e9e31a44b36a634b44999f
+- kind: project-relative
+  target: copilot
   value: .github/hooks/apm-harness.json
   runtime: null
   scope: project
@@ -1102,6 +1174,10 @@ local_deployed_files:
 - .agents/skills/spdd-sync
 - .agents/skills/spdd-sync/SKILL.md
 - .agents/skills/spdd-sync/agents/openai.yaml
+- .claude/agents/sdlc-auditor.md
+- .claude/agents/sdlc-coder.md
+- .claude/agents/sdlc-planner.md
+- .claude/agents/sdlc-reviewer.md
 - .claude/commands/opsx-apply.md
 - .claude/commands/opsx-archive.md
 - .claude/commands/opsx-explore.md
@@ -1160,6 +1236,10 @@ local_deployed_files:
 - .claude/skills/spdd-sync
 - .claude/skills/spdd-sync/SKILL.md
 - .claude/skills/spdd-sync/agents/openai.yaml
+- .github/agents/sdlc-auditor.agent.md
+- .github/agents/sdlc-coder.agent.md
+- .github/agents/sdlc-planner.agent.md
+- .github/agents/sdlc-reviewer.agent.md
 - .github/hooks/apm-harness.json
 - .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py
 - .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-bash-guard.py
@@ -1180,8 +1260,8 @@ local_deployed_file_hashes:
   .agents/skills/harness-quadrant-process/references/quadrant-doc-template.md: sha256:d78f00562fefba88b9ac6b8f25385c7f0b2b828a4098235539095e92ac1f6ae7
   .agents/skills/harness/SKILL.md: sha256:9d3ad4069e638e900567a44cd643bfda9ab46a44a06fe7df98fbd919d2331b82
   .agents/skills/harness/references/dev-harness-kit-export.md: sha256:eb3b27fd4526f2fcaa15f6ae2fc45111a7575cc09ee3f020b524e7adbab4e662
-  .agents/skills/install-dev-harness/SKILL.md: sha256:20da91c1312a9f490d850740f016c715d3a51d8fb2ca89ff7e3650cfd7508d57
-  .agents/skills/install-dev-harness/templates/CLAUDE.md.template: sha256:6e34319b9979e1b774ada7e34898e8640e20615ece50406bad80fec44a9da336
+  .agents/skills/install-dev-harness/SKILL.md: sha256:704cb980babe10a345c18bcf88d76ceb115e8e5427db1d6dd4d470abbe142554
+  .agents/skills/install-dev-harness/templates/CLAUDE.md.template: sha256:b31e073bc4f80695bbd9e6afba8b517be3eac4cee2719dd3d0a99a871626d536
   .agents/skills/install-dev-harness/templates/harness.config.json.template: sha256:8444f21dd26a4be25bd79f3d47cc0c0c42e357faba0acfd0a71cdfbc52e196b2
   .agents/skills/install-dev-harness/templates/phase_cli.py: sha256:f72504b8e0523b1b2cd1405f3baeb49a13da4031639be7d61d9ab9da96af02f3
   .agents/skills/openspec-apply-change/SKILL.md: sha256:3ebe3a76be0c4078dc330b4aff30980eb515c6e8824366246d4ee86daa5c983e
@@ -1202,6 +1282,10 @@ local_deployed_file_hashes:
   .agents/skills/spdd-reasons-canvas/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .agents/skills/spdd-sync/SKILL.md: sha256:c2f05f038be42c58ff80058c00e5096b0db5a9144ad436a979084964095eebe9
   .agents/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
+  .claude/agents/sdlc-auditor.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
+  .claude/agents/sdlc-coder.md: sha256:a186d5bec1d0650c9a52dfbb1ddd36b5cc0eef5f11bc44c6d80a6f67331a84cb
+  .claude/agents/sdlc-planner.md: sha256:8cc0ac386466526530a5690cec180a98cdb3be99569306dd43b0561a9c56609a
+  .claude/agents/sdlc-reviewer.md: sha256:bb349651361caa10d0eecc64dc8594026a407ddbd9e9e31a44b36a634b44999f
   .claude/commands/opsx-apply.md: sha256:cc529c6fc803294b6aaa167935edcc6cf29f5d6abfca5745cc6b2b66c52e4d1d
   .claude/commands/opsx-archive.md: sha256:7521ac8904458e2ee287015f009b6f7f5e55ca6b83849920bf2353e443853997
   .claude/commands/opsx-explore.md: sha256:46ed31adf3396460842a383324118e8d220b77fb49471a28a667a8551f3f3232
@@ -1220,8 +1304,8 @@ local_deployed_file_hashes:
   .claude/skills/harness-quadrant-process/references/quadrant-doc-template.md: sha256:d78f00562fefba88b9ac6b8f25385c7f0b2b828a4098235539095e92ac1f6ae7
   .claude/skills/harness/SKILL.md: sha256:9d3ad4069e638e900567a44cd643bfda9ab46a44a06fe7df98fbd919d2331b82
   .claude/skills/harness/references/dev-harness-kit-export.md: sha256:eb3b27fd4526f2fcaa15f6ae2fc45111a7575cc09ee3f020b524e7adbab4e662
-  .claude/skills/install-dev-harness/SKILL.md: sha256:20da91c1312a9f490d850740f016c715d3a51d8fb2ca89ff7e3650cfd7508d57
-  .claude/skills/install-dev-harness/templates/CLAUDE.md.template: sha256:6e34319b9979e1b774ada7e34898e8640e20615ece50406bad80fec44a9da336
+  .claude/skills/install-dev-harness/SKILL.md: sha256:704cb980babe10a345c18bcf88d76ceb115e8e5427db1d6dd4d470abbe142554
+  .claude/skills/install-dev-harness/templates/CLAUDE.md.template: sha256:b31e073bc4f80695bbd9e6afba8b517be3eac4cee2719dd3d0a99a871626d536
   .claude/skills/install-dev-harness/templates/harness.config.json.template: sha256:8444f21dd26a4be25bd79f3d47cc0c0c42e357faba0acfd0a71cdfbc52e196b2
   .claude/skills/install-dev-harness/templates/phase_cli.py: sha256:f72504b8e0523b1b2cd1405f3baeb49a13da4031639be7d61d9ab9da96af02f3
   .claude/skills/openspec-apply-change/SKILL.md: sha256:3ebe3a76be0c4078dc330b4aff30980eb515c6e8824366246d4ee86daa5c983e
@@ -1242,6 +1326,10 @@ local_deployed_file_hashes:
   .claude/skills/spdd-reasons-canvas/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .claude/skills/spdd-sync/SKILL.md: sha256:c2f05f038be42c58ff80058c00e5096b0db5a9144ad436a979084964095eebe9
   .claude/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
+  .github/agents/sdlc-auditor.agent.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
+  .github/agents/sdlc-coder.agent.md: sha256:a186d5bec1d0650c9a52dfbb1ddd36b5cc0eef5f11bc44c6d80a6f67331a84cb
+  .github/agents/sdlc-planner.agent.md: sha256:8cc0ac386466526530a5690cec180a98cdb3be99569306dd43b0561a9c56609a
+  .github/agents/sdlc-reviewer.agent.md: sha256:bb349651361caa10d0eecc64dc8594026a407ddbd9e9e31a44b36a634b44999f
   .github/hooks/apm-harness.json: sha256:1844939cb35265f9c3628080a5ffba8d4ec890f75cfc9cd8a8dddd35a654b726
   .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
   .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-bash-guard.py: sha256:de9414085402d88aa8d03628b299d90e05344e4ace6319b339a980d1f11ab652
