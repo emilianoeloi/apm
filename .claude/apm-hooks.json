@@ -1,0 +1,52 @@
+{
+  "SessionStart": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/apm/.apm/hooks/scripts/session-start.py\"",
+          "timeout": 5
+        }
+      ],
+      "_apm_source": "_local/apm"
+    }
+  ],
+  "PreToolUse": [
+    {
+      "matcher": "Write|Edit|NotebookEdit",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/apm/.apm/hooks/scripts/pre-tool-write-guard.py\"",
+          "timeout": 5
+        }
+      ],
+      "_apm_source": "_local/apm"
+    },
+    {
+      "matcher": "Bash",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/apm/.apm/hooks/scripts/pre-tool-bash-guard.py\"",
+          "timeout": 5
+        }
+      ],
+      "_apm_source": "_local/apm"
+    }
+  ],
+  "Stop": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py\"",
+          "timeout": 60
+        }
+      ],
+      "_apm_source": "_local/apm"
+    }
+  ]
+}

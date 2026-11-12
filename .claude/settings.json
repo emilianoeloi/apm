@@ -1,12 +1,24 @@
 {
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/apm/.apm/hooks/scripts/session-start.py\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Write|Edit|NotebookEdit",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/hooks/pre-tool-write-guard.py\"",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/apm/.apm/hooks/scripts/pre-tool-write-guard.py\"",
             "timeout": 5
           }
         ]
@@ -16,19 +28,20 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/hooks/pre-tool-bash-guard.py\"",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/apm/.apm/hooks/scripts/pre-tool-bash-guard.py\"",
             "timeout": 5
           }
         ]
       }
     ],
-    "SessionStart": [
+    "Stop": [
       {
+        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/hooks/session-start.py\"",
-            "timeout": 5
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py\"",
+            "timeout": 60
           }
         ]
       }

@@ -45,12 +45,15 @@ Via APM os comandos têm o mesmo nome nos dois hosts: `/opsx-*` e `/spdd-*`
 (o `/opsx:*` com dois-pontos é do `openspec init` nativo do Claude).
 
 Os hooks são scripts Python stdlib-only (só `python3` é requisito) e rodam
-como processo externo — funcionam para qualquer stack do projeto alvo.
+como processo externo — funcionam para qualquer stack do projeto alvo. **O APM
+entrega os hooks**: o pacote os declara em `.apm/hooks/harness.json` e o
+`apm install` copia os scripts e os registra em `.claude/settings.json` e
+`.github/hooks/`. Nada de copiar scripts nem editar o `settings.json` à mão.
 
 > **Não rode `openspec init --tools claude,...` nem `openspdd generate` no
 > projeto consumidor** — o APM já entrega esses arquivos e uma segunda cópia
-> duplica comandos. Os arquivos em `templates/` são o fallback para os
-> scripts de hook, que o APM ainda não materializa sozinho.
+> duplica comandos. Os arquivos em `templates/` são só o que o projeto precisa
+> ter por conta própria: `harness.config.json`, `CLAUDE.md` e o `phase_cli.py`.
 
 ## Mantendo o vendor (mantenedores deste repo)
 
@@ -104,6 +107,10 @@ faltar, informe ao usuário e pare — não instale ferramentas globais sem pedi
      Nunca crie `.github/copilot-instructions.md` junto de `AGENTS.md`.
    - Diretórios reais de código e testes (`code_prefixes`).
    - Idioma dos artefatos OpenSpec (`--language`), se não for o padrão.
+   - Comando de sensores do projeto (`sensors_command`: testes, lint, build —
+     o que deve passar antes de encerrar a sessão). Se o usuário não souber,
+     deixe vazio e escreva "não informado" nos quality gates: vazio nunca
+     bloqueia o encerramento.
    - Quer só os hooks de segurança sem gate de fase? Então deixe
      `planning_write_prefixes`/`code_prefixes` como `[]` e pule os passos 4–5.
 
@@ -113,11 +120,16 @@ faltar, informe ao usuário e pare — não instale ferramentas globais sem pedi
    apm install emilianoeloi/apm#<tag>     # ou adicione em apm.yml → dependencies.apm
    apm install --target claude,copilot    # reaplica para os hosts escolhidos
    ```
-   Resultado: `.claude/commands/opsx-*.md`, `.claude/skills/{openspec,spdd}-*`
-   e `.github/prompts/opsx-*.prompt.md`.
+   Resultado: `.claude/commands/opsx-*.md`, `.claude/skills/{openspec,spdd}-*`,
+   `.github/prompts/opsx-*.prompt.md` e os hooks (`SessionStart`, `PreToolUse`
+   para escrita e Bash, `Stop`) registrados em `.claude/settings.json` e
+   `.github/hooks/`, com os scripts em `.claude/hooks/<pacote>/` e
+   `.github/hooks/scripts/<pacote>/`.
    Hooks são código executável: se o APM pedir, use `apm approve` depois de
-   revisar. Use `apm install --dry-run` antes quando o projeto já tiver
-   arquivos locais.
+   revisar os scripts. Use `apm install --dry-run` antes quando o projeto já
+   tiver arquivos locais, e confira que cada evento aparece uma vez no
+   `.claude/settings.json` (se o projeto já registrava hooks parecidos à mão,
+   remova o registro antigo para não duplicar).
 
 4. **Crie o estado do OpenSpec** (só `openspec/`; os comandos já vieram do APM):
    ```bash
@@ -131,33 +143,38 @@ faltar, informe ao usuário e pare — não instale ferramentas globais sem pedi
    (com `.gitkeep`). Elas precisam estar em `planning_write_prefixes` para a
    fase `proposal` permitir escrita nelas.
 
-6. **Instale o gate de fase** copiando `templates/` para o projeto:
+6. **Instale o gate de fase** copiando `templates/` para o projeto (os hooks
+   já vieram do APM no passo 3; o que sobra é a configuração e o CLI de fase):
 
    | Template | Destino | Placeholders |
    |---|---|---|
-   | `templates/harness.config.json.template` | `harness.config.json` | `{{RULEBOOK_FILE}}`; `{{PLANNING_PREFIXES}}` = `["openspec/", "spdd/", ".harness/"]`; `{{CODE_PREFIXES}}` = ex. `["src/", "tests/"]` |
+   | `templates/harness.config.json.template` | `harness.config.json` | `{{RULEBOOK_FILE}}`; `{{PLANNING_PREFIXES}}` = `["openspec/", "spdd/", ".harness/"]`; `{{CODE_PREFIXES}}` = ex. `["src/", "tests/"]`; depois preencha `sensors_command` |
    | `templates/CLAUDE.md.template` | `CLAUDE.md` (só se não existir) | `{{RULEBOOK_FILE}}`, `{{QUALITY_GATES}}`, `{{CODE_PREFIXES_HUMAN}}` |
-   | `templates/hooks/pre-tool-write-guard.py` | `scripts/hooks/` | — |
-   | `templates/hooks/pre-tool-bash-guard.py` | `scripts/hooks/` | — |
-   | `templates/hooks/session-start.py` | `scripts/hooks/` | — |
    | `templates/phase_cli.py` | `scripts/harness/phase_cli.py` | — |
 
    Se `CLAUDE.md`/`AGENTS.md` já existir, apenas acrescente a seção
-   “Fase da change” (com o mapeamento do passo 8). Registre os hooks em
-   `.claude/settings.json` fazendo **merge** com `templates/settings.hooks.json`
-   (nunca sobrescreva). Se o APM já entrega os hooks via `.apm/hooks/*.json`,
-   não duplique o registro — copie só os scripts.
+   “Fase da change” (com o mapeamento do passo 8). Não crie
+   `scripts/hooks/` nem edite `.claude/settings.json` para registrar hooks: é
+   o APM que faz isso.
+
+   Opcional: o pre-commit genérico do pacote roda o mesmo `sensors_command`
+   antes de cada commit (e nunca trava sem ele). Copie
+   `.apm/scripts/git-hooks/pre-commit` do pacote para `.githooks/pre-commit` e
+   rode `git config core.hooksPath .githooks`.
 
 7. **Verifique**:
    ```bash
-   echo '{"source":"new"}' | python3 scripts/hooks/session-start.py
+   echo '{"source":"new"}' | python3 .claude/hooks/*/.apm/hooks/scripts/session-start.py
+   echo '{"hook_event_name":"Stop"}' | python3 .claude/hooks/*/.apm/hooks/scripts/stop-sensors.py; echo "exit=$?"
    openspec list
    python3 scripts/harness/phase_cli.py show
    ls .claude/skills/spdd-*/SKILL.md .github/prompts/opsx-*.prompt.md
    ```
    O primeiro comando deve imprimir JSON com `additionalContext` (fase não
-   declarada + checklist de guias); o `ls` confirma que o APM entregou os
-   prompts nos dois hosts.
+   declarada + checklist de guias). O segundo deve sair com 0 (sem
+   `sensors_command` ou com sensores passando) e com 2 mostrando a saída do
+   sensor se ele falhar. O `ls` confirma que o APM entregou os prompts nos
+   dois hosts.
 
 8. **Ensine o mapeamento fluxo ↔ fase** (inclua no `AGENTS.md`/`CLAUDE.md`):
 
@@ -185,7 +202,7 @@ faltar, informe ao usuário e pare — não instale ferramentas globais sem pedi
 
 ## Contrato entre hook e CLI — não quebre isto
 
-O hook (`scripts/hooks/*.py`) e o CLI (`scripts/harness/phase_cli.py`) leem o
+Os hooks (scripts do pacote, entregues pelo APM) e o CLI (`scripts/harness/phase_cli.py`) leem o
 mesmo arquivo (`harness.config.json` → `phase_state_path`, default
 `.harness/change-phase.json`) sem compartilhar código — o hook roda num
 interpretador isolado e não pode importar nada do projeto. A única garantia
@@ -201,9 +218,21 @@ Independente de fase, os hooks sempre bloqueiam (configurável em
 - Escrita em nomes de arquivo de credencial conhecidos (`.env`,
   `service_account.json`, chaves privadas).
 - Escrita que resolve para fora da raiz do repositório (path traversal).
-- `git push`, `git reset --hard`, `git clean -f`, `git branch -D`, `rm -rf`.
+- `git push`, `git reset --hard`, `git clean -f`, `git branch -D`, `rm -rf`
+  (só quando são o comando em si; citados em texto, como numa mensagem de
+  commit, não bloqueiam).
 - Escrita direta em `.env` via redirecionamento de shell (`> .env`,
   `tee .env`).
+
+Fora da raiz do projeto, a escrita só passa pelas pastas listadas em
+`allowed_write_roots` do `harness.config.json` (vazio por padrão; use para
+pastas temporárias, como `/tmp`).
+
+No encerramento da sessão, o hook de Stop roda o `sensors_command` do projeto:
+saída diferente de 0 ou estouro do tempo bloqueia o encerramento e mostra a
+saída; vazio nunca bloqueia. Configuração ausente, corrompida ou de tipo errado
+nunca derruba um hook — só desliga os checks que dependem dela; as defesas
+acima continuam valendo.
 
 Isso não substitui revisão humana para `git push` — o hook bloqueia a
 execução automática; o agente ainda deve pedir confirmação explícita ao

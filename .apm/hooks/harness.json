@@ -1,0 +1,32 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "python3 \"${PLUGIN_ROOT}/.apm/hooks/scripts/session-start.py\"",
+        "timeout": 5
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|NotebookEdit",
+        "type": "command",
+        "command": "python3 \"${PLUGIN_ROOT}/.apm/hooks/scripts/pre-tool-write-guard.py\"",
+        "timeout": 5
+      },
+      {
+        "matcher": "Bash",
+        "type": "command",
+        "command": "python3 \"${PLUGIN_ROOT}/.apm/hooks/scripts/pre-tool-bash-guard.py\"",
+        "timeout": 5
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "python3 \"${PLUGIN_ROOT}/.apm/hooks/scripts/stop-sensors.py\"",
+        "timeout": 60
+      }
+    ]
+  }
+}

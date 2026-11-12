@@ -29,7 +29,7 @@ python3 scripts/harness/phase_cli.py set apply <nome-da-mudanca>
 ```
 
 Enquanto a fase for `proposal`, o hook `pre-tool-write-guard.py` bloqueia
-escrita em ``.apm/`, `scripts/` e `tests/`` e o hook `pre-tool-bash-guard.py`
+escrita em `.apm/`, `scripts/` e `tests/` e o hook `pre-tool-bash-guard.py`
 bloqueia `git commit`/`add`/`merge`/`rebase`. Consulte a fase atual com
 `python3 scripts/harness/phase_cli.py show`.
 
@@ -48,7 +48,9 @@ bloqueia `git commit`/`add`/`merge`/`rebase`. Consulte a fase atual com
 
 ## Quality gates mínimos
 
-não informado
+- Testes do pacote e dos hooks: `python3 -m unittest discover -s tests -t .` (é também o `sensors_command` do `harness.config.json`: o hook de Stop o roda sozinho ao encerrar a sessão).
+- Validação da change: `openspec validate <change> --strict`.
+- Neutralidade: `grep -rniE "cowboy|cobol|cobc|calculadora" .apm` deve voltar vazia.
 
 ## Escopo
 

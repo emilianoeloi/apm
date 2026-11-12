@@ -1,5 +1,5 @@
 {
-  "_comment": "Config lido pelos hooks em scripts/hooks/ e pelo CLI em scripts/harness/phase_cli.py. Nenhum dos dois importa código do projeto — só stdlib — então este arquivo é o único contrato entre eles. Ausência deste arquivo nunca deve travar o agente: todo hook cai em defaults seguros (allow) quando ele não existe ou está corrompido.",
+  "_comment": "Config lido pelos hooks do pacote (entregues pelo APM) e pelo CLI em scripts/harness/phase_cli.py. Nenhum dos dois importa código do projeto — só stdlib — então este arquivo é o único contrato entre eles. Ausência deste arquivo nunca deve travar o agente: todo hook cai em defaults seguros (allow) quando ele não existe ou está corrompido.",
 
   "phase_state_path": ".harness/change-phase.json",
 
@@ -8,9 +8,16 @@
     { "path": "openspec/config.yaml", "label": "openspec" }
   ],
 
+  "_comment_sensors": "sensors_command: comando do projeto que o hook de Stop roda ao encerrar a sessão (raiz do projeto como diretório de trabalho). Vazio = não bloqueia nunca. Saída diferente de 0 ou estouro de sensors_timeout_seconds bloqueia o encerramento e mostra a saída. Mantenha o timeout abaixo do timeout do hook (60 s).",
+  "sensors_command": "python3 -m unittest discover -s tests -t .",
+  "sensors_timeout_seconds": 50,
+
   "_comment_prefixes": "Deixe planning_write_prefixes e code_prefixes como [] se o projeto não usa gate de fase (ainda bloqueia credenciais/comandos destrutivos, só não bloqueia por fase).",
   "planning_write_prefixes": ["openspec/", "spdd/", ".harness/"],
   "code_prefixes": [".apm/", "scripts/", "tests/"],
+
+  "_comment_roots": "allowed_write_roots: diretórios ABSOLUTOS fora da raiz do projeto onde a escrita é permitida (ex.: /tmp). Aceita ~ e variáveis de ambiente. Padrão: vazio = nada fora da raiz. Nunca libera arquivos de credencial.",
+  "allowed_write_roots": ["/tmp", "/private/tmp"],
 
   "blocked_filenames": [
     ".env",
@@ -23,18 +30,18 @@
   "blocked_filename_suffixes": [".pem", ".p12", ".keystore", ".jks"],
 
   "blocked_bash_patterns": [
-    { "pattern": "\\bgit\\s+push\\b", "reason": "git push requer confirmação explícita do usuário." },
-    { "pattern": "\\bgit\\s+reset\\s+--hard\\b", "reason": "git reset --hard é destrutivo — peça confirmação explícita." },
-    { "pattern": "\\bgit\\s+clean\\s+-[a-z]*f", "reason": "git clean -f é destrutivo — peça confirmação explícita." },
-    { "pattern": "\\bgit\\s+branch\\s+-[A-Z]", "reason": "deleção forçada de branch requer confirmação explícita." },
-    { "pattern": "\\brm\\s+-[a-z]*r[a-z]*f\\b", "reason": "rm -rf é destrutivo — use deleções explícitas ou git rm." },
+    { "pattern": "(?:^|[;&|\\n]|\\$\\()\\s*\\(?\\s*(?:sudo\\s+)?git\\s+push\\b", "reason": "git push requer confirmação explícita do usuário." },
+    { "pattern": "(?:^|[;&|\\n]|\\$\\()\\s*\\(?\\s*(?:sudo\\s+)?git\\s+reset\\s+--hard\\b", "reason": "git reset --hard é destrutivo — peça confirmação explícita." },
+    { "pattern": "(?:^|[;&|\\n]|\\$\\()\\s*\\(?\\s*(?:sudo\\s+)?git\\s+clean\\s+-[a-z]*f", "reason": "git clean -f é destrutivo — peça confirmação explícita." },
+    { "pattern": "(?:^|[;&|\\n]|\\$\\()\\s*\\(?\\s*(?:sudo\\s+)?git\\s+branch\\s+-[a-zA-Z]*(?-i:D)", "reason": "deleção forçada de branch requer confirmação explícita." },
+    { "pattern": "(?:^|[;&|\\n]|\\$\\()\\s*\\(?\\s*(?:sudo\\s+)?rm\\s+-[a-z]*r[a-z]*f\\b", "reason": "rm -rf é destrutivo — use deleções explícitas ou git rm." },
     { "pattern": "(>+|tee)\\s+\\.env\\b", "reason": "escrita em .env é bloqueada — credenciais não devem ser commitadas." }
   ],
 
   "proposal_blocked_bash_patterns": [
-    { "pattern": "\\bgit\\s+commit\\b", "label": "git commit" },
-    { "pattern": "\\bgit\\s+add\\b", "label": "git add" },
-    { "pattern": "\\bgit\\s+merge\\b", "label": "git merge" },
-    { "pattern": "\\bgit\\s+rebase\\b", "label": "git rebase" }
+    { "pattern": "(?:^|[;&|\\n]|\\$\\()\\s*\\(?\\s*(?:sudo\\s+)?git\\s+commit\\b", "label": "git commit" },
+    { "pattern": "(?:^|[;&|\\n]|\\$\\()\\s*\\(?\\s*(?:sudo\\s+)?git\\s+add\\b", "label": "git add" },
+    { "pattern": "(?:^|[;&|\\n]|\\$\\()\\s*\\(?\\s*(?:sudo\\s+)?git\\s+merge\\b", "label": "git merge" },
+    { "pattern": "(?:^|[;&|\\n]|\\$\\()\\s*\\(?\\s*(?:sudo\\s+)?git\\s+rebase\\b", "label": "git rebase" }
   ]
 }
