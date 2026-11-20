@@ -2,21 +2,21 @@
 name: harness
 description: >
   Inspeciona, diagnostica e melhora o harness de desenvolvimento do projeto
-  para Claude Code e OpenAI Codex e o harness de runtime em Google ADK. Use
-  para auditar o que realmente está ativo, investigar regras ignoradas, portar
-  configuração entre os hosts ou adicionar guias, skills, hooks, testes e
-  sensores de CI.
+  para Claude Code, OpenAI Codex, GitHub Copilot e Google Antigravity, além do
+  harness de runtime em Google ADK. Use para auditar o que realmente está ativo,
+  investigar regras ignoradas, portar configuração entre os hosts ou adicionar
+  guias, skills, hooks, testes e sensores de CI.
 allowed-tools: Read, Grep, Glob, Bash(ruff:*), Bash(mypy:*), Bash(pytest:*)
 license: MIT
 metadata:
-  version: "3.0"
+  version: "3.1"
 ---
 
-# Harness do Projeto (Claude Code + Codex + GitHub Copilot + ADK)
+# Harness do Projeto (Claude Code + Codex + GitHub Copilot + Antigravity + ADK)
 
 Trate o projeto como dois contextos de execução:
 
-1. O **harness de desenvolvimento** governa Claude Code, Codex ou GitHub Copilot (VS Code) enquanto alteram o repositório.
+1. O **harness de desenvolvimento** governa Claude Code, Codex, GitHub Copilot (VS Code) ou Google Antigravity enquanto alteram o repositório.
 2. O **harness de runtime** governa agentes que a aplicação executa com Google ADK.
 
 Identifique primeiro qual contexto e qual host a solicitação afeta. Não pressuponha que um artefato documentado exista ou esteja ativo.
@@ -52,8 +52,8 @@ Relate essa classificação. Nunca descreva um sensor planejado ou ausente como 
 | Artefato | Papel |
 |---|---|
 | `CLAUDE.md` | contexto de arquitetura, convenções e fluxo de trabalho compartilhado neste repositório |
-| `AGENTS.md` | entrada do Codex e do GitHub Copilot (lido diretamente pelo VS Code) e ponte explícita para o contexto compartilhado |
-| `.agents/skills/*/SKILL.md` | skills descobertos tanto pelo Codex quanto pelo GitHub Copilot, sem duplicação |
+| `AGENTS.md` | entrada do Codex, GitHub Copilot e Google Antigravity (lido automaticamente na raiz) e ponte explícita para `CLAUDE.md` |
+| `.agents/skills/*/SKILL.md` | skills descobertos pelo Codex, GitHub Copilot e Google Antigravity, sem duplicação |
 | `pyproject.toml` | dependências, configuração de testes e limites do pacote Python |
 | testes em `tests/` | sensores determinísticos compartilhados pelos hosts |
 | pre-commit e CI, quando existirem | sensores fora do loop do modelo |
@@ -100,6 +100,20 @@ Não trate `.claude/commands/`, `.claude/agents/` ou `.claude/settings.json` com
 | `.github/hooks/*.json` | hooks de ciclo de vida versionados (workspace) |
 
 Skills e a leitura de `AGENTS.md` já funcionam sem trabalho extra, pois o Copilot os descobre nos mesmos caminhos usados pelo Codex. Hooks e subagentes especializados (`.claude/agents/`, `.claude/settings.json`) não são portados automaticamente — recrie-os em `.github/hooks/` e `.github/agents/` quando o comportamento precisar ser garantido também no Copilot.
+
+### Google Antigravity
+
+| Artefato | Papel |
+|---|---|
+| `AGENTS.md` / `GEMINI.md` | instrução persistente descoberta automaticamente da raiz até o diretório atual |
+| `.agents/rules/*.md` | regras hierárquicas do workspace |
+| `.agents/skills/*/SKILL.md` | skills descobertos sob demanda, compartilhados com Codex e Copilot |
+| `.agents/hooks.json` / `hooks.json` | hooks de ciclo de vida do workspace |
+
+O Google Antigravity não carrega `CLAUDE.md`, `.claude/settings.json`, `.github/hooks/*.json` nem `.claude/agents/*.md` automaticamente. Para garantir que o mesmo harness opere nesse host:
+- Mantenha `AGENTS.md` na raiz apontando explicitamente para `CLAUDE.md` e `harness.config.json`.
+- Enquanto `.agents/hooks.json` não estiver conectado, acione `scripts/harness/phase_cli.py` e `sensors_command` via CLI na sessão principal em cada transição (`proposal` → `apply` → `done`).
+- Defina os subagentes `sdlc-planner`, `sdlc-coder`, `sdlc-reviewer` e `sdlc-auditor` na sessão a partir das especificações de `.claude/agents/sdlc-*.md`, garantindo que o `sdlc-reviewer` receba apenas ferramentas de leitura e que a sessão principal execute `sensors_command`, `openspec validate --strict` e `git status --porcelain` quando o reviewer não dispuser de shell.
 
 ## Harness de runtime (Google ADK)
 
@@ -188,6 +202,7 @@ Teste cada script de hook diretamente com JSON representativo em `stdin`. Para b
 | Skill nunca é acionado implicitamente | descrição pouco específica ou política de invocação desativada |
 | Regra funciona no Claude, mas não no Codex | artefato existe apenas em `.claude/` |
 | Regra funciona no Claude ou Codex, mas não no Copilot | hook ou subagente existe apenas em `.claude/` ou `.codex/`; falta o equivalente em `.github/` |
+| Regra/hook funciona no Claude ou Copilot, mas não no Antigravity | falta `AGENTS.md` apontando para `CLAUDE.md`, faltam hooks em `.agents/hooks.json` ou falta definir os subagentes `sdlc-*` na sessão |
 | Hook do Codex não executa | projeto não confiável, hook ainda não aprovado ou matcher incorreto |
 | Hook do Copilot não executa | arquivo fora de `.github/hooks/`, JSON inválido ou script sem permissão de execução |
 | Guia é ignorado repetidamente | regra ambígua ou ausência de sensor determinístico |

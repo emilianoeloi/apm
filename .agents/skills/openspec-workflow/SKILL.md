@@ -4,7 +4,7 @@ description: Skill de governança SDLC com OpenSpec para desenvolvimento guiado 
 license: MIT
 metadata:
   author: local
-  version: "1.0"
+  version: "1.1"
 ---
 
 # Skill — OpenSpec Workflow (SDLC)
@@ -79,6 +79,8 @@ Objetivo: Criar e validar os artefatos de planejamento sem tocar em código de p
    ```bash
    openspec validate <change-name> --strict
    ```
+9. **Fidelidade ao SPDD (`spdd-analysis` e `spdd-reasons-canvas`)**:
+   Antes de gerar a análise estratégica e o REASONS Canvas na fase `proposal`, leia integralmente o `SKILL.md` correspondente de cada skill (`spdd-analysis` e `spdd-reasons-canvas`) para preservar sua estrutura canônica — incluindo a preservação verbatim do requisito original na análise e as 7 seções oficiais do Canvas (`Requirements`, `Entities` com `mermaid classDiagram`, `Approach`, `Structure`, `Operations`, `Norms`, `Safeguards`), sem improvisar acrônimos alternativos.
 
 ---
 
@@ -100,6 +102,8 @@ Objetivo: Validar que todas as tarefas foram cumpridas pelo agente de código e 
    ```bash
    openspec validate <change-name> --strict
    ```
+3. **Verificação pela sessão principal quando o reviewer não tiver shell**:
+   Se o subagente `sdlc-reviewer` operar em modo somente-leitura sem acesso a terminal/shell, a sessão principal deve executar explicitamente o `sensors_command` do `harness.config.json`, `openspec validate <change-name> --strict` e `git status --porcelain` (registrando os resultados reais) antes de aprovar o commit ou merge.
 
 ---
 
