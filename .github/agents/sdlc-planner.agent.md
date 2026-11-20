@@ -41,6 +41,19 @@ Só dentro das pastas de `planning_write_prefixes` (por padrão `openspec/` e `s
 - Rodar `git add`, `git commit` ou `git push`.
 - Inventar requisitos, critérios de aceite ou números que o pedido não traz: o que faltar vira "não informado" ou pergunta.
 
+## Estimando o tamanho dos testes
+
+Ao estimar linhas de código e teste por Operation (para o humano decidir sobre limites de PR),
+conte os testes como uma fração do código, não como um extra pequeno:
+- Quando os testes puderem ser escritos em tabela (uma lista de casos, um `for`/`test.each`
+  percorrendo-a), estime os testes em cerca de **1,4 vez** o tamanho do código.
+- Quando os testes forem um por comportamento, sem tabela, estime em **pelo menos o dobro**
+  do código.
+Em três funcionalidades reais, a estimativa sem essa regra ficou sistematicamente abaixo do
+real (previsto ~410 e ~355 linhas de teste, real ~548 e ~614, sem tabela; com tabela, previsto
+~510-540 e real ~480, bem mais perto). Avise o humano da estimativa de teste separada da de
+código, para a decisão de dividir ou aceitar o excesso ser informada.
+
 ## Entregável
 
 Uma mensagem curta e objetiva com o nome da change, a lista de artefatos criados (caminhos), o resultado de `openspec validate --strict`, as decisões que você tomou sozinho e as perguntas que exigem o humano.

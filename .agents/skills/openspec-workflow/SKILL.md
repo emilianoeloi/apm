@@ -125,3 +125,21 @@ skill conhecido precisa de atualização ou se um skill novo deve nascer, e regi
 2. **Kebab-case obrigatório**: Sempre use nomes em minúsculas com hífen.
 3. **Tarefas atômicas**: Cada item em `tasks.md` deve ser verificável com sim/não.
 4. **Zero código na proposal**: Não edite `src/` ou `docs/` durante a fase `proposal`.
+
+## Depois do `openspec archive` de uma capability nova
+
+Quando `openspec archive` cria uma spec principal nova (capability que não existia antes),
+ele escreve um `## Purpose` provisório: `TBD - created by archiving change <change>. Update
+Purpose after archive.`. Esse texto reprova `openspec validate --specs --strict` com o aviso
+"Purpose section is still a placeholder". Troque-o por uma frase real do que a capability
+faz, editando a spec principal diretamente — um `## Purpose` dentro de uma change/delta só é
+lido quando a capability nasce, então não serve para corrigir isso depois.
+
+## Requisitos curtos
+
+Mantenha cada `### Requirement:` abaixo de 500 caracteres. `openspec validate --strict` avisa
+("Requirement text is very long") quando um requisito mistura a regra geral com exemplos e
+casos de borda no mesmo parágrafo. Em vez de um requisito longo, separe: a regra geral num
+`### Requirement:`, e cada exemplo ou caso de borda num `#### Scenario:` dentro dele, ou num
+segundo `### Requirement:` quando o caso de borda for, na prática, outra regra (por exemplo,
+"qual rótulo alimenta este campo" separado de "o campo sempre existe e nunca é undefined").
