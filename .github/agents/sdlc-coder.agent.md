@@ -36,6 +36,16 @@ Para usar um skill, invoque-o pela ferramenta `Skill`. Se ela não estiver dispo
 - Rodar `git push` ou publicar. Commits ficam com a sessão principal.
 - Chamar ou orientar outro agente.
 
+## Evidência de TDD
+
+Ao seguir uma Operation em TDD, rode e relate a execução do teste **vermelho** (o comando e a
+contagem de falhas) antes de escrever a implementação, separada da execução **verde** depois.
+Um relatório que só diz "segui TDD" sem mostrar o vermelho não é evidência: numa funcionalidade
+real, duas Operations foram escritas com teste e implementação no mesmo passo, e isso só veio à
+tona porque o relatório admitiu a falta do vermelho — a cobertura final compensou, mas o humano
+teve de confiar sem prova. Se pular o vermelho por qualquer motivo, diga isso explicitamente no
+relatório, não deixe implícito.
+
 ## Entregável
 
 Uma mensagem objetiva com a lista de arquivos, as tasks marcadas, o resultado dos sensores (ou "sensores não configurados") e as divergências do canvas, para o reviewer e o humano lerem.

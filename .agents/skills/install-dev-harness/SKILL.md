@@ -252,3 +252,30 @@ acima continuam valendo.
 Isso não substitui revisão humana para `git push` — o hook bloqueia a
 execução automática; o agente ainda deve pedir confirmação explícita ao
 usuário antes de rodar o comando manualmente fora do hook.
+
+## Armadilhas observadas em projetos consumidores
+
+Aprendido ao instalar este harness num projeto consumidor real (app estático sem backend, com Firebase Auth e leitura do Google Drive; apm v1.0.0):
+
+- **Este skill não entrega workflow de CI.** Se o projeto pedir "CI pronto desde o início",
+  crie o `.github/workflows/ci.yml` à mão (checagem de sintaxe + `npm test` ou equivalente);
+  o `install-dev-harness` só entrega os hooks e o gate de fase.
+- **O hook `pre-tool-bash-guard.py` lê o comando inteiro antes de executar.** Um comando
+  composto como `phase_cli.py set apply <change> && git commit ...` é bloqueado inteiro na
+  fase `proposal`, mesmo que só a segunda metade seja o commit. Declare a fase num comando
+  e faça o `git commit` em outro, depois de confirmar `phase_cli.py show`.
+- **O hook de escrita bloqueia qualquer caminho fora da raiz do repositório**, inclusive
+  arquivos de configuração do usuário (`~/.claude/CLAUDE.md`, por exemplo). Para editar algo
+  fora do repo, peça ao humano para colar o trecho, ou declare o caminho em
+  `allowed_write_roots` só se for intencional e temporário.
+- **O `sdlc-coder` escreve só em `code_prefixes`.** Arquivos de configuração, documentação,
+  CI e manifestos de pacote (`package.json`, `harness.config.json`, `apm.yml`, `CHANGELOG.md`,
+  `README.md`, `docs/`) ficam por conta da sessão principal, mesmo quando a mudança deles é
+  parte da mesma funcionalidade.
+- **`sed -i` no macOS (BSD) exige o argumento de extensão do backup** (`sed -i '' ...` ou
+  `sed -i.bak ...`); sem ele, o comando falha ou deixa um arquivo de backup solto no repo.
+  Prefira editar com a ferramenta de edição do agente, não com `sed -i` em scripts de uma linha.
+- **Só comite depois de ver os sensores passarem.** Um commit saiu com um teste quebrado,
+  por um `import` esquecido num arquivo de teste; o problema só apareceu ao rodar os testes
+  de novo depois. Rode `sensors_command` (ou o comando de teste do projeto) uma última vez
+  antes de cada commit, não só antes do primeiro.
