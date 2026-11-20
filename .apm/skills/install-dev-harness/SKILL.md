@@ -279,3 +279,18 @@ Aprendido ao instalar este harness num projeto consumidor real (app estático se
   por um `import` esquecido num arquivo de teste; o problema só apareceu ao rodar os testes
   de novo depois. Rode `sensors_command` (ou o comando de teste do projeto) uma última vez
   antes de cada commit, não só antes do primeiro.
+
+- **PRs empilhadas: mesclar uma PR cuja base é outra branch a leva só para essa branch.**
+  Com `main ← A ← B ← C`, mesclar B e C depois de A deixa B e C dentro das branches de baixo e
+  fora da `main`. Aponte a base de cada PR para a `main` depois de mesclar a anterior (ou
+  mescle de cima para baixo), e confira na `origin/main` que o conteúdo entrou. Prefira uma
+  funcionalidade por branch, cada uma a partir da `main` atual, quando não houver dependência.
+- **Brief ao `sdlc-coder`: copie do canvas a lista completa de funções e arquivos da
+  Operation**, em vez de resumir de memória; uma função esquecida no brief só reaparece quando
+  o coder avisa. Peça sempre o vermelho com a contagem de falhas antes do código.
+- **O limite de uso pode interromper um subagente no meio do trabalho.** Os testes vermelhos
+  já escritos ficam como ponto de retomada: retome o mesmo agente depois do reinício em vez de
+  começar outro.
+- **Mudança que altera a rotina de quem opera o sistema** (um login que passa a pedir menos
+  escopo, uma sincronização que deixa de rodar sozinha) precisa estar no README e no changelog
+  e ser dita antes de publicar.

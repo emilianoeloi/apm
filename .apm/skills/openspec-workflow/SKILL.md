@@ -143,3 +143,10 @@ casos de borda no mesmo parágrafo. Em vez de um requisito longo, separe: a regr
 `### Requirement:`, e cada exemplo ou caso de borda num `#### Scenario:` dentro dele, ou num
 segundo `### Requirement:` quando o caso de borda for, na prática, outra regra (por exemplo,
 "qual rótulo alimenta este campo" separado de "o campo sempre existe e nunca é undefined").
+
+## Roteiro manual e spec devem bater com o código
+
+Roteiros de verificação manual, README e specs descrevem comportamento: confira-os contra o
+código antes de arquivar. Um roteiro dizia "abre em nova aba" e o código não definia o alvo do
+link; o revisor achou a divergência. Ao fechar a change, reconcilie o canvas, a spec e o
+roteiro com o que foi implementado (nomes, ordens de decisão, textos).
