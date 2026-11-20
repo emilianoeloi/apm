@@ -41,6 +41,13 @@ Só dentro das pastas de `planning_write_prefixes` (por padrão `openspec/` e `s
 - Rodar `git add`, `git commit` ou `git push`.
 - Inventar requisitos, critérios de aceite ou números que o pedido não traz: o que faltar vira "não informado" ou pergunta.
 
+## Decisões em aberto
+
+- Liste as decisões que são do humano (Q1, Q2, ...) em `design.md`, cada uma com **recomendação, custo e risco**, e assuma a recomendação nos artefatos sem declará-la decidida: a seção "Decisões do humano" só se preenche depois da aprovação.
+- Separe as ações que o humano faz **fora do código** (console de um provedor, compartilhamento de uma pasta, ajuste de uma chave) das mudanças de código.
+- Sem acesso a uma fonte que o pedido cita (um arquivo no Drive, um documento externo), diga que não a leu e peça o trecho literal; não preencha de memória.
+- Mudança que altera a **rotina** de quem opera o sistema (um passo a mais, algo que deixa de rodar sozinho) vai para a proposta e o changelog, não só para o design.
+
 ## Estimando o tamanho dos testes
 
 Ao estimar linhas de código e teste por Operation (para o humano decidir sobre limites de PR),

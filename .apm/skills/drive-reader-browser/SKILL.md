@@ -69,6 +69,13 @@ navegador e `Referer`. Sempre no cabeçalho `Authorization`.
 - **Isolamento de falha:** erro ao ler um item (404, 429, 500, rede, tempo esgotado) não deve
   impedir os outros itens de carregar; devolva um resultado parcial com o item marcado em erro.
 
+- **Teste o teto de concorrência medindo o máximo simultâneo**, não só o total: um teste que
+  conta as chamadas finais passa mesmo se o limite não existir. Use uma porta falsa com atraso
+  e registre quantas chamadas estão em voo ao mesmo tempo.
+- **Leitor só de leitura e reutilizável:** exponha uma fábrica de leitor que só faz `GET`, para
+  mais de um consumidor (uma tela e uma sincronização) usarem o mesmo código; um 401 vira um
+  código próprio (ex. sessão expirada), tratado pelo chamador, em vez de uma exceção genérica.
+
 ## Mapa de erros HTTP
 
 - **401:** o token venceu ou é inválido. Pare todas as leituras em andamento (aborte-as),
