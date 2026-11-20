@@ -278,6 +278,13 @@ Spec: APM_SETUP V1.2. Nenhuma tag e nenhum push; a Onda 1 (1.0.0-alpha.1) ainda 
 * `install-dev-harness`: o template `harness.config.json.template` lista `.pre-commit-config.yaml` em `guide_files` mesmo sem o arquivo existir, gerando um "MISSING" falso (removido à mão aqui). O passo 3 só cobre `apm install <repo>#<tag>`, não a fonte local. `settings.hooks.json` traz uma chave `_comment` que precisou ser tirada ao criar `.claude/settings.json`. Proposta: atualizar o skill (público, serve a qualquer projeto). Nada publicado.
 * Skill novo: nenhum necessário nesta onda.
 
+## [1.1.0](https://github.com/emilianoeloi/apm/compare/v1.0.0...v1.1.0) (2026-11-20)
+
+
+### Features
+
+* **skills:** adiciona suporte ao Google Antigravity e guardrails de revisão SDLC ([#21](https://github.com/emilianoeloi/apm/issues/21)) ([362a95e](https://github.com/emilianoeloi/apm/commit/362a95eb80c949d3aa2a043169c9111bee15fd2a))
+
 ## [1.0.0](https://github.com/emilianoeloi/apm/compare/v1.0.0-alpha.1...v1.0.0) (2026-11-12)
 
 
