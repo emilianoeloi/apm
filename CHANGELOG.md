@@ -278,6 +278,13 @@ Spec: APM_SETUP V1.2. Nenhuma tag e nenhum push; a Onda 1 (1.0.0-alpha.1) ainda 
 * `install-dev-harness`: o template `harness.config.json.template` lista `.pre-commit-config.yaml` em `guide_files` mesmo sem o arquivo existir, gerando um "MISSING" falso (removido à mão aqui). O passo 3 só cobre `apm install <repo>#<tag>`, não a fonte local. `settings.hooks.json` traz uma chave `_comment` que precisou ser tirada ao criar `.claude/settings.json`. Proposta: atualizar o skill (público, serve a qualquer projeto). Nada publicado.
 * Skill novo: nenhum necessário nesta onda.
 
+## [1.3.0](https://github.com/emilianoeloi/apm/compare/v1.2.0...v1.3.0) (2026-11-20)
+
+
+### Features
+
+* licoes de uma feature real com Firestore e dois agentes em sdlc-coder, sdlc-reviewer, sdlc-planner, install-dev-harness, openspec-workflow, drive-status e drive-reader-browser ([#26](https://github.com/emilianoeloi/apm/issues/26)) ([02db130](https://github.com/emilianoeloi/apm/commit/02db130f8607dcdd763663e75e26e84720326654))
+
 ## [1.2.0](https://github.com/emilianoeloi/apm/compare/v1.1.0...v1.2.0) (2026-11-20)
 
 
