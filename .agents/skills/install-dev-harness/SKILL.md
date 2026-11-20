@@ -3,16 +3,16 @@ name: install-dev-harness
 description: >
   Prepara o workflow de SDLC de um projeto (Spec-Driven Development) com
   OpenSpec + OpenSPDD, protegido por um gate de fase (proposal vs. apply)
-  mecânico via hooks. Funciona para Claude Code e GitHub Copilot, entregue
-  via APM. Stack-agnóstico. Use quando o usuário quiser "trazer o harness
-  para este projeto", instalar o fluxo propose → analysis → canvas →
-  generate → archive, proteger o planejamento contra escrita prematura de
-  código, ou bloquear comandos destrutivos de git/shell.
+  mecânico via hooks. Funciona para Claude Code, GitHub Copilot e Google
+  Antigravity, entregue via APM. Stack-agnóstico. Use quando o usuário quiser
+  "trazer o harness para este projeto", instalar o fluxo propose → analysis →
+  canvas → generate → archive, proteger o planejamento contra escrita prematura
+  de código, ou bloquear comandos destrutivos de git/shell.
 allowed-tools: Read, Write, Edit, Bash, Glob
 license: MIT
 metadata:
   author: exported-from-uimaker-adk
-  version: "2.0"
+  version: "2.1"
 ---
 
 # Skill — Install Dev Harness (APM + OpenSpec + OpenSPDD)
@@ -36,7 +36,7 @@ Quatro peças, cada uma com um dono:
 
 | Peça | Dono | O que fornece |
 |---|---|---|
-| **APM** (`apm.yml`) | distribuição | entrega skills, agents, prompts e hooks para `claude` e `copilot` com um único `apm install` |
+| **APM** (`apm.yml`) | distribuição | entrega skills, agents, prompts e hooks para `claude`, `copilot` e `antigravity` com um único `apm install` |
 | **OpenSpec** | especificação | skills `openspec-*` e prompts `/opsx-*` **vendorizados neste repo**; o CLI `openspec` cria `openspec/` e roda `validate`/`archive` |
 | **OpenSPDD** | prompt estruturado | skills originais `spdd-analysis`, `spdd-reasons-canvas`, `spdd-generate`, `spdd-sync`, `spdd-prompt-update` **vendorizadas neste repo**, sem alterações; não exige o CLI `openspdd` no projeto consumidor |
 | **Harness gate** (hooks + `phase_cli.py`) | enforcement | bloqueia código em `proposal`, bloqueia `git push`/`rm -rf`/credenciais sempre |
@@ -95,13 +95,12 @@ faltar, informe ao usuário e pare — não instale ferramentas globais sem pedi
 1. **Detecte o ambiente** do projeto alvo:
    - Stack (`pyproject.toml`, `package.json`, `Package.swift`/`*.xcodeproj`,
      `build.gradle(.kts)`) → sugere `code_prefixes` (`src/`, `tests/`, …).
-   - Hosts em uso: `.claude/` → Claude Code; `.github/` → Copilot. Se ambos
-     ou nenhum, instale para os dois.
+   - Hosts em uso: `.claude/` → Claude Code; `.github/` → Copilot; `.agents/` → Antigravity / Codex. Se múltiplos ou nenhum, instale para os hosts aplicáveis.
    - Já existe `apm.yml`, `openspec/`, `AGENTS.md`/`CLAUDE.md`,
      `.claude/settings.json`? Faça merge, nunca sobrescreva.
 
 2. **Pergunte o que falta** (AskUserQuestion, só se mudar o resultado):
-   - Hosts alvo (`claude`, `copilot`, ambos).
+   - Hosts alvo (`claude`, `copilot`, `antigravity`, ou combinação).
    - Arquivo raiz do agente (`AGENTS.md` lido por Copilot/Codex, `CLAUDE.md`
      para Claude; veja `dev-harness-architect/reference/harness-model.md#hierarquia-de-instrucoes`).
      Nunca crie `.github/copilot-instructions.md` junto de `AGENTS.md`.
@@ -117,8 +116,8 @@ faltar, informe ao usuário e pare — não instale ferramentas globais sem pedi
 3. **Instale o harness via APM** — entrega as skills `openspec-*`, os prompts
    `/opsx-*` e `/spdd-*`, agents e hooks para os hosts escolhidos:
    ```bash
-   apm install emilianoeloi/apm#<tag>     # ou adicione em apm.yml → dependencies.apm
-   apm install --target claude,copilot    # reaplica para os hosts escolhidos
+   apm install emilianoeloi/apm#<tag>                  # ou adicione em apm.yml → dependencies.apm
+   apm install --target claude,copilot,antigravity     # reaplica para os hosts escolhidos
    ```
    Resultado: `.claude/commands/opsx-*.md`, `.claude/skills/{openspec,spdd}-*`,
    `.github/prompts/opsx-*.prompt.md` e os hooks (`SessionStart`, `PreToolUse`
@@ -153,7 +152,10 @@ faltar, informe ao usuário e pare — não instale ferramentas globais sem pedi
    | `templates/phase_cli.py` | `scripts/harness/phase_cli.py` | — |
 
    Se `CLAUDE.md`/`AGENTS.md` já existir, apenas acrescente a seção
-   “Fase da change” (com o mapeamento do passo 8). Não crie
+   “Fase da change” (com o mapeamento do passo 8). Quando usar Codex, Copilot
+   ou Google Antigravity e `AGENTS.md` ainda não existir na raiz, crie um
+   `AGENTS.md` enxuto apontando explicitamente para `CLAUDE.md` e
+   `harness.config.json` (ponte canônica, sem duplicar texto longo). Não crie
    `scripts/hooks/` nem edite `.claude/settings.json` para registrar hooks: é
    o APM que faz isso.
 
@@ -202,7 +204,11 @@ faltar, informe ao usuário e pare — não instale ferramentas globais sem pedi
    coder; em seguida o reviewer; o auditor sob demanda). O modelo de
    `CLAUDE.md` já traz esse roteiro. Os agentes leem as pastas e o comando de
    sensores do `harness.config.json`: preencha `code_prefixes` e
-   `sensors_command` antes de usá-los.
+   `sensors_command` antes de usá-los. No Google Antigravity, como os arquivos de
+   `.claude/agents/` não são carregados automaticamente, defina `sdlc-*` na
+   sessão com as mesmas regras de ferramentas e faça a sessão principal rodar
+   `sensors_command` + `openspec validate --strict` se o subagente reviewer não
+   tiver shell.
 
 9. **Relate** os arquivos criados/modificados, os comandos de verificação
    executados e o próximo passo natural: `architecture-fitness-functions`
