@@ -421,6 +421,13 @@ Spec: APM_SETUP V1.2. Nenhuma tag e nenhum push; a Onda 1 (1.0.0-alpha.1) ainda 
 * `install-dev-harness`: o template `harness.config.json.template` lista `.pre-commit-config.yaml` em `guide_files` mesmo sem o arquivo existir, gerando um "MISSING" falso (removido à mão aqui). O passo 3 só cobre `apm install <repo>#<tag>`, não a fonte local. `settings.hooks.json` traz uma chave `_comment` que precisou ser tirada ao criar `.claude/settings.json`. Proposta: atualizar o skill (público, serve a qualquer projeto). Nada publicado.
 * Skill novo: nenhum necessário nesta onda.
 
+## [1.6.0](https://github.com/emilianoeloi/apm/compare/v1.5.0...v1.6.0) (2026-11-21)
+
+
+### Features
+
+* **agents:** cenarios Gherkin na spec, sensor, teste de aceitacao e conferencia pelo reviewer ([#38](https://github.com/emilianoeloi/apm/issues/38)) ([063b541](https://github.com/emilianoeloi/apm/commit/063b5410a1197eebd1beaeb8e8a822badcc6e41e))
+
 ## [1.5.0](https://github.com/emilianoeloi/apm/compare/v1.4.0...v1.5.0) (2026-11-21)
 
 
