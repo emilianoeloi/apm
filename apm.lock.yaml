@@ -18,7 +18,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:a0637269e00e46b600f2423f19715a638d41563ec8868b47bd1283f4ee3268b6
+  content_hash: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
 - kind: project-relative
   target: claude
   value: .claude/agents/sdlc-planner.md
@@ -154,6 +154,24 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:0d4856d982916d10475d67ca26068c79c1336c2c08bebbea760a2f125dc5574e
+- kind: project-relative
+  target: claude
+  value: .claude/skills/acceptance-from-spec
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/acceptance-from-spec/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b08f1b2138bd8c25eeb048262a26ccdb19d75f627f2c1d55bc9293098116602f
 - kind: project-relative
   target: claude
   value: .claude/skills/architecture-fitness-functions
@@ -631,6 +649,24 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/acceptance-from-spec
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/acceptance-from-spec/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b08f1b2138bd8c25eeb048262a26ccdb19d75f627f2c1d55bc9293098116602f
 - kind: project-relative
   target: copilot
   value: .agents/skills/architecture-fitness-functions
@@ -1125,7 +1161,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:a0637269e00e46b600f2423f19715a638d41563ec8868b47bd1283f4ee3268b6
+  content_hash: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
 - kind: project-relative
   target: copilot
   value: .github/agents/sdlc-planner.agent.md
@@ -1271,6 +1307,8 @@ deployments:
   active_owner: .
   content_hash: sha256:9cac79c54e05e1e7d893c66f74ce8fdf5088b3437a46191cd9a8b0150d3d5e98
 local_deployed_files:
+- .agents/skills/acceptance-from-spec
+- .agents/skills/acceptance-from-spec/SKILL.md
 - .agents/skills/architecture-fitness-functions
 - .agents/skills/architecture-fitness-functions/SKILL.md
 - .agents/skills/ci-automerge
@@ -1341,6 +1379,8 @@ local_deployed_files:
 - .claude/hooks/apm/.apm/hooks/scripts/pre-tool-write-guard.py
 - .claude/hooks/apm/.apm/hooks/scripts/session-start.py
 - .claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py
+- .claude/skills/acceptance-from-spec
+- .claude/skills/acceptance-from-spec/SKILL.md
 - .claude/skills/architecture-fitness-functions
 - .claude/skills/architecture-fitness-functions/SKILL.md
 - .claude/skills/ci-automerge
@@ -1413,6 +1453,7 @@ local_deployed_files:
 - .github/prompts/opsx-sync.prompt.md
 - .github/prompts/opsx-update.prompt.md
 local_deployed_file_hashes:
+  .agents/skills/acceptance-from-spec/SKILL.md: sha256:b08f1b2138bd8c25eeb048262a26ccdb19d75f627f2c1d55bc9293098116602f
   .agents/skills/architecture-fitness-functions/SKILL.md: sha256:125386113324fd42cb369c00767d961cf8239def9723588b10914f2d42f7f8f2
   .agents/skills/ci-automerge/SKILL.md: sha256:ba4848e8977266eb1988dda703229e30e53a64f15d53c73f18408511aaa27570
   .agents/skills/dev-harness-architect/SKILL.md: sha256:780b39fccaad446344f10e23a4a89db58ec12756c099a40b9e89473eab8a38e7
@@ -1446,7 +1487,7 @@ local_deployed_file_hashes:
   .agents/skills/spdd-sync/SKILL.md: sha256:c2f05f038be42c58ff80058c00e5096b0db5a9144ad436a979084964095eebe9
   .agents/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .claude/agents/sdlc-auditor.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
-  .claude/agents/sdlc-coder.md: sha256:a0637269e00e46b600f2423f19715a638d41563ec8868b47bd1283f4ee3268b6
+  .claude/agents/sdlc-coder.md: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
   .claude/agents/sdlc-planner.md: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
   .claude/agents/sdlc-reviewer.md: sha256:4abbabf04238b69b7bb490c8ae6570c06e963f23dc725de7a6f3b5e206eb619c
   .claude/commands/opsx-apply.md: sha256:cc529c6fc803294b6aaa167935edcc6cf29f5d6abfca5745cc6b2b66c52e4d1d
@@ -1462,6 +1503,7 @@ local_deployed_file_hashes:
   .claude/hooks/apm/.apm/hooks/scripts/pre-tool-write-guard.py: sha256:b4b769559f947bcf50b400d2cf9e222f459c4d6704eacba8f389913a0cc352fe
   .claude/hooks/apm/.apm/hooks/scripts/session-start.py: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
   .claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py: sha256:0d4856d982916d10475d67ca26068c79c1336c2c08bebbea760a2f125dc5574e
+  .claude/skills/acceptance-from-spec/SKILL.md: sha256:b08f1b2138bd8c25eeb048262a26ccdb19d75f627f2c1d55bc9293098116602f
   .claude/skills/architecture-fitness-functions/SKILL.md: sha256:125386113324fd42cb369c00767d961cf8239def9723588b10914f2d42f7f8f2
   .claude/skills/ci-automerge/SKILL.md: sha256:ba4848e8977266eb1988dda703229e30e53a64f15d53c73f18408511aaa27570
   .claude/skills/dev-harness-architect/SKILL.md: sha256:780b39fccaad446344f10e23a4a89db58ec12756c099a40b9e89473eab8a38e7
@@ -1495,7 +1537,7 @@ local_deployed_file_hashes:
   .claude/skills/spdd-sync/SKILL.md: sha256:c2f05f038be42c58ff80058c00e5096b0db5a9144ad436a979084964095eebe9
   .claude/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .github/agents/sdlc-auditor.agent.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
-  .github/agents/sdlc-coder.agent.md: sha256:a0637269e00e46b600f2423f19715a638d41563ec8868b47bd1283f4ee3268b6
+  .github/agents/sdlc-coder.agent.md: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
   .github/agents/sdlc-planner.agent.md: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
   .github/agents/sdlc-reviewer.agent.md: sha256:4abbabf04238b69b7bb490c8ae6570c06e963f23dc725de7a6f3b5e206eb619c
   .github/hooks/apm-harness.json: sha256:6c7cb7784319d515cfbd646c1509c32a536e2e4409a7126300e6797dd136ae97

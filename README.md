@@ -54,7 +54,7 @@ Quatro agentes de papel único e fonte única (`.apm/agents/sdlc-*.agent.md`), q
 | Agente | Fase | O que faz | Escreve | Ferramentas |
 |---|---|---|---|---|
 | `sdlc-planner` | `proposal` | proposta OpenSpec validada, análise e REASONS Canvas (skills `openspec-explore`, `openspec-propose`, `spdd-analysis`, `spdd-reasons-canvas`) | só `planning_write_prefixes` (por padrão `openspec/` e `spdd/`); nunca código | `Read, Grep, Glob, Write, Edit, Bash, Skill` |
-| `sdlc-coder` | `apply` | código pelas Operations do canvas (skills `spdd-generate` e `openspec-apply-change`), tasks marcadas e sensores antes de entregar; para e avisa se não houver canvas | só `code_prefixes` e os checkboxes do `tasks.md` | `Read, Grep, Glob, Write, Edit, Bash, Skill` |
+| `sdlc-coder` | `apply` | código pelas Operations do canvas (skills `acceptance-from-spec`, `spdd-generate` e `openspec-apply-change`; o teste de aceitação de cada cenário vem antes do código), tasks marcadas e sensores antes de entregar; para e avisa se não houver canvas | só `code_prefixes` e os checkboxes do `tasks.md` | `Read, Grep, Glob, Write, Edit, Bash, Skill` |
 | `sdlc-reviewer` | depois da implementação | confere código, Operations e tasks, roda `openspec validate --strict` e os sensores e entrega um relatório com veredito e achados (arquivo, linha e Operation) | nada: somente leitura | `Read, Grep, Glob, Bash` |
 | `sdlc-auditor` | sob demanda (opcional) | responde dúvidas e audita conformidade, arquitetura e segurança com evidências de arquivo e linha | nada: somente leitura | `Read, Grep, Glob, Bash` |
 
@@ -97,6 +97,21 @@ Configuração ou payload ausente, corrompido ou de tipo errado nunca derruba ne
 O pre-commit genérico (`.apm/scripts/git-hooks/pre-commit`) roda o mesmo `sensors_command` antes de cada commit; veja o skill `install-dev-harness` para instalar.
 
 **Verificação.** O bloqueio foi comprovado no Claude Code (Bash e escrita, pelo código de saída 2). O formato do Copilot (`.github/hooks/`, decisão `deny` por JSON) é gerado pelo APM e coberto por testes de saída, mas **não foi verificado num Copilot real**.
+
+## Testes de aceitação
+
+O skill `acceptance-from-spec` faz o `sdlc-coder`, na fase `apply`, escrever **primeiro** o teste de aceitação de cada `Cenário:` aprovado da change, provar que ele falha, implementar e provar que ele passa. O skill não fixa ferramenta de teste: descobre a do projeto.
+
+1. **Ligação com a spec.** Cada teste leva uma linha literal, em comentário ou no nome do teste: `Spec: <capability> / <nome do requisito> / <título do cenário>`, com os três textos copiados da spec. É a convenção que a revisão por cenário (F4, ainda não entregue) conferirá por busca de texto.
+2. **Vermelho antes do código.** O coder relata o comando, a contagem de falhas e o motivo, sem stubs artificiais. Se o teste já nasce verde, ele relata isso.
+3. **Verde depois.** O coder roda o teste e o `sensors_command` e confere que o comando **executa** a aceitação; se não executa ou está vazio, diz "sensores não configurados" em vez de afirmar que passou.
+4. **Sem framework: propõe e espera.** O coder descobre a ferramenta (arquivo raiz do agente, `sensors_command`, testes existentes, manifesto de build). Se não houver, não escreve nem instala nada: devolve de uma a três opções e para até você aprovar; depois a sessão principal o dispara de novo com a ferramenta aprovada.
+
+Para a aceitação valer como sensor, componha o teste ao `sensors_command` do `harness.config.json` do projeto.
+
+**Projetos na versão anterior.** Atualize a dependência do apm e rode `apm install`. A partir daí o coder exige o teste de aceitação antes do código; a primeira `apply` num projeto sem ferramenta de teste para e pede a sua escolha; e o `sensors_command` precisa rodar a aceitação. A única mudança de configuração é compor a aceitação ao `sensors_command`.
+
+**Não verificado.** O comportamento do modelo seguindo o skill num projeto real (projeto de prova: não informado). Os testes do pacote provam o texto do skill e do agente, não o modelo.
 
 ## Sensor de Gherkin
 

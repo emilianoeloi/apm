@@ -30,7 +30,7 @@ FORBIDDEN_KEYS = {"model", "handoffs", "skills", "color"}
 # Skills que cada papel deve citar.
 SKILLS_BY_ROLE = {
     "sdlc-planner": {"openspec-explore", "openspec-propose", "spdd-analysis", "spdd-reasons-canvas"},
-    "sdlc-coder": {"spdd-generate", "openspec-apply-change"},
+    "sdlc-coder": {"spdd-generate", "openspec-apply-change", "acceptance-from-spec"},
 }
 
 STACK_TERMS = re.compile(
@@ -130,7 +130,7 @@ class CorpoDosAgentesTest(unittest.TestCase):
                 self.assertLessEqual(len(self.body(name).splitlines()), 300)
 
     def test_skills_citados_existem(self):
-        pattern = re.compile(r"`((?:openspec|spdd)-[a-z-]+)`")
+        pattern = re.compile(r"`((?:openspec|spdd)-[a-z-]+|acceptance-from-spec)`")
         for name in NAMES:
             with self.subTest(agente=name):
                 for skill in set(pattern.findall(self.body(name))):
@@ -142,6 +142,12 @@ class CorpoDosAgentesTest(unittest.TestCase):
                 body = self.body(name)
                 for skill in skills:
                     self.assertIn(f"`{skill}`", body)
+
+    def test_coder_cita_a_aceitacao_antes_das_operations(self):
+        body = self.body("sdlc-coder")
+        cited = body.find("`acceptance-from-spec`")
+        self.assertGreaterEqual(cited, 0)
+        self.assertLess(cited, body.find("`spdd-generate`"))
 
     def test_planner(self):
         body = self.body("sdlc-planner")
