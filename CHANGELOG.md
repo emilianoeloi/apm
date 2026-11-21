@@ -20,7 +20,15 @@ Se um projeto usa um fechamento fora da lista, o cenário passa a sair `ORFAO` m
 * 201 testes; `openspec validate --strict`; sensor de Gherkin; neutralidade. `spec-trace` na change: 7 cobertos, 0 `SEM_TESTE`, 1 herdado sem teste, 0 órfãos, 9 extras.
 * Vermelho natural pela asserção (47 testes, 11 falhas por asserção). O teste de tab e NBSP nasceu verde (caracterização): a mutação manual `lstrip()` para `lstrip(" ")` o faz falhar (28 subtestes), e o código foi restaurado.
 * Vermelho da fronteira: 5 testes, 7 falhas por asserção (`Caso#2`, `Caso'2`, `Caso"abc`, `Caso)extra`, `Caso*/x`, `Caso-->x`, `Caso//x`).
-* **Não verificado:** a prova de comportamento do reviewer sem `Glob`, com cópias em `apm_modules/` (task 6.4). A lista `CLOSERS` não foi confirmada contra projetos externos.
+* **Não verificado:** a prova de comportamento do reviewer sem `Glob`, com cópias em `apm_modules/` (task 6.4). A lista `CLOSERS` não foi confirmada contra projetos externos. A correção da fronteira não passou por nova revisão do `sdlc-reviewer` (conferida direto em 22 sufixos). Fora do escopo (Q5): `line.find("Spec:")` casa também dentro de palavra (`InSpec:`).
+
+### Retrospectiva de skills
+
+* Usados: `acceptance-from-spec` (1.0, sem as convenções da F5, que estão em outra branch), `spdd-sync`, `skill-retrospective` e os agentes `sdlc-planner`, `sdlc-coder` e `sdlc-reviewer`.
+* `sdlc-reviewer`: voltou a achar um defeito que o coder não viu (fronteira depois do fechamento, falso `COBERTO`); a regra da lista `CLOSERS` por prefixo estava incompleta. Proposta: o brief do coder pedir sempre uma tabela de casos hostis de borda ao endurecer uma regra de casamento.
+* `sdlc-coder`: seguiu a regra de conferir arquivos `*-E` e relatou a mutação manual do teste que nasce verde; funcionou. O skill ainda não diz como provar um teste de caracterização (mutação manual): proposta de uma linha no skill.
+* `sdlc-planner`: de novo sem acesso à spec do Drive; o brief supre.
+* Faltou um skill: nenhum novo. Nada foi publicado sem o "ok" do Elói.
 
 ## Onda 3, F5 — afinar o skill acceptance-from-spec (2026-11-21)
 

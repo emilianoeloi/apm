@@ -116,7 +116,7 @@ Cenário: Coder com cenário aprovado
 - **THEN** a busca não encontra nenhum
 
 ### Requirement: Reviewer confere cada cenário contra um teste
-O `sdlc-reviewer` SHALL conferir que cada `Cenário:` novo ou alterado pela change tem teste ligado pela linha `Spec:`, usando o `spec-trace.py` achado por `Glob` ou, sem ele, `grep -F` da trinca no fonte dos testes, SHALL ler cada teste ligado para confirmar que afirma o `Então`, SHALL tratar o cenário herdado sem teste como informativo e SHALL entregar a seção "Cenários x testes" sem alterar arquivo nem as `tools`.
+O `sdlc-reviewer` SHALL conferir que cada `Cenário:` novo ou alterado pela change tem teste ligado pela linha `Spec:`, usando o `spec-trace.py` achado por `Glob` (ou, sem a ferramenta `Glob`, por `find` que exclua `apm_modules`) ou, sem o script, `grep -F` da trinca no fonte dos testes, SHALL usar a cópia implantada do host (`.claude/hooks/apm/.apm/hooks/scripts/` ou `.github/hooks/scripts/apm/.apm/hooks/scripts/`) e nunca a de `apm_modules/`, SHALL ler cada teste ligado para confirmar que afirma o `Então`, SHALL tratar o cenário herdado sem teste como informativo e SHALL entregar a seção "Cenários x testes" sem alterar arquivo nem as `tools`.
 
 ```gherkin
 Cenário: Revisão de change com cenários
@@ -124,6 +124,12 @@ Cenário: Revisão de change com cenários
   Quando o reviewer é disparado
   Então o relatório traz a seção Cenários x testes com o estado e o arquivo:linha de cada cenário
   E o git status --porcelain final é igual ao inicial
+
+Cenário: Cópia certa do script
+  Dado o texto do agente reviewer
+  Quando ele é lido
+  Então diz que a cópia certa é a implantada do host, fora de apm_modules
+  E diz que find, excluindo apm_modules, é o plano B quando não há Glob
 ```
 
 #### Scenario: Revisão de change com cenários
@@ -141,6 +147,10 @@ Cenário: Revisão de change com cenários
 #### Scenario: Ferramentas inalteradas
 - **WHEN** o frontmatter do reviewer é lido
 - **THEN** `tools` continua `Read, Grep, Glob, Bash`
+
+#### Scenario: Cópia certa do script
+- **WHEN** o texto do reviewer é lido
+- **THEN** ele manda usar a cópia implantada do host, fora de `apm_modules/`, e cita `find` (sem `apm_modules`) como plano B sem `Glob`
 
 ### Requirement: Achados de cenário e veredito
 O `sdlc-reviewer` SHALL classificar como alta, com veredito `REPROVADO`, o cenário novo ou alterado sem teste e o teste ligado que não afirma o `Então` (falso verde), e como média a linha `Spec:` órfã, o marcador ambíguo e a cobertura sem a linha `Spec:`; cada achado SHALL citar arquivo, linha e Operation, e sem o relatório do coder o reviewer SHALL dizer "vermelho não verificado".

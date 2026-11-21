@@ -72,6 +72,8 @@ Fonte em `.apm/`, cópias por host implantadas pelo `apm install`; testes em `te
 ### Update Script - .apm/hooks/scripts/spec-trace.py
 1. Responsibility: `read_text` com `os.open`, `fstat`, `finally`; `CLOSERS` e `ends_title` por `startswith`; docstring e `--help`. Estimativa: ~25 linhas.
 
+Implementado além do previsto, após a revisão: `ends_title` passou a exigir **fronteira depois do fechamento** (fim da linha, espaço — tab e NBSP inclusive — ou outro fechamento conhecido); `Caso#2`, `Caso'2`, `Caso"abc`, `Caso)extra`, `Caso*/x`, `Caso-->x` e `Caso//x` viram `ORFAO`, enquanto `") # x`, `*/ -->`, `*/-->` e CRLF seguem válidos (achado médio do reviewer, 7 falhas por asserção no vermelho). A mutação manual `lstrip()` para `lstrip(" ")` fez o teste de tab e NBSP falhar em 28 subtestes e foi revertida. O teste da corrida usa um subprocesso `-I` que troca `os.open` e confere as flags.
+
 ### Update Agent - .apm/agents/sdlc-reviewer.agent.md
 1. Responsibility: cópia do host, nunca `apm_modules/`, `find` como plano B. Estimativa: ~4 linhas de prosa.
 
@@ -100,3 +102,5 @@ Fonte em `.apm/`, cópias por host implantadas pelo `apm install`; testes em `te
 4. Migration Constraints: marcador com sufixo fora de `CLOSERS` sai `ORFAO` e o cenário `SEM_TESTE`; avisar no README e no CHANGELOG.
 5. Neutrality Constraints: `grep` de neutralidade vazia; `STACK_TERMS` não casa no reviewer.
 6. Release Constraints: sem push, tag ou merge sem o "ok" do Elói.
+
+<!-- Sync pós-implementação. A task 6.4 (reviewer sem Glob, com cópias em apm_modules/) não foi feita; a lista CLOSERS não foi confirmada contra projetos externos; a correção da fronteira não passou por nova revisão. Fora do escopo (Q5): line.find("Spec:") casa também dentro de palavra (InSpec:). -->
