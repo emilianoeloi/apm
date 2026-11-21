@@ -17,7 +17,8 @@ COPIES = (
     REPO / ".agents" / "skills" / NAME / "SKILL.md",
 )
 ORIGIN_TERMS = re.compile(r"cowboy|cobol|cobc|calculadora", re.IGNORECASE)
-MARKER = re.compile(r"^Spec: .+ / .+ / .+$", re.MULTILINE)
+TAG = "Spec"
+MARKER = re.compile(rf"^{TAG}: .+ / .+ / .+$", re.MULTILINE)
 MAX_LINES = 150
 
 REQUIRED = (
@@ -80,18 +81,18 @@ class SkillFonteTest(unittest.TestCase):
 
     def test_marcador_nao_casa_sem_os_tres_campos_ou_com_campo_vazio(self):
         for line in (
-            "Spec: cap / req",
-            "Spec: cap",
-            "Spec:  /  / ",
-            "Spec: cap /  / titulo",
-            "Spec:  / req / titulo",
-            "Spec: cap / req / ",
+            f"{TAG}: cap / req",
+            f"{TAG}: cap",
+            f"{TAG}:  /  / ",
+            f"{TAG}: cap /  / titulo",
+            f"{TAG}:  / req / titulo",
+            f"{TAG}: cap / req / ",
         ):
             with self.subTest(linha=line):
                 self.assertIsNone(MARKER.search(line))
 
     def test_marcador_casa_com_tres_campos(self):
-        self.assertIsNotNone(MARKER.search("Spec: cap / req / titulo"))
+        self.assertIsNotNone(MARKER.search(f"{TAG}: cap / req / titulo"))
 
     def test_descricao_sem_acento_errado(self):
         self.assertNotIn("pára", read_skill())

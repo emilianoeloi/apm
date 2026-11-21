@@ -115,6 +115,30 @@ def effective_requirements(root: Path) -> list:
     return result
 
 
+def parse_scenarios(body: str) -> list:
+    """Lista de `(título, passos)` dos `Cenário:` do bloco gherkin, na ordem; `[]` sem bloco.
+
+    `passos` são as linhas de passo (Dado/Quando/Então/E/Mas) já sem recuo, unidas por quebra de linha.
+    Lê o bloco como `validate` (`FENCE_OPEN`, `KEYWORD`), mas não julga formato.
+    """
+    start = FENCE_OPEN.search(body)
+    if not start:
+        return []
+    rest = body[start.end():]
+    close = re.search(r"^```\s*$", rest, re.MULTILINE)
+    inner = rest[: close.start()] if close else rest
+    scenarios = []
+    for line in inner.splitlines():
+        match = KEYWORD.match(line)
+        if not match or line.strip().startswith("#"):
+            continue
+        if match.group(1) == "Cenário:":
+            scenarios.append((match.group(2).strip(), []))
+        elif scenarios:
+            scenarios[-1][1].append(line.strip())
+    return [(title, "\n".join(steps)) for title, steps in scenarios]
+
+
 def validate(body: str) -> list:
     """Lista de erros do bloco Gherkin de um requisito (vazia = conforme)."""
     errors = []

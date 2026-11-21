@@ -36,7 +36,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:4abbabf04238b69b7bb490c8ae6570c06e963f23dc725de7a6f3b5e206eb619c
+  content_hash: sha256:15f640d4ff2b39d0ea2a99846bc740044567516d06604b81cfafd56efb40bc1f
 - kind: project-relative
   target: claude
   value: .claude/commands/opsx-apply.md
@@ -108,7 +108,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:b78d18f546365a88e160898e6240cecf82e3144c6677e2237e80ac4278211aa9
+  content_hash: sha256:abc0f5b2eb2f8b190cfca531dbd3dde5b2167000f099c403bc5e1c6eb968ac55
 - kind: project-relative
   target: claude
   value: .claude/hooks/apm/.apm/hooks/scripts/gherkin-sensor.py
@@ -145,6 +145,15 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
+- kind: project-relative
+  target: claude
+  value: .claude/hooks/apm/.apm/hooks/scripts/spec-trace.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a5215762d6e4ef1e43ed2fa7bb68117394f211c96da47b565704fade618bc6b0
 - kind: project-relative
   target: claude
   value: .claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py
@@ -1179,7 +1188,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:4abbabf04238b69b7bb490c8ae6570c06e963f23dc725de7a6f3b5e206eb619c
+  content_hash: sha256:15f640d4ff2b39d0ea2a99846bc740044567516d06604b81cfafd56efb40bc1f
 - kind: project-relative
   target: copilot
   value: .github/hooks/apm-harness.json
@@ -1206,7 +1215,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:b78d18f546365a88e160898e6240cecf82e3144c6677e2237e80ac4278211aa9
+  content_hash: sha256:abc0f5b2eb2f8b190cfca531dbd3dde5b2167000f099c403bc5e1c6eb968ac55
 - kind: project-relative
   target: copilot
   value: .github/hooks/scripts/apm/.apm/hooks/scripts/gherkin-sensor.py
@@ -1243,6 +1252,15 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
+- kind: project-relative
+  target: copilot
+  value: .github/hooks/scripts/apm/.apm/hooks/scripts/spec-trace.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a5215762d6e4ef1e43ed2fa7bb68117394f211c96da47b565704fade618bc6b0
 - kind: project-relative
   target: copilot
   value: .github/hooks/scripts/apm/.apm/hooks/scripts/stop-sensors.py
@@ -1378,6 +1396,7 @@ local_deployed_files:
 - .claude/hooks/apm/.apm/hooks/scripts/pre-tool-bash-guard.py
 - .claude/hooks/apm/.apm/hooks/scripts/pre-tool-write-guard.py
 - .claude/hooks/apm/.apm/hooks/scripts/session-start.py
+- .claude/hooks/apm/.apm/hooks/scripts/spec-trace.py
 - .claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py
 - .claude/skills/acceptance-from-spec
 - .claude/skills/acceptance-from-spec/SKILL.md
@@ -1445,6 +1464,7 @@ local_deployed_files:
 - .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-bash-guard.py
 - .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-write-guard.py
 - .github/hooks/scripts/apm/.apm/hooks/scripts/session-start.py
+- .github/hooks/scripts/apm/.apm/hooks/scripts/spec-trace.py
 - .github/hooks/scripts/apm/.apm/hooks/scripts/stop-sensors.py
 - .github/prompts/opsx-apply.prompt.md
 - .github/prompts/opsx-archive.prompt.md
@@ -1489,7 +1509,7 @@ local_deployed_file_hashes:
   .claude/agents/sdlc-auditor.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
   .claude/agents/sdlc-coder.md: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
   .claude/agents/sdlc-planner.md: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
-  .claude/agents/sdlc-reviewer.md: sha256:4abbabf04238b69b7bb490c8ae6570c06e963f23dc725de7a6f3b5e206eb619c
+  .claude/agents/sdlc-reviewer.md: sha256:15f640d4ff2b39d0ea2a99846bc740044567516d06604b81cfafd56efb40bc1f
   .claude/commands/opsx-apply.md: sha256:cc529c6fc803294b6aaa167935edcc6cf29f5d6abfca5745cc6b2b66c52e4d1d
   .claude/commands/opsx-archive.md: sha256:7521ac8904458e2ee287015f009b6f7f5e55ca6b83849920bf2353e443853997
   .claude/commands/opsx-explore.md: sha256:46ed31adf3396460842a383324118e8d220b77fb49471a28a667a8551f3f3232
@@ -1497,11 +1517,12 @@ local_deployed_file_hashes:
   .claude/commands/opsx-sync.md: sha256:dea22f65e19200e435c25b86d813ca20aefcb4a868ec08ef85bda4742a399775
   .claude/commands/opsx-update.md: sha256:fb24721463e58a3d102c3d08117deebdbb09eb33e072743f31b31ccc006e4afc
   .claude/hooks/apm/.apm/hooks/scripts/_common.py: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
-  .claude/hooks/apm/.apm/hooks/scripts/_gherkin.py: sha256:b78d18f546365a88e160898e6240cecf82e3144c6677e2237e80ac4278211aa9
+  .claude/hooks/apm/.apm/hooks/scripts/_gherkin.py: sha256:abc0f5b2eb2f8b190cfca531dbd3dde5b2167000f099c403bc5e1c6eb968ac55
   .claude/hooks/apm/.apm/hooks/scripts/gherkin-sensor.py: sha256:fee18e465ad5161481dc8123376e7e630b642d189473d166b6d06ff92f77d7f9
   .claude/hooks/apm/.apm/hooks/scripts/pre-tool-bash-guard.py: sha256:de9414085402d88aa8d03628b299d90e05344e4ace6319b339a980d1f11ab652
   .claude/hooks/apm/.apm/hooks/scripts/pre-tool-write-guard.py: sha256:b4b769559f947bcf50b400d2cf9e222f459c4d6704eacba8f389913a0cc352fe
   .claude/hooks/apm/.apm/hooks/scripts/session-start.py: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
+  .claude/hooks/apm/.apm/hooks/scripts/spec-trace.py: sha256:a5215762d6e4ef1e43ed2fa7bb68117394f211c96da47b565704fade618bc6b0
   .claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py: sha256:0d4856d982916d10475d67ca26068c79c1336c2c08bebbea760a2f125dc5574e
   .claude/skills/acceptance-from-spec/SKILL.md: sha256:b08f1b2138bd8c25eeb048262a26ccdb19d75f627f2c1d55bc9293098116602f
   .claude/skills/architecture-fitness-functions/SKILL.md: sha256:125386113324fd42cb369c00767d961cf8239def9723588b10914f2d42f7f8f2
@@ -1539,14 +1560,15 @@ local_deployed_file_hashes:
   .github/agents/sdlc-auditor.agent.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
   .github/agents/sdlc-coder.agent.md: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
   .github/agents/sdlc-planner.agent.md: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
-  .github/agents/sdlc-reviewer.agent.md: sha256:4abbabf04238b69b7bb490c8ae6570c06e963f23dc725de7a6f3b5e206eb619c
+  .github/agents/sdlc-reviewer.agent.md: sha256:15f640d4ff2b39d0ea2a99846bc740044567516d06604b81cfafd56efb40bc1f
   .github/hooks/apm-harness.json: sha256:6c7cb7784319d515cfbd646c1509c32a536e2e4409a7126300e6797dd136ae97
   .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
-  .github/hooks/scripts/apm/.apm/hooks/scripts/_gherkin.py: sha256:b78d18f546365a88e160898e6240cecf82e3144c6677e2237e80ac4278211aa9
+  .github/hooks/scripts/apm/.apm/hooks/scripts/_gherkin.py: sha256:abc0f5b2eb2f8b190cfca531dbd3dde5b2167000f099c403bc5e1c6eb968ac55
   .github/hooks/scripts/apm/.apm/hooks/scripts/gherkin-sensor.py: sha256:fee18e465ad5161481dc8123376e7e630b642d189473d166b6d06ff92f77d7f9
   .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-bash-guard.py: sha256:de9414085402d88aa8d03628b299d90e05344e4ace6319b339a980d1f11ab652
   .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-write-guard.py: sha256:b4b769559f947bcf50b400d2cf9e222f459c4d6704eacba8f389913a0cc352fe
   .github/hooks/scripts/apm/.apm/hooks/scripts/session-start.py: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
+  .github/hooks/scripts/apm/.apm/hooks/scripts/spec-trace.py: sha256:a5215762d6e4ef1e43ed2fa7bb68117394f211c96da47b565704fade618bc6b0
   .github/hooks/scripts/apm/.apm/hooks/scripts/stop-sensors.py: sha256:0d4856d982916d10475d67ca26068c79c1336c2c08bebbea760a2f125dc5574e
   .github/prompts/opsx-apply.prompt.md: sha256:606297a1b99418258590e4e3642a46312651b41d26fb3f7bd9b4e50658d7029c
   .github/prompts/opsx-archive.prompt.md: sha256:2898d1ee82fcb51a3b1d6d138eb677ace07aac5389fbab956cb9bac5cbb5d419

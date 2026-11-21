@@ -113,6 +113,30 @@ Para a aceitação valer como sensor, componha o teste ao `sensors_command` do `
 
 **Prova.** O fluxo foi exercitado em dois projetos de prova (uma calculadora em Go, com ferramenta de teste, e um projeto mínimo sem nenhuma, onde o coder parou, propôs opções e só retomou depois da aprovação); veja `docs/roteiro-de-teste.md`. Os testes do pacote provam o texto do skill e do agente; o comportamento do modelo foi observado só nessas duas provas.
 
+## Conferência de cenários na revisão
+
+O `sdlc-reviewer` confere se cada `Cenário:` da change tem um teste ligado pela linha `Spec: <capability> / <requisito> / <cenário>` (a convenção de "Testes de aceitação"). Ele continua **somente leitura**: usa o script `spec-trace.py`, que só lê e não deixa rastro, e cita o resultado no relatório.
+
+```bash
+python3 -B <caminho>/spec-trace.py --root . --change <nome-da-change>
+```
+
+O caminho muda por host (o reviewer o acha com `Glob **/spec-trace.py`). A saída tem uma linha por cenário, `spec-trace: ESTADO capability / requisito / cenário @ arquivo:linha`, e um resumo no fim.
+
+| Estado | Significado | Efeito no veredito |
+|---|---|---|
+| `COBERTO` | há um teste com a linha `Spec:` do cenário | nenhum |
+| `SEM_TESTE` | cenário novo ou alterado sem teste ligado | **reprova** |
+| `HERDADO_SEM_TESTE` | cenário antigo de um requisito modificado, sem alteração | só informativo |
+| `ORFAO` | linha `Spec:` sem cenário correspondente | achado de severidade média |
+| `AMBIGUO` | a linha casa com mais de um cenário | achado de severidade média |
+
+Só o cenário **novo ou alterado** da change é exigido; os herdados não. O casamento é no código-fonte dos testes, nunca na saída do executor (o Go, por exemplo, troca espaços por `_` no nome do subteste). O agente também reprova o **falso verde**: o teste que não afirma o `Então` do cenário, ou que passaria sem o código, o que ele decide lendo o teste. Sem o relatório do coder, o vermelho aparece como "não verificado".
+
+**Limites.** O script prova o vínculo, não a qualidade do teste; essa parte é leitura do agente. Fixtures de teste que contêm uma linha `Spec:` dentro de uma string aparecem como `ORFAO`: o agente as descarta ao ler (monte a linha por constante para evitar). O comportamento do modelo no reviewer só foi coberto por testes de texto; falta a prova num projeto real. Por isso dois cenários de comportamento do modelo (`sdlc-agent-roles`: "Revisão de change com cenários" e "Cenário novo sem teste") ficam `SEM_TESTE` conhecidos, e o script sai 2 na change que os criou; só a prova num projeto real os cobre.
+
+**Projetos na versão anterior.** Depois de atualizar o apm e rodar `apm install`, o reviewer passa a reprovar cenário novo ou alterado sem teste. Cenários antigos não são exigidos.
+
 ## Sensor de Gherkin
 
 Todo requisito das specs do OpenSpec traz um bloco ` ```gherkin ` com `Cenário:`, `Dado`, `Quando` e `Então`, antes do primeiro `#### Scenario:`. O sensor `gherkin-sensor.py` (só biblioteca padrão, ao lado dos outros hooks) confere isso e **falha com código 2 citando o requisito**; sem violação, sai 0 e fica mudo.
