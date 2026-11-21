@@ -1,5 +1,33 @@
 # Changelog
 
+## Onda 1, F3 — skill acceptance-from-spec (2026-11-21)
+
+Change `acceptance-from-spec`, arquivada. Fecha a Onda 1 (F1, F2 e F3). Sem push; PR e merge são do Elói.
+
+### O que muda
+
+* Skill público `acceptance-from-spec` (97 linhas, sem nomear ferramenta de teste): o `sdlc-coder`, na fase `apply`, escreve primeiro o teste de aceitação de cada `Cenário:` aprovado, ligado à spec pela linha `Spec: <capability> / <requisito> / <cenário>`, prova o vermelho (comando e contagem de falhas, sem stubs) e o verde pelo `sensors_command`.
+* Sem framework de teste: o coder não escreve nem instala nada; devolve um relatório `BLOQUEADO` com 1 a 3 opções e espera a aprovação. Operations sem cenário seguem como pendente. Change sem `Cenário:`: o skill não se aplica.
+* `sdlc-coder` invoca o skill antes das Operations; README ganha "Testes de aceitação" e o aviso de migração; `CLAUDE.md` cita o skill nos quality gates.
+* Capability nova `acceptance-from-spec` (6 requisitos) e um requisito novo em `sdlc-agent-roles` e em `pacote-generico`.
+
+### Verificação
+
+* 154 testes, `openspec validate --specs --strict`, sensor de Gherkin e neutralidade: ok.
+* sdlc-reviewer: aprovado com ressalvas; as de texto (BLOQUEADO, change sem cenário, testes negativos do marcador, ortografia, README) foram tratadas.
+* **Não verificado:** o comportamento do modelo seguindo o skill num projeto real (task 6.4; projeto de prova: não informado). Os testes provam o texto, não o modelo.
+* **Ainda aberto na Onda 1:** o disparo ao vivo do hook do sensor (task 5.5 da F2) e o `PostToolUse` no Copilot.
+
+### Retrospectiva de skills
+
+* Usados: `acceptance-from-spec` (novo, ainda não exercitado por um modelo), `openspec-workflow`, `spdd-sync`, `skill-retrospective` e os agentes `sdlc-planner`, `sdlc-coder` e `sdlc-reviewer`.
+* `sdlc-planner`: de novo sem acesso à spec do Drive (não tem o conector); o brief da sessão principal supre. Proposta: o agente declarar quando a fonte citada não foi lida.
+* `sdlc-coder`: seguiu a ordem pedida no aviso do `apm install` (investigar antes). Escrita de README e `CLAUDE.md` voltou à sessão principal pela terceira vez: vale decidir uma lista de "docs do projeto" que o coder possa tocar (proposta, não feita).
+* `install-dev-harness`: sem lacuna nova; falta citar o `acceptance-from-spec` e o sensor ao orientar `sensors_command` (proposta).
+* `drive-status`: o cabeçalho V1.7 serviu de ponta a ponta; sem lacuna. Corrigir um STATUS anterior exige um novo (aconteceu no V5 e no V11): vale uma linha no skill.
+* Aviso do `apm install` "skill replaced by a different package": só o skill `harness`, anterior à Onda 1; o APM reescreve links relativos de `references/dev-harness-kit-export.md`. Cosmético; vale reportar ao apm.
+* Faltou um skill: nenhum novo. Nada foi publicado sem o "ok" do Elói.
+
 ## Onda 1, F2 — sensor de Gherkin (2026-11-21)
 
 Change `sensor-de-gherkin`, arquivada. Sem push; PR e merge são do Elói.

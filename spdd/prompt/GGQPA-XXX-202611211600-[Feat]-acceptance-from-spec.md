@@ -93,6 +93,7 @@ Conservador: só adições; nenhum hook, `_gherkin.py`, spec existente ou outro 
 ### Create Tests - tests/agents/test_acceptance_skill.py (primeiro, vermelho)
 1. Responsibility: proteger o texto do skill. Em tabela: frontmatter; trechos obrigatórios (`Spec:`, `Cenário:`, `vermelho`, `verde`, `contagem de falhas`, `sensors_command`, `harness.config.json`, `Pare`, `aprovação`, `não instal`, `code_prefixes`); `STACK_TERMS` e os quatro termos ausentes; tamanho; exemplo do marcador casa com o regex canônico; cópias idênticas em `.claude/skills/` e `.agents/skills/`.
 2. Verificar vermelho (skill inexistente) e registrar comando e contagem. Estimativa: ~120 linhas.
+3. Implementado além do previsto, após a revisão: casos negativos do marcador `Spec:` (dois campos, um campo, campos vazios, título vazio) e um positivo; trechos obrigatórios `BLOQUEADO`, `pendente`, `pulou`, `sem stubs`, `não se aplica`, `seguem normalmente` e `nada escrito`; lista `CODER_REQUIRED` para o coder; teste que impede "pára" no frontmatter. Tamanho real do skill: 97 linhas.
 
 ### Update Tests - tests/agents/test_contract.py
 1. Responsibility: o coder cita o skill. `SKILLS_BY_ROLE["sdlc-coder"]` ganha `acceptance-from-spec`; regex de skills citadas cobre o nome; ordem (skill citado antes do item das Operations).
@@ -102,9 +103,10 @@ Conservador: só adições; nenhum hook, `_gherkin.py`, spec existente ou outro 
 1. Responsibility: instrução do ciclo teste-primeiro. Frontmatter `name`, `description`, `license: MIT`, `metadata`.
 2. Passos: (1) cenários da change (`ADDED`/`MODIFIED`, bloco gherkin); (2) descobrir framework em ordem, parar no primeiro achado, conflito = parar; (3) sem framework: propor 1 a 3 opções (motivo, custo, pasta, comando, composição no `sensors_command`), Pare, não instale, não escreva, devolva à sessão principal para a aprovação do Emiliano; (4) escrever o teste com a linha `Spec:`; (5) vermelho: comando mais estreito, contagem de falhas, motivo, sem stubs; teste verde de primeira = relatar; (6) implementar; (7) verde: teste estreito e `sensors_command`, conferir que a aceitação roda, senão "sensores não configurados"; (8) relatório por cenário; pendências fora de `code_prefixes`.
 3. Sem nomes de ferramenta, linguagem ou comando de stack. Estimativa: ~110 linhas.
+4. Acrescentado após a revisão: change sem nenhum `Cenário:` faz o skill não se aplicar (sem inventar teste, registrado no relatório); no ramo "sem framework" o relatório é `BLOQUEADO: ferramenta de teste não definida: nada escrito, aguardando ferramenta`, e as Operations sem cenário seguem normalmente como pendente.
 
 ### Update Agent - .apm/agents/sdlc-coder.agent.md
-1. Responsibility: invocar o skill. Item em "O que você faz" antes das Operations; linha em "Entregável". Nada mais muda (ferramentas, escrita, limites).
+1. Responsibility: invocar o skill. Item em "O que você faz" antes das Operations; linha em "Entregável". Nada mais muda (ferramentas, escrita, limites). Implementado também: o Entregável traz o formato BLOQUEADO e o item "corrija até os sensores passarem" diz que a falta de ferramenta de teste não conta como falha de sensor; o item novo é o nº 1 de "O que você faz" e os demais foram renumerados.
 2. Verificar `tests/agents` verde. Estimativa: ~14 linhas.
 
 ### Update Docs (sessão principal, fora do coder)
@@ -132,3 +134,5 @@ Conservador: só adições; nenhum hook, `_gherkin.py`, spec existente ou outro 
 4. Honesty Constraints: o coder nunca afirma que a aceitação passou pelos sensores se o `sensors_command` não a roda; vermelho pulado é dito; comportamento do modelo "não verificado" até a prova no projeto real.
 5. Stop Constraints: sem framework definido, nenhum teste é escrito e nada é instalado até a aprovação do Emiliano.
 6. Release Constraints: sem push, tag ou merge sem o "ok" do Elói; PR `feat(agents):`.
+
+<!-- Sync pós-implementação. Task 6.4 (comportamento do modelo num projeto de prova, não informado) segue aberta; os testes provam o texto, não o modelo. -->
