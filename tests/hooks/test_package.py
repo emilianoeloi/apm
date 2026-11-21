@@ -20,11 +20,18 @@ class ManifestTest(unittest.TestCase):
         self.manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))["hooks"]
 
     def test_eventos_registrados(self):
-        self.assertEqual(set(self.manifest), {"SessionStart", "PreToolUse", "Stop"})
+        self.assertEqual(set(self.manifest), {"SessionStart", "PreToolUse", "PostToolUse", "Stop"})
 
     def test_pre_tool_use_tem_os_dois_matchers(self):
         matchers = sorted(entry["matcher"] for entry in self.manifest["PreToolUse"])
         self.assertEqual(matchers, ["Bash", "Write|Edit|NotebookEdit"])
+
+    def test_post_tool_use_roda_o_sensor_de_gherkin_no_bash(self):
+        entries = self.manifest["PostToolUse"]
+        self.assertEqual([entry["matcher"] for entry in entries], ["Bash"])
+        self.assertIn("gherkin-sensor.py", entries[0]["command"])
+        self.assertIn("--on-validate", entries[0]["command"])
+        self.assertEqual(entries[0]["timeout"], 10)
 
     def test_cada_comando_aponta_para_um_script_que_existe(self):
         for event, entries in self.manifest.items():
@@ -55,7 +62,7 @@ class ScriptsTest(unittest.TestCase):
                     names = [node.module.split(".")[0]]
                 for name in names:
                     with self.subTest(script=script.name, importa=name):
-                        self.assertTrue(name in sys.stdlib_module_names or name == "_common")
+                        self.assertTrue(name in sys.stdlib_module_names or name in ("_common", "_gherkin"))
 
     def test_sem_termos_de_stack_ou_do_projeto_de_origem(self):
         for path in sorted((REPO / ".apm" / "hooks").rglob("*")):

@@ -9,7 +9,7 @@
   ],
 
   "_comment_sensors": "sensors_command: comando do projeto que o hook de Stop roda ao encerrar a sessão (raiz do projeto como diretório de trabalho). Vazio = não bloqueia nunca. Saída diferente de 0 ou estouro de sensors_timeout_seconds bloqueia o encerramento e mostra a saída. Mantenha o timeout abaixo do timeout do hook (60 s).",
-  "sensors_command": "python3 -m unittest discover -s tests -t .",
+  "sensors_command": "python3 -B -m unittest discover -s tests -t . && python3 -B .apm/hooks/scripts/gherkin-sensor.py",
   "sensors_timeout_seconds": 50,
 
   "_comment_prefixes": "Deixe planning_write_prefixes e code_prefixes como [] se o projeto não usa gate de fase (ainda bloqueia credenciais/comandos destrutivos, só não bloqueia por fase).",

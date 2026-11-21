@@ -50,6 +50,56 @@ Roteiro de aceite do pacote `apm` (spec APM_SETUP V1.2). Cada passo diz o que ro
 - **Formato de saída decimal:** o formato escolhido (`strconv.FormatFloat` com `'g'`) imprime `1e+06` para um milhão e `1.23456789e+08` para 123456789; é decisão de produto da calculadora, registrada como característica conhecida, e não falha do harness.
 - **Nomes `GGQPA-XXX`:** os skills de SPDD geram arquivos com um número de ticket que o projeto não tem; vale a pena aceitar um prefixo configurável.
 
+## Prova da Onda 1 da rodada V2.0 (cenário, teste de aceitação e sensor)
+
+Projeto de prova: `emilianoeloi/calculadora_go`, clone descartável no scratchpad, apm instalado da **fonte local** (sem push nem tag) na branch `feat/f3-acceptance-from-spec`. Mudança de prova: a operação `resto`.
+
+| Passo | Resultado |
+|---|---|
+| Instalar o apm novo no projeto | `go test ./...` segue verde; skill, sensor, hook `PostToolUse` e agentes instalados |
+| Rodar o sensor nas specs existentes | **Falha com 14 violações** (nenhum requisito tinha bloco): projetos antigos precisam de retrofit |
+| Retrofit dos 14 requisitos (change própria) | Sensor sai 0 com a change ativa e depois de arquivada; texto e cenários WHEN/THEN idênticos |
+| Planner gera `operacao-de-resto` | Requisitos com bloco gherkin e `#### Scenario:`; `openspec validate --strict` e sensor ok |
+| Coder escreve o teste antes do código | Vermelho: build falhou com 3 `undefined: Resto`; na CLI, 2 testes de topo e 7 subtestes falharam. Verde: `go test ./...` com 17 subtestes `Spec:` |
+| Reviewer confere | Aprovado com ressalvas; mutações pensadas (módulo estilo Python, `math.Remainder`, sem `b==0`, sem `verificarFinito`) seriam pegas |
+| `git push` | Bloqueio coberto pelos testes do hook; não tentado de novo |
+
+**Ramo "sem framework" (segunda prova).** Num projeto mínimo sem teste, manifesto nem linguagem (change `saudacao`, dois cenários), o coder real parou com `BLOQUEADO: ferramenta de teste não definida (nada escrito, aguardando ferramenta)`: `src/` ficou vazia, as tasks desmarcadas, os dois cenários pendentes, e propôs três opções sem instalar nada. Com a ferramenta aprovada (Python `unittest`, registrada pela sessão principal no `CLAUDE.md` e no `sensors_command`), ele retomou: vermelho (2 testes, 1 falha; depois do reforço, 2 falhas), verde (`discover` executou os 2 testes `Spec:`), sensor de Gherkin 0. Achado: o teste de "Sem argumento" passou sem o programa existir, porque o interpretador sai com código 2 e escreve em stderr quando o arquivo falta; o coder o reforçou (stdout vazio e mensagem do programa). Vale uma linha no skill: o vermelho precisa vir da asserção do cenário, não de erro do ambiente.
+
+**Limites da prova.** O disparo ao vivo do hook `PostToolUse` não foi observado numa sessão real; só o payload simulado. O vermelho vem do relatório do coder e da estrutura dos testes; o git não registra a ordem das escritas. Nenhum cenário de `resto` ficou sem teste, mas 3 cenários herdados de um requisito modificado ficaram sem linha `Spec:`.
+
+**Achados para o pacote**
+- **Retrofit é parte da migração:** adotar o sensor num projeto com specs antigas falha até o bloco ser acrescentado; o README agora avisa.
+- **Skill e tasks divergem:** o skill manda um teste por `Cenário:` do bloco; o planner mandou cobrir também todos os `#### Scenario:`. Alinhar.
+- **Cenário herdado em requisito modificado:** não está dito se precisa de teste `Spec:`; a F4 precisa decidir.
+- **Sensor não lê testes:** sai 0 sem nenhuma linha `Spec:`; o vínculo só será conferido pela F4.
+- **Nome de subteste (Go):** espaços viram `_` e ` / ` vira hierarquia; o `grep` no fonte é o mais seguro.
+- **Teste defensivo sem cenário:** o skill não diz como marcá-lo.
+- **Instalação suja o `git status`:** os arquivos do apm se misturam à change; vale commitar a instalação à parte.
+- **Hooks e outra pasta:** desta vez a escrita no projeto de prova passou porque ele estava em `/private/tmp`, liberado em `allowed_write_roots`; a limitação de `CLAUDE_PROJECT_DIR` da prova anterior continua valendo para outras pastas.
+
+## Prova do reviewer (F4, task 6.4)
+
+Projeto mínimo `semfw` (Python `unittest`), apm da F4 instalado da fonte local, change de prova `saudacao-composta` montada com defeitos conhecidos, sem dizer ao reviewer o que esperar: um cenário novo sem teste, um requisito novo sem teste, um marcador `Spec:` com título errado (`Nome compostos`), um teste vazio (`assertTrue(True)`) e tasks marcadas sem código.
+
+| Defeito plantado | O reviewer real |
+|---|---|
+| cenário novo sem teste (`Nome composto`) | `SEM_TESTE`, severidade alta |
+| requisito novo sem teste (`Saudação formal`) | `SEM_TESTE`, severidade alta |
+| marcador com título errado | `ORFAO`, severidade média |
+| teste que não afirma o `Então` | apontado como falso verde (alta), com leitura do teste |
+| tasks marcadas sem código | apontado: `saudacao.py` não implementa nada novo |
+| cenário já existente e com teste | `COBERTO` (lido: afirma `Olá, Ana!` e código 0) |
+
+Veredito: **REPROVADO**. Ele também achou um defeito que eu não tinha plantado de propósito: a classe de teste nova estava depois do `if __name__ == "__main__"` e nunca rodava; foi um erro meu ao montar a fixture.
+
+**Atritos**
+- O reviewer, nessa execução, não tinha a ferramenta `Glob` (só `Bash` e `Read`) e usou `find . -name spec-trace.py`. Achou 4 cópias, 3 delas em `apm_modules/`. Usou a implantada em `.claude/hooks/apm/...`. Vale o agente dizer que a cópia certa é a do host, fora de `apm_modules/`, e que `find` é o plano B.
+- Sem o relatório do coder, o vermelho aparece como "não verificado", como o agente manda.
+- Ele não usou a reserva `grep -F`.
+
+**Limites.** É uma prova com um modelo e uma fixture. Ela mostra o comportamento de uma revisão, não a taxa de acerto; os dois cenários `SEM_TESTE` conhecidos de `sdlc-agent-roles` seguem sem teste automático.
+
 ## Itens conhecidos fora do roteiro
 
 - O formato dos agentes e dos hooks no Copilot não foi verificado num Copilot real.

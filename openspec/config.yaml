@@ -5,6 +5,15 @@ context: |
   All artifacts must be written in português.
   Keep OpenSpec structural headings and SHALL/MUST keywords in English.
 
+rules:
+  specs:
+    - >-
+      Todo requisito (### Requirement:) SHALL trazer, logo depois do parágrafo
+      SHALL/MUST e antes do primeiro #### Scenario:, um bloco cercado ```gherkin
+      com ao menos um cenário no formato "Cenário: <título>", "Dado", "Quando" e
+      "Então" (E/Mas como continuação). O título repete o de um #### Scenario:
+      do mesmo requisito. Um cenário mínimo por requisito basta.
+
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.
 # Example:

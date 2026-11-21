@@ -9,7 +9,7 @@ description: >-
 license: MIT
 metadata:
   author: local
-  version: "1.0"
+  version: "1.1"
 ---
 
 # Skill — Status no Drive
@@ -38,6 +38,7 @@ repositório.
 3. **Nunca edite um arquivo de status antigo.** Histórico de progresso é append-only; corrigir
    um erro do passado é registrar isso no status novo, não reescrever o antigo.
 4. Pasta sem nenhum status ainda: comece em `V1`.
+5. **Confira a pasta de novo logo antes de salvar.** Se outra sessão ou agente gravou o número `V<n+1>` enquanto você preparava o arquivo, use o próximo número livre.
 
 ## Campos mínimos
 
@@ -53,6 +54,22 @@ repositório.
 - Bloqueios (ou "nenhum").
 
 Dado que não existe ou não se aplica vira **"não informado"**, nunca uma suposição.
+
+## Cabeçalho fixo (protocolo com agente, modelo e estado)
+
+Quando vários agentes de código gravam status no mesmo Drive, abra o arquivo pelo título e por
+um cabeçalho de uma linha por campo, no formato `- Campo: valor`, e só depois as seções
+(Feito, Testado, Não testado, Próximo passo, Bloqueios):
+
+- **Agente** (o agente que fez esta interação, ex. o nome do produto, `HUMANO` ou outro nome),
+  **Modelo**, **Estado** (`ANDAMENTO`, `BLOQUEADO`, `PARADO` ou `LANÇADO`), **Data e hora**,
+  **Onda**, **Fase do harness**, **Branch**, **Commits**, **PR** e **Substitui** (o status
+  anterior que este continua).
+- Dado ausente vira "não informado". Quem lê o painel agregador precisa conseguir distinguir
+  os agentes e o estado sem abrir o corpo.
+- **Hora:** use a hora real do fuso do projeto. Se não souber a hora exata, escreva a data e
+  "hora exata não informada"; não invente nem arredonde.
+- **Múltiplos agentes no mesmo projeto:** cada agente trabalha na sua própria branch; quem assume ou continua o trabalho do outro lê o STATUS mais novo dele antes de mexer.
 
 ## Se o Drive falhar
 

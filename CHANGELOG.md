@@ -1,5 +1,148 @@
 # Changelog
 
+## Onda 2, F4 — reviewer confere cenário contra teste (2026-11-21)
+
+Change `reviewer-confere-cenarios`, arquivada. Empilhada sobre a F3 (PRs #33 a #36 abertos). Sem push; PR e merge são do Elói.
+
+### O que muda
+
+* `spec-trace.py` (só leitura, só biblioteca padrão) lista os cenários da change e confere as linhas `Spec: <capability> / <requisito> / <cenário>` nos testes. Estados: `COBERTO`, `SEM_TESTE`, `HERDADO_SEM_TESTE`, `ORFAO` e `AMBIGUO`. A leitura é só de arquivo regular, até 1 MiB.
+* `_gherkin.parse_scenarios` e um passo novo do `sdlc-reviewer` ("Cenários x testes"): cenário novo ou alterado sem teste e falso verde reprovam; órfão e ambíguo são de severidade média; herdado sem teste é informativo. O agente continua somente leitura.
+* Capability nova `spec-trace` (7 requisitos) e requisitos novos em `sdlc-agent-roles` e `pacote-generico`. README: "Conferência de cenários na revisão".
+
+### Decisão do Elói
+
+Dois cenários de comportamento do modelo em `sdlc-agent-roles` ("Revisão de change com cenários" e "Cenário novo sem teste") ficam `SEM_TESTE` conhecidos, cobertos só pela prova de comportamento. Por isso o `spec-trace` sai 2 na própria change, e o veredito mecânico do reviewer sobre ela é `REPROVADO` por decisão registrada.
+
+### Verificação
+
+* 199 testes; `openspec validate --specs --strict`; sensor de Gherkin; neutralidade. `spec-trace` na change: 8 cobertos, 2 `SEM_TESTE` conhecidos, 0 órfãos.
+* sdlc-reviewer: primeiro REPROVADO (leitura de FIFO e de link para dispositivo travava, sufixo alfanumérico gerava falso `COBERTO`, cenário do README sem teste, órfãos falsos); tratados com teste primeiro; segunda revisão: aprovado com ressalvas.
+* **Prova de comportamento (task 6.4):** feita em projeto de prova com a change `saudacao-composta` e defeitos plantados; o reviewer real reprovou, achou o cenário novo e o requisito novo sem teste, o marcador órfão, o teste vazio e as tasks sem código (veja `docs/roteiro-de-teste.md`). Atrito: sem `Glob` ele usou `find` e achou cópias em `apm_modules/`. **Ressalvas baixas abertas:** janela entre `lstat` e `open` (usar `O_NONBLOCK` e `O_NOFOLLOW`), sufixos `_`, `-` e `(` contam como fechamento, subtestes com tab e espaço não separável.
+
+### Retrospectiva de skills
+
+* Usados: `acceptance-from-spec` (primeira vez neste repo), `spdd-sync`, `skill-retrospective` e os agentes `sdlc-planner`, `sdlc-coder` e `sdlc-reviewer`.
+* `acceptance-from-spec` (atritos): falta dizer como anotar o teste de um `#### Scenario:` extra sem criar `ORFAO` (o coder usou um comentário `Extra`); falta exigir que o vermelho venha da asserção e não de erro do ambiente (um script ausente sai com 2); falta orientar fixtures que contêm `Spec:` (montar a linha por constante); falta dizer como tratar cenário de comportamento do modelo, que só prova humana cobre. Proposta: uma change própria no skill (Q8 do plano da F4).
+* `sdlc-reviewer`: a primeira revisão achou bugs reais que o coder não viu (travamento por FIFO, falso verde por prefixo); o ciclo planner, coder, reviewer, correção, nova revisão se mostrou útil. Proposta: o brief do reviewer sempre pedir tentativa de entrada hostil e de falso verde.
+* `sdlc-planner`: de novo sem acesso à spec do Drive (sem o conector); o brief da sessão principal supre.
+* `drive-status`: sem lacuna.
+* Faltou um skill: nenhum novo. Nada foi publicado sem o "ok" do Elói.
+
+## Onda 1, F3 — skill acceptance-from-spec (2026-11-21)
+
+Change `acceptance-from-spec`, arquivada. Fecha a Onda 1 (F1, F2 e F3). Sem push; PR e merge são do Elói.
+
+### O que muda
+
+* Skill público `acceptance-from-spec` (97 linhas, sem nomear ferramenta de teste): o `sdlc-coder`, na fase `apply`, escreve primeiro o teste de aceitação de cada `Cenário:` aprovado, ligado à spec pela linha `Spec: <capability> / <requisito> / <cenário>`, prova o vermelho (comando e contagem de falhas, sem stubs) e o verde pelo `sensors_command`.
+* Sem framework de teste: o coder não escreve nem instala nada; devolve um relatório `BLOQUEADO` com 1 a 3 opções e espera a aprovação. Operations sem cenário seguem como pendente. Change sem `Cenário:`: o skill não se aplica.
+* `sdlc-coder` invoca o skill antes das Operations; README ganha "Testes de aceitação" e o aviso de migração; `CLAUDE.md` cita o skill nos quality gates.
+* Capability nova `acceptance-from-spec` (6 requisitos) e um requisito novo em `sdlc-agent-roles` e em `pacote-generico`.
+
+### Verificação
+
+* 154 testes, `openspec validate --specs --strict`, sensor de Gherkin e neutralidade: ok.
+* sdlc-reviewer: aprovado com ressalvas; as de texto (BLOQUEADO, change sem cenário, testes negativos do marcador, ortografia, README) foram tratadas.
+* **Não verificado:** o comportamento do modelo seguindo o skill num projeto real (task 6.4; projeto de prova: não informado). Os testes provam o texto, não o modelo.
+* **Ainda aberto na Onda 1:** o disparo ao vivo do hook do sensor (task 5.5 da F2) e o `PostToolUse` no Copilot.
+
+### Retrospectiva de skills
+
+* Usados: `acceptance-from-spec` (novo, ainda não exercitado por um modelo), `openspec-workflow`, `spdd-sync`, `skill-retrospective` e os agentes `sdlc-planner`, `sdlc-coder` e `sdlc-reviewer`.
+* `sdlc-planner`: de novo sem acesso à spec do Drive (não tem o conector); o brief da sessão principal supre. Proposta: o agente declarar quando a fonte citada não foi lida.
+* `sdlc-coder`: seguiu a ordem pedida no aviso do `apm install` (investigar antes). Escrita de README e `CLAUDE.md` voltou à sessão principal pela terceira vez: vale decidir uma lista de "docs do projeto" que o coder possa tocar (proposta, não feita).
+* `install-dev-harness`: sem lacuna nova; falta citar o `acceptance-from-spec` e o sensor ao orientar `sensors_command` (proposta).
+* `drive-status`: o cabeçalho V1.7 serviu de ponta a ponta; sem lacuna. Corrigir um STATUS anterior exige um novo (aconteceu no V5 e no V11): vale uma linha no skill.
+* Aviso do `apm install` "skill replaced by a different package": só o skill `harness`, anterior à Onda 1; o APM reescreve links relativos de `references/dev-harness-kit-export.md`. Cosmético; vale reportar ao apm.
+* Faltou um skill: nenhum novo. Nada foi publicado sem o "ok" do Elói.
+
+## Onda 1, F2 — sensor de Gherkin (2026-11-21)
+
+Change `sensor-de-gherkin`, arquivada. Sem push; PR e merge são do Elói.
+
+### O que muda
+
+* `gherkin-sensor.py` e a biblioteca `_gherkin.py` (só biblioteca padrão): conferem o bloco `gherkin` de cada requisito, aplicam os deltas das changes ativas (`ADDED`, `MODIFIED`, `REMOVED`, `RENAMED`) e saem 2 citando `capability / Requirement / change`.
+* Hook `PostToolUse` (Bash) roda o sensor depois de um `openspec validate`; o `sensors_command` deste repo roda os testes e depois o sensor (Stop e pre-commit).
+* A regra do formato vive só em `_gherkin.py`; o teste da F1 passou a importá-la.
+* Capability nova `gherkin-sensor` (8 requisitos); `hook-runtime` ganha o `PostToolUse` e o helper `_gherkin`. README: seção "Sensor de Gherkin".
+
+### Verificação
+
+* 141 testes e `openspec validate --specs --strict` (8 specs): ok. Vermelho natural em cada etapa.
+* sdlc-reviewer: aprovado com ressalvas; o README foi corrigido (disparo ao vivo não verificado).
+* **Não verificado:** o disparo do hook numa sessão real (task 5.5) e o `PostToolUse` num Copilot real.
+* **Ressalvas abertas (baixas):** o regex casa por texto (`git commit -m "openspec validate"` dispara, ruído sem dano); `--root` inválido sai 0 com aviso; faltam testes do ramo de erro inesperado (código 2) e do fail-open do modo hook.
+
+### Retrospectiva de skills
+
+* Usados: `openspec-workflow`, `spdd-sync`, `skill-retrospective`, `install-dev-harness` (ganhou nota sobre o sensor) e os agentes `sdlc-planner`, `sdlc-coder`, `sdlc-reviewer`.
+* `sdlc-coder`: investigou o aviso do `apm install` depois do install, não antes; o brief deve exigir a ordem. Escrita fora de `code_prefixes` (README, `harness.config.json`, `CLAUDE.md`) voltou à sessão principal de novo: considerar uma lista de "docs do projeto" que o coder possa tocar (proposta, não feita).
+* `sdlc-planner`: não leu a spec do Drive, usou só o brief; vale uma linha no agente para ler a fonte quando o brief a cita (proposta).
+* `spdd-sync`: o caminho curto para desvios aditivos pequenos, proposto na F1, se confirmou.
+* Aviso do `apm install` "skills replaced by a different package": só `harness` apareceu, sem nomear o outro pacote; investigar no `apm`.
+* Faltou um skill: nenhum novo. `acceptance-from-spec` nasce na F3. Nada foi publicado sem o "ok" do Elói.
+
+## Onda 1, F1 — cenários Gherkin na spec (2026-11-21)
+
+Change `cenarios-gherkin-na-spec`, arquivada. Sem push; PR e merge são do Elói.
+
+### O que muda
+
+* Todo requisito das specs do OpenSpec traz um bloco cercado ` ```gherkin ` (`Cenário:`, `Dado`, `Quando`, `Então`), antes do primeiro `#### Scenario:`. O `#### Scenario:` com WHEN/THEN continua, pois o `--strict` o exige.
+* O `sdlc-planner`, o skill `openspec-workflow`, `rules.specs` do `openspec/config.yaml` e o `CLAUDE.md` exigem o bloco.
+* Retrofit dos 31 requisitos das 6 specs; capability nova `spec-gherkin-scenarios`.
+* Teste de formato em `tests/specs/test_gherkin_blocks.py` e `BlocoGherkinTest` no contrato dos agentes. O sensor de Gherkin é a F2.
+* `versao-final-1-0-0` foi arquivada antes, por dependência de ordem do delta `release-versioning`.
+
+### Verificação
+
+* 117 testes e `openspec validate --specs --strict` (7 specs): ok.
+* sdlc-reviewer: aprovado com ressalvas, tratadas abaixo.
+* **Não verificado:** o planner com o modelo real gerando o bloco (task 4.4); o aviso do `apm install` sobre "2 skills replaced by a different package"; amostra negativa para bloco sem fechamento.
+
+### Retrospectiva de skills
+
+* Usados: `install-dev-harness` (não rodado: o apm é o próprio pacote), `openspec-workflow`, `spdd-sync`, `skill-retrospective` e os agentes `sdlc-planner`, `sdlc-coder`, `sdlc-reviewer`.
+* `openspec-workflow` e `sdlc-planner`: atualizados nesta change. `openspec-propose` não, por ser gerado pelo CLI.
+* `sdlc-coder`: o escopo de escrita não cobre `openspec/config.yaml`, o que obrigou a sessão principal a aplicar a task; vale a change que o coder possa tocar `rules` ao planejar (proposta, não feita).
+* `spdd-sync`: ficou melhor com um passo para o caso de desvios pequenos e aditivos sem pedir plano (proposta).
+* `drive-status` público: já usa o cabeçalho com Agente, Modelo e Estado; falta conferir o campo Substitui na F2/F3.
+* Faltou um skill: nenhum novo. `acceptance-from-spec` nasce na F3. Nada foi publicado sem o "ok" do Elói.
+
+## Onda 0 — preparo da rodada V2.0 (2026-11-21)
+
+Spec: APM_SETUP V2.0 (Drive). Nenhum push; a Onda 1 (F1, F2, F3) ainda não começou.
+
+### Versão
+
+* A spec falava em evoluir de 1.1.0 para 1.2.0, mas o repositório já estava em `1.5.0` (manifesto e `apm.yml`). Decisão do Elói: usar a versão mais atual. A próxima versão sai do release-please (sem `release-as`).
+* O apm é o próprio pacote (`apm.yml` sem dependências externas), então o skill `install-dev-harness` não foi rodado de novo. Ferramentas: `apm` 0.35.0, `openspec` 1.14.1, `python3` 3.14.5.
+
+### Feito
+
+* `apm install --target claude,copilot --force` ressincronizou as cópias implantadas (agentes `sdlc-coder`, `sdlc-planner`, `sdlc-reviewer` e cinco skills), que estavam atrás da fonte em `.apm/`.
+* Bloco "Status no Drive" (V1.7, APM) adicionado ao `CLAUDE.md`. Não há `AGENTS.md`.
+* `harness.config.json` mantido como está; hosts claude e copilot; artefatos OpenSpec em português do Brasil.
+
+### Verificação
+
+* `session-start.py` imprime JSON com `additionalContext`: ok. `stop-sensors.py` sai com 0: ok.
+* `openspec list` e `phase_cli.py show`: ok. `spdd-*` em `.claude/skills/`, `opsx-*` em `.claude/commands/` e `.github/prompts/`: ok.
+* Os quatro agentes `sdlc-*` em `.claude/agents/` e `.github/agents/`: ok. 110 testes ok.
+* Conector do Google Drive: leitura da spec ok. O primeiro `APM_STATUS` é salvo ao fim desta onda.
+
+### Observações
+
+* Antes do sync, 3 testes de cópia implantada falhavam, e `__pycache__` não rastreado quebrava o teste de termos proibidos. Caches removidos; rode os testes com `python3 -B`.
+* `gh` está sem credencial válida (401); o repositório público foi lido por `curl` e `git ls-remote`, o privado por SSH.
+
+### Retrospectiva de skills
+
+* Público (`apm` v1.5.0): 21 skills. Privado (`skills`): 43. O `drive-status` público precisa ser conferido contra o cabeçalho V1.7 na Onda 1.
+* `install-dev-harness`: sem lacuna nova nesta onda. Nada foi publicado.
+
 ## Preparação da 1.0.0 final (2026-11-12)
 
 Change `versao-final-1-0-0`. A prova da calculadora em Go foi aprovada pelo Elói; esta change faz a configuração propor a `1.0.0`. Nada é publicado até o Elói mesclar este PR e, depois, o PR de release.

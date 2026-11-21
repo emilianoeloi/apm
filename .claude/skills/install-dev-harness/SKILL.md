@@ -12,7 +12,7 @@ allowed-tools: Read, Write, Edit, Bash, Glob
 license: MIT
 metadata:
   author: exported-from-uimaker-adk
-  version: "2.1"
+  version: "2.2"
 ---
 
 # Skill — Install Dev Harness (APM + OpenSpec + OpenSPDD)
@@ -249,6 +249,16 @@ saída; vazio nunca bloqueia. Configuração ausente, corrompida ou de tipo erra
 nunca derruba um hook — só desliga os checks que dependem dela; as defesas
 acima continuam valendo.
 
+Sensor de Gherkin: o pacote entrega `gherkin-sensor.py` (e a biblioteca
+`_gherkin.py`) ao lado dos hooks. Um hook `PostToolUse` (matcher `Bash`) o roda
+sozinho quando o comando contém `openspec validate`, saindo com 2 e citando
+capability e requisito quando falta o bloco Gherkin. Ele não entra no
+`sensors_command`, que segue vazio nos modelos. Para ter o sensor também no
+Stop, componha-o ao `sensors_command` do projeto com o caminho onde o host
+implantou os scripts (varia por host), por exemplo
+`<comando de testes> && python3 <caminho-implantado>/gherkin-sensor.py`.
+No Copilot, o `PostToolUse` não foi verificado.
+
 Isso não substitui revisão humana para `git push` — o hook bloqueia a
 execução automática; o agente ainda deve pedir confirmação explícita ao
 usuário antes de rodar o comando manualmente fora do hook.
@@ -279,3 +289,20 @@ Aprendido ao instalar este harness num projeto consumidor real (app estático se
   por um `import` esquecido num arquivo de teste; o problema só apareceu ao rodar os testes
   de novo depois. Rode `sensors_command` (ou o comando de teste do projeto) uma última vez
   antes de cada commit, não só antes do primeiro.
+
+- **PRs empilhadas: mesclar uma PR cuja base é outra branch a leva só para essa branch.**
+  Com `main ← A ← B ← C`, mesclar B e C depois de A deixa B e C dentro das branches de baixo e
+  fora da `main`. Aponte a base de cada PR para a `main` depois de mesclar a anterior (ou
+  mescle de cima para baixo), e confira na `origin/main` que o conteúdo entrou. Prefira uma
+  funcionalidade por branch, cada uma a partir da `main` atual, quando não houver dependência.
+- **Brief ao `sdlc-coder`: copie do canvas a lista completa de funções e arquivos da
+  Operation**, em vez de resumir de memória; uma função esquecida no brief só reaparece quando
+  o coder avisa. Peça sempre o vermelho com a contagem de falhas antes do código.
+- **O limite de uso pode interromper um subagente no meio do trabalho.** Os testes vermelhos
+  já escritos ficam como ponto de retomada: retome o mesmo agente depois do reinício em vez de
+  começar outro.
+- **Mudança que altera a rotina de quem opera o sistema** (um login que passa a pedir menos
+  escopo, uma sincronização que deixa de rodar sozinha) precisa estar no README e no changelog
+  e ser dita antes de publicar.
+- **Arquivos de container e documentação raiz na fase `apply`:** O `sdlc-coder` valida se cada arquivo tocado pertence a `code_prefixes`. Quando uma change inclui containerização (`Dockerfile`, `.dockerignore`) ou documentação operacional na raiz (`README.md`, `CHANGELOG.md`), inclua `Dockerfile` em `code_prefixes` quando o coder for implementá-lo e deixe os arquivos fora de `code_prefixes` (`.dockerignore`, `README.md`, `CHANGELOG.md`) explicitamente atribuídos à sessão principal, evitando falso positivo de desvio de escopo no `sdlc-reviewer`.
+- **Ambientes virtuais (`.venv`) com symlinks externos em subagentes com sandbox:** Quando `.venv/bin/python` aponta para um interpretador fora do workspace (ex.: `~/.local/share/uv/python/...`), subagentes restritos ao sandbox do diretório do projeto podem receber `Operation not permitted`. Rode a suíte padrão com o `python3` do sistema dentro do subagente (usando `pytest.importorskip` para extras opcionais) e execute a suíte completa de `.venv/bin/python` na sessão principal.

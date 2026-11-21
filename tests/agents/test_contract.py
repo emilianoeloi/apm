@@ -30,7 +30,7 @@ FORBIDDEN_KEYS = {"model", "handoffs", "skills", "color"}
 # Skills que cada papel deve citar.
 SKILLS_BY_ROLE = {
     "sdlc-planner": {"openspec-explore", "openspec-propose", "spdd-analysis", "spdd-reasons-canvas"},
-    "sdlc-coder": {"spdd-generate", "openspec-apply-change"},
+    "sdlc-coder": {"spdd-generate", "openspec-apply-change", "acceptance-from-spec"},
 }
 
 STACK_TERMS = re.compile(
@@ -130,7 +130,7 @@ class CorpoDosAgentesTest(unittest.TestCase):
                 self.assertLessEqual(len(self.body(name).splitlines()), 300)
 
     def test_skills_citados_existem(self):
-        pattern = re.compile(r"`((?:openspec|spdd)-[a-z-]+)`")
+        pattern = re.compile(r"`((?:openspec|spdd)-[a-z-]+|acceptance-from-spec)`")
         for name in NAMES:
             with self.subTest(agente=name):
                 for skill in set(pattern.findall(self.body(name))):
@@ -142,6 +142,12 @@ class CorpoDosAgentesTest(unittest.TestCase):
                 body = self.body(name)
                 for skill in skills:
                     self.assertIn(f"`{skill}`", body)
+
+    def test_coder_cita_a_aceitacao_antes_das_operations(self):
+        body = self.body("sdlc-coder")
+        cited = body.find("`acceptance-from-spec`")
+        self.assertGreaterEqual(cited, 0)
+        self.assertLess(cited, body.find("`spdd-generate`"))
 
     def test_planner(self):
         body = self.body("sdlc-planner")
@@ -171,6 +177,31 @@ class CorpoDosAgentesTest(unittest.TestCase):
         body = self.body("sdlc-auditor")
         for needle in ("git status --porcelain", "evidência", "arquivo"):
             self.assertIn(needle, body)
+
+
+SKILL_WORKFLOW = SKILLS / "openspec-workflow" / "SKILL.md"
+GHERKIN_NEEDLES = ("```gherkin", "Dado", "Quando", "Então")
+
+
+class BlocoGherkinTest(unittest.TestCase):
+    def test_planner_e_skill_citam_o_bloco_gherkin(self):
+        for path in (AGENTS / "sdlc-planner.agent.md", SKILL_WORKFLOW):
+            text = path.read_text(encoding="utf-8")
+            for needle in GHERKIN_NEEDLES:
+                with self.subTest(arquivo=path.name, trecho=needle):
+                    self.assertIn(needle, text)
+
+    def test_copias_do_skill_e_do_planner_identicas_a_fonte(self):
+        copies = (
+            (AGENTS / "sdlc-planner.agent.md", CLAUDE_DEPLOY / "sdlc-planner.md"),
+            (AGENTS / "sdlc-planner.agent.md", COPILOT_DEPLOY / "sdlc-planner.agent.md"),
+            (SKILL_WORKFLOW, REPO / ".claude" / "skills" / "openspec-workflow" / "SKILL.md"),
+            (SKILL_WORKFLOW, REPO / ".agents" / "skills" / "openspec-workflow" / "SKILL.md"),
+        )
+        for source, deployed in copies:
+            with self.subTest(copia=str(deployed.relative_to(REPO))):
+                self.assertTrue(deployed.exists(), "não implantado")
+                self.assertEqual(deployed.read_text(encoding="utf-8"), source.read_text(encoding="utf-8"))
 
 
 class ImplantacaoTest(unittest.TestCase):

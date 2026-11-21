@@ -54,7 +54,7 @@ Quatro agentes de papel único e fonte única (`.apm/agents/sdlc-*.agent.md`), q
 | Agente | Fase | O que faz | Escreve | Ferramentas |
 |---|---|---|---|---|
 | `sdlc-planner` | `proposal` | proposta OpenSpec validada, análise e REASONS Canvas (skills `openspec-explore`, `openspec-propose`, `spdd-analysis`, `spdd-reasons-canvas`) | só `planning_write_prefixes` (por padrão `openspec/` e `spdd/`); nunca código | `Read, Grep, Glob, Write, Edit, Bash, Skill` |
-| `sdlc-coder` | `apply` | código pelas Operations do canvas (skills `spdd-generate` e `openspec-apply-change`), tasks marcadas e sensores antes de entregar; para e avisa se não houver canvas | só `code_prefixes` e os checkboxes do `tasks.md` | `Read, Grep, Glob, Write, Edit, Bash, Skill` |
+| `sdlc-coder` | `apply` | código pelas Operations do canvas (skills `acceptance-from-spec`, `spdd-generate` e `openspec-apply-change`; o teste de aceitação de cada cenário vem antes do código), tasks marcadas e sensores antes de entregar; para e avisa se não houver canvas | só `code_prefixes` e os checkboxes do `tasks.md` | `Read, Grep, Glob, Write, Edit, Bash, Skill` |
 | `sdlc-reviewer` | depois da implementação | confere código, Operations e tasks, roda `openspec validate --strict` e os sensores e entrega um relatório com veredito e achados (arquivo, linha e Operation) | nada: somente leitura | `Read, Grep, Glob, Bash` |
 | `sdlc-auditor` | sob demanda (opcional) | responde dúvidas e audita conformidade, arquitetura e segurança com evidências de arquivo e linha | nada: somente leitura | `Read, Grep, Glob, Bash` |
 
@@ -83,6 +83,7 @@ O pacote entrega os hooks pelo APM: `apm install --target claude,copilot` copia 
 | `SessionStart` | `session-start.py` | injeta fase, branch e guias no contexto da sessão |
 | `PreToolUse` (escrita) | `pre-tool-write-guard.py` | bloqueia credenciais, escrita fora da raiz do projeto e código na fase `proposal` |
 | `PreToolUse` (Bash) | `pre-tool-bash-guard.py` | bloqueia `git push`, `git reset --hard`, `git clean -f`, `git branch -D` e `rm -rf` (só quando são o comando, não quando aparecem em texto) e, em `proposal`, os que mutam o repositório |
+| `PostToolUse` (Bash) | `gherkin-sensor.py --on-validate` | depois de um `openspec validate`, falha com código 2 se algum requisito não tiver bloco Gherkin |
 | `Stop` | `stop-sensors.py` | roda o comando de sensores do projeto e só deixa encerrar se ele passar |
 
 Tudo é configurado pelo `harness.config.json` do projeto (modelo em `.apm/templates/`):
@@ -96,6 +97,62 @@ Configuração ou payload ausente, corrompido ou de tipo errado nunca derruba ne
 O pre-commit genérico (`.apm/scripts/git-hooks/pre-commit`) roda o mesmo `sensors_command` antes de cada commit; veja o skill `install-dev-harness` para instalar.
 
 **Verificação.** O bloqueio foi comprovado no Claude Code (Bash e escrita, pelo código de saída 2). O formato do Copilot (`.github/hooks/`, decisão `deny` por JSON) é gerado pelo APM e coberto por testes de saída, mas **não foi verificado num Copilot real**.
+
+## Testes de aceitação
+
+O skill `acceptance-from-spec` faz o `sdlc-coder`, na fase `apply`, escrever **primeiro** o teste de aceitação de cada `Cenário:` aprovado da change, provar que ele falha, implementar e provar que ele passa. O skill não fixa ferramenta de teste: descobre a do projeto.
+
+1. **Ligação com a spec.** Cada teste leva uma linha literal, em comentário ou no nome do teste: `Spec: <capability> / <nome do requisito> / <título do cenário>`, com os três textos copiados da spec. É a convenção que a revisão por cenário (F4, ainda não entregue) conferirá por busca de texto.
+2. **Vermelho antes do código.** O coder relata o comando, a contagem de falhas e o motivo, sem stubs artificiais. Se o teste já nasce verde, ele relata isso.
+3. **Verde depois.** O coder roda o teste e o `sensors_command` e confere que o comando **executa** a aceitação; se não executa ou está vazio, diz "sensores não configurados" em vez de afirmar que passou.
+4. **Sem framework: propõe e espera.** O coder descobre a ferramenta (arquivo raiz do agente, `sensors_command`, testes existentes, manifesto de build). Se não houver, não escreve nem instala nada: devolve de uma a três opções e para até você aprovar; depois a sessão principal o dispara de novo com a ferramenta aprovada.
+
+Para a aceitação valer como sensor, componha o teste ao `sensors_command` do `harness.config.json` do projeto.
+
+**Projetos na versão anterior.** Atualize a dependência do apm e rode `apm install`. A partir daí o coder exige o teste de aceitação antes do código; a primeira `apply` num projeto sem ferramenta de teste para e pede a sua escolha; e o `sensors_command` precisa rodar a aceitação. A única mudança de configuração é compor a aceitação ao `sensors_command`. Se o projeto já tem specs do OpenSpec, o sensor de Gherkin falha até cada requisito ganhar o bloco `gherkin` (na prova, 14 requisitos): faça o retrofit numa change própria, só com o bloco, e arquive-a antes da próxima feature.
+
+**Prova.** O fluxo foi exercitado em dois projetos de prova (uma calculadora em Go, com ferramenta de teste, e um projeto mínimo sem nenhuma, onde o coder parou, propôs opções e só retomou depois da aprovação); veja `docs/roteiro-de-teste.md`. Os testes do pacote provam o texto do skill e do agente; o comportamento do modelo foi observado só nessas duas provas.
+
+## Conferência de cenários na revisão
+
+O `sdlc-reviewer` confere se cada `Cenário:` da change tem um teste ligado pela linha `Spec: <capability> / <requisito> / <cenário>` (a convenção de "Testes de aceitação"). Ele continua **somente leitura**: usa o script `spec-trace.py`, que só lê e não deixa rastro, e cita o resultado no relatório.
+
+```bash
+python3 -B <caminho>/spec-trace.py --root . --change <nome-da-change>
+```
+
+O caminho muda por host (o reviewer o acha com `Glob **/spec-trace.py`). A saída tem uma linha por cenário, `spec-trace: ESTADO capability / requisito / cenário @ arquivo:linha`, e um resumo no fim.
+
+| Estado | Significado | Efeito no veredito |
+|---|---|---|
+| `COBERTO` | há um teste com a linha `Spec:` do cenário | nenhum |
+| `SEM_TESTE` | cenário novo ou alterado sem teste ligado | **reprova** |
+| `HERDADO_SEM_TESTE` | cenário antigo de um requisito modificado, sem alteração | só informativo |
+| `ORFAO` | linha `Spec:` sem cenário correspondente | achado de severidade média |
+| `AMBIGUO` | a linha casa com mais de um cenário | achado de severidade média |
+
+Só o cenário **novo ou alterado** da change é exigido; os herdados não. O casamento é no código-fonte dos testes, nunca na saída do executor (o Go, por exemplo, troca espaços por `_` no nome do subteste). O agente também reprova o **falso verde**: o teste que não afirma o `Então` do cenário, ou que passaria sem o código, o que ele decide lendo o teste. Sem o relatório do coder, o vermelho aparece como "não verificado".
+
+**Limites.** O script prova o vínculo, não a qualidade do teste; essa parte é leitura do agente. Fixtures de teste que contêm uma linha `Spec:` dentro de uma string aparecem como `ORFAO`: o agente as descarta ao ler (monte a linha por constante para evitar). O comportamento do modelo no reviewer só foi coberto por testes de texto; falta a prova num projeto real. Por isso dois cenários de comportamento do modelo (`sdlc-agent-roles`: "Revisão de change com cenários" e "Cenário novo sem teste") ficam `SEM_TESTE` conhecidos, e o script sai 2 na change que os criou; só a prova num projeto real os cobre.
+
+**Projetos na versão anterior.** Depois de atualizar o apm e rodar `apm install`, o reviewer passa a reprovar cenário novo ou alterado sem teste. Cenários antigos não são exigidos.
+
+## Sensor de Gherkin
+
+Todo requisito das specs do OpenSpec traz um bloco ` ```gherkin ` com `Cenário:`, `Dado`, `Quando` e `Então`, antes do primeiro `#### Scenario:`. O sensor `gherkin-sensor.py` (só biblioteca padrão, ao lado dos outros hooks) confere isso e **falha com código 2 citando o requisito**; sem violação, sai 0 e fica mudo.
+
+```text
+gherkin: sensor-gate / Requirement: Exemplo [change minha-change]: esperado exatamente 1 bloco gherkin, achei 0
+```
+
+Ele lê as specs principais e aplica os deltas das changes ativas (`ADDED`, `MODIFIED`, `REMOVED` e `RENAMED`; `archive/` é ignorado). A raiz vem de `--root`, depois de `CLAUDE_PROJECT_DIR`, depois do `.git`; sem pasta `openspec/` ele sai 0 com um aviso.
+
+- **Junto do `openspec validate`:** o hook `PostToolUse` roda o sensor depois de qualquer `openspec validate` no Bash e mostra a falha à sessão. Funciona sem editar a configuração do projeto.
+- **No Stop e no pre-commit:** componha no `sensors_command` do `harness.config.json`, por exemplo `python3 -m unittest discover -s tests -t . && python3 <caminho>/gherkin-sensor.py`. Nos modelos entregues o comando segue vazio.
+- **Não verificado ao vivo:** no Claude Code o registro do hook foi conferido e o payload simulado dispara o sensor, mas o disparo numa sessão real ainda não foi testado; no Copilot o `PostToolUse` também não foi verificado.
+- **Limite conhecido:** o casamento é por texto (`openspec validate`), então um comando que só cite essa frase também roda o sensor (ruído, sem dano), e `openspec --no-color validate` não o dispara.
+
+O `openspec validate --strict` segue como juiz da estrutura; o sensor só confere o bloco.
 
 ## Releases (automáticos)
 
