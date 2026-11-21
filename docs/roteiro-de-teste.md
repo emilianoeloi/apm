@@ -64,7 +64,9 @@ Projeto de prova: `emilianoeloi/calculadora_go`, clone descartável no scratchpa
 | Reviewer confere | Aprovado com ressalvas; mutações pensadas (módulo estilo Python, `math.Remainder`, sem `b==0`, sem `verificarFinito`) seriam pegas |
 | `git push` | Bloqueio coberto pelos testes do hook; não tentado de novo |
 
-**Limites da prova.** O ramo "sem framework: propõe e espera" não foi exercitado (o Go já tem testes). O disparo ao vivo do hook `PostToolUse` não foi observado numa sessão real; só o payload simulado. O vermelho vem do relatório do coder e da estrutura dos testes; o git não registra a ordem das escritas. Nenhum cenário de `resto` ficou sem teste, mas 3 cenários herdados de um requisito modificado ficaram sem linha `Spec:`.
+**Ramo "sem framework" (segunda prova).** Num projeto mínimo sem teste, manifesto nem linguagem (change `saudacao`, dois cenários), o coder real parou com `BLOQUEADO: ferramenta de teste não definida (nada escrito, aguardando ferramenta)`: `src/` ficou vazia, as tasks desmarcadas, os dois cenários pendentes, e propôs três opções sem instalar nada. Com a ferramenta aprovada (Python `unittest`, registrada pela sessão principal no `CLAUDE.md` e no `sensors_command`), ele retomou: vermelho (2 testes, 1 falha; depois do reforço, 2 falhas), verde (`discover` executou os 2 testes `Spec:`), sensor de Gherkin 0. Achado: o teste de "Sem argumento" passou sem o programa existir, porque o interpretador sai com código 2 e escreve em stderr quando o arquivo falta; o coder o reforçou (stdout vazio e mensagem do programa). Vale uma linha no skill: o vermelho precisa vir da asserção do cenário, não de erro do ambiente.
+
+**Limites da prova.** O disparo ao vivo do hook `PostToolUse` não foi observado numa sessão real; só o payload simulado. O vermelho vem do relatório do coder e da estrutura dos testes; o git não registra a ordem das escritas. Nenhum cenário de `resto` ficou sem teste, mas 3 cenários herdados de um requisito modificado ficaram sem linha `Spec:`.
 
 **Achados para o pacote**
 - **Retrofit é parte da migração:** adotar o sensor num projeto com specs antigas falha até o bloco ser acrescentado; o README agora avisa.

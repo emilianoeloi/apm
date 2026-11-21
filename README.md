@@ -111,7 +111,7 @@ Para a aceitação valer como sensor, componha o teste ao `sensors_command` do `
 
 **Projetos na versão anterior.** Atualize a dependência do apm e rode `apm install`. A partir daí o coder exige o teste de aceitação antes do código; a primeira `apply` num projeto sem ferramenta de teste para e pede a sua escolha; e o `sensors_command` precisa rodar a aceitação. A única mudança de configuração é compor a aceitação ao `sensors_command`. Se o projeto já tem specs do OpenSpec, o sensor de Gherkin falha até cada requisito ganhar o bloco `gherkin` (na prova, 14 requisitos): faça o retrofit numa change própria, só com o bloco, e arquive-a antes da próxima feature.
 
-**Não verificado.** O comportamento do modelo seguindo o skill num projeto real (projeto de prova: não informado). Os testes do pacote provam o texto do skill e do agente, não o modelo.
+**Prova.** O fluxo foi exercitado em dois projetos de prova (uma calculadora em Go, com ferramenta de teste, e um projeto mínimo sem nenhuma, onde o coder parou, propôs opções e só retomou depois da aprovação); veja `docs/roteiro-de-teste.md`. Os testes do pacote provam o texto do skill e do agente; o comportamento do modelo foi observado só nessas duas provas.
 
 ## Sensor de Gherkin
 
