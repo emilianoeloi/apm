@@ -25,6 +25,20 @@ A limpeza do projeto de origem (`cowboy`, uma calculadora em COBOL) removeu, de 
 
 O conteúdo não foi movido: quem ainda precisa dele deve manter a dependência na tag `v0.3.1`, que guarda o estado antigo. O hook de encerramento que o substitui é genérico (veja "Hooks" abaixo), e os agentes de SDLC são os `sdlc-*` descritos em "Agentes de SDLC". Os agentes da 0.3.x não têm equivalente direto.
 
+## Migração para a 2.0
+
+A 2.0 torna o SDLC do pacote **verificável**: todo requisito da spec tem um cenário Gherkin conferido por sensor, e todo cenário novo tem um teste de aceitação escrito antes do código e conferido na revisão. É uma versão **incompatível** para quem já usa a 1.x, porque o fluxo passa a falhar onde antes passava:
+
+| O que muda | Efeito num projeto da 1.x | O que fazer |
+|---|---|---|
+| Specs com bloco Gherkin (seção "Sensor de Gherkin") | O sensor `gherkin-sensor.py` sai 2 em todo requisito sem bloco, e o hook `PostToolUse` o mostra depois de um `openspec validate` | Faça o retrofit das specs numa change própria, só com o bloco, e arquive-a antes da próxima feature. Opcional: componha o sensor ao `sensors_command` |
+| `sdlc-coder` e o skill `acceptance-from-spec` (seção "Testes de aceitação") | O coder escreve primeiro o teste de cada `Cenário:`, com a linha `Spec:`, e prova o vermelho e o verde; sem ferramenta de teste, para com `BLOQUEADO` | Garanta uma ferramenta de teste aprovada no arquivo raiz do agente e um `sensors_command` que a execute |
+| `sdlc-reviewer` e o `spec-trace.py` (seção "Conferência de cenários na revisão") | O reviewer reprova cenário novo ou alterado sem teste ligado, e o falso verde | Ligue cada teste ao cenário pela linha `Spec:`; cenários antigos não são exigidos |
+| Convenções do skill 1.1 e fim do título do marcador | Extras levam `Extra:`; depois do título só vale um fechamento de comentário conhecido, e outro sufixo vira `ORFAO` | Deixe o marcador sozinho no fim da linha |
+| Planner | As tasks de teste têm um teste por `Cenário:` do bloco | Nada a fazer |
+
+Passos: atualize a dependência para a `v2.0.0`, rode `apm install --target claude,copilot` (revise os scripts de hook novos, que são código executável), faça o retrofit das specs, rode `openspec validate --specs --strict` e o sensor de Gherkin, e só então declare a primeira fase `proposal`. Sem retrofit, o primeiro `openspec validate` já mostra os requisitos sem cenário. A prova do fluxo em projetos reais está em `docs/roteiro-de-teste.md`.
+
 ## Workflow SDD (OpenSpec + OpenSPDD)
 
 O pacote mantém **vendorizadas** as skills e prompts de OpenSpec e OpenSPDD, então `apm install` entrega o fluxo completo para `claude` e `copilot`:
