@@ -100,9 +100,12 @@ Conservador: só adições; `harness.json`, `sensors_command`, `validate` e `eff
 ### Create Tests - tests/hooks/test_spec_trace.py (primeiro, vermelho)
 1. Responsibility: proteger o comportamento do script como processo, em projetos temporários, em tabela: coberto, sem teste, herdado vs alterado, `RENAMED`, prefixo mais longo, fechamento de comentário, órfão, ambíguo, `--change`, `--tests`, exclusões e `.md`, binário/ilegível/grande, sem `openspec/`, sem change ativa, resumo com `extras`, árvore e pasta dos scripts intactas; e `parse_scenarios`.
 2. Registrar comando e contagem de falhas (script inexistente). Estimativa: ~230 linhas.
+3. Implementado além do previsto, após a revisão: testes de FIFO e de link simbólico para dispositivo (com timeout de 10 s) e de link para arquivo comum; sufixo alfanumérico depois do título vira `ORFAO`; o `--help` diz que `ORFAO` e `AMBIGUO` também saem 2 sem ser o veredito. O helper `trace()` confere que o script existe antes de rodar (evita falso verde por erro do ambiente). 30 testes iniciais, 35 depois; total da suíte 199.
 
 ### Create Tests - tests/agents/test_reviewer_scenarios.py (vermelho)
 1. Responsibility: texto do reviewer (`spec-trace.py`, `Glob`, `Spec:`, `grep -F`, `HERDADO`, `Cenários x testes`, `REPROVADO`, `falso verde`, `ORFAO`, `fonte`), `tools` inalteradas, passo antes de "Relatório", neutralidade (`STACK_TERMS` e os quatro termos), cópias idênticas (agente, script, `_gherkin.py` nos dois hosts), `harness.json` sem `spec-trace`. Estimativa: ~60 linhas.
+
+Acrescentado: `ReadmeTest`, teste de texto do cenário `pacote-generico / Aviso de migração para a conferência de cenários / Leitor de projeto na versão anterior` (prova o texto do README, não o comportamento), e a frase "saída 2 não é o veredito" no agente.
 
 ### Update Library - .apm/hooks/scripts/_gherkin.py
 1. Responsibility: `parse_scenarios(body) -> [(título, passos)]`, mesma leitura do bloco que `validate` (`FENCE_OPEN`, `KEYWORD`). Só acréscimo. Estimativa: ~15 linhas.
@@ -110,6 +113,7 @@ Conservador: só adições; `harness.json`, `sensors_command`, `validate` e `eff
 ### Create Script - .apm/hooks/scripts/spec-trace.py
 1. Responsibility: ver Approach 2. Sem `git`, sem escrita, só stdlib + `_gherkin` + `_common`.
 2. Algoritmo: (a) ler deltas ativos e spec principal; (b) montar cenários exigidos (ADDED todos; MODIFIED comparando com a base, seguindo RENAMED) e o conjunto de alvos válidos (todos os efetivos); (c) varrer arquivos pelas regras de exclusão, linha com `Spec:`; (d) prefixo mais longo por linha; (e) emitir uma linha por exigido/herdado e por órfão/ambíguo, o resumo e a saída. Estimativa: ~150 linhas.
+4. Implementado além do previsto, após a revisão: `read_text` só lê arquivo regular que não seja link (`os.lstat` e `S_ISREG`) e no máximo `MAX_BYTES+1`; o casamento por prefixo exige que o resto da linha seja vazio ou comece por caractere não alfanumérico (`ends_title`). Linha de saída: `spec-trace: ESTADO trinca @ arquivo:linha`; resumo com coberto, sem_teste, herdado_sem_teste, orfao, ambiguo e extras.
 
 ### Update Agent - .apm/agents/sdlc-reviewer.agent.md
 1. Responsibility: passo "Confira cenário contra teste" (script por `Glob`, `python3 -B <caminho> --root . --change <nome>`, reserva `grep -rnF`, ler cada teste ligado), regras de escopo/severidade/veredito, seção "Cenários x testes", "vermelho não verificado", conferência no fonte. Ferramentas e limites inalterados. Estimativa: ~25 linhas.
@@ -140,3 +144,5 @@ Conservador: só adições; `harness.json`, `sensors_command`, `validate` e `eff
 4. Neutrality Constraints: `grep` de neutralidade vazia; `STACK_TERMS` não casa no reviewer.
 5. Honesty Constraints: o script nunca declara "aceitação provada" (prova o vínculo); sem relatório do coder, "vermelho não verificado"; comportamento do modelo "não verificado" até a prova real.
 6. Release Constraints: sem push, tag ou merge sem o "ok" do Elói; PR `feat(agents):` depois dos PRs da F3.
+
+<!-- Sync pós-implementação. Decisão (b) do Emiliano: os 2 cenários de comportamento do modelo em sdlc-agent-roles ficam SEM_TESTE conhecidos, cobertos pela 6.4 (prova num projeto real, não feita); o spec-trace sai 2 na change por isso. Ressalvas baixas abertas: janela lstat/open (O_NONBLOCK/O_NOFOLLOW), sufixos `_`/`-`/`(` após o título contam como fechamento, subtestes com tab/NBSP. -->

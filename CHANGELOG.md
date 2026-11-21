@@ -1,5 +1,34 @@
 # Changelog
 
+## Onda 2, F4 — reviewer confere cenário contra teste (2026-11-21)
+
+Change `reviewer-confere-cenarios`, arquivada. Empilhada sobre a F3 (PRs #33 a #36 abertos). Sem push; PR e merge são do Elói.
+
+### O que muda
+
+* `spec-trace.py` (só leitura, só biblioteca padrão) lista os cenários da change e confere as linhas `Spec: <capability> / <requisito> / <cenário>` nos testes. Estados: `COBERTO`, `SEM_TESTE`, `HERDADO_SEM_TESTE`, `ORFAO` e `AMBIGUO`. A leitura é só de arquivo regular, até 1 MiB.
+* `_gherkin.parse_scenarios` e um passo novo do `sdlc-reviewer` ("Cenários x testes"): cenário novo ou alterado sem teste e falso verde reprovam; órfão e ambíguo são de severidade média; herdado sem teste é informativo. O agente continua somente leitura.
+* Capability nova `spec-trace` (7 requisitos) e requisitos novos em `sdlc-agent-roles` e `pacote-generico`. README: "Conferência de cenários na revisão".
+
+### Decisão do Elói
+
+Dois cenários de comportamento do modelo em `sdlc-agent-roles` ("Revisão de change com cenários" e "Cenário novo sem teste") ficam `SEM_TESTE` conhecidos, cobertos só pela prova de comportamento. Por isso o `spec-trace` sai 2 na própria change, e o veredito mecânico do reviewer sobre ela é `REPROVADO` por decisão registrada.
+
+### Verificação
+
+* 199 testes; `openspec validate --specs --strict`; sensor de Gherkin; neutralidade. `spec-trace` na change: 8 cobertos, 2 `SEM_TESTE` conhecidos, 0 órfãos.
+* sdlc-reviewer: primeiro REPROVADO (leitura de FIFO e de link para dispositivo travava, sufixo alfanumérico gerava falso `COBERTO`, cenário do README sem teste, órfãos falsos); tratados com teste primeiro; segunda revisão: aprovado com ressalvas.
+* **Não verificado:** a prova de comportamento do reviewer num projeto real (task 6.4). **Ressalvas baixas abertas:** janela entre `lstat` e `open` (usar `O_NONBLOCK` e `O_NOFOLLOW`), sufixos `_`, `-` e `(` contam como fechamento, subtestes com tab e espaço não separável.
+
+### Retrospectiva de skills
+
+* Usados: `acceptance-from-spec` (primeira vez neste repo), `spdd-sync`, `skill-retrospective` e os agentes `sdlc-planner`, `sdlc-coder` e `sdlc-reviewer`.
+* `acceptance-from-spec` (atritos): falta dizer como anotar o teste de um `#### Scenario:` extra sem criar `ORFAO` (o coder usou um comentário `Extra`); falta exigir que o vermelho venha da asserção e não de erro do ambiente (um script ausente sai com 2); falta orientar fixtures que contêm `Spec:` (montar a linha por constante); falta dizer como tratar cenário de comportamento do modelo, que só prova humana cobre. Proposta: uma change própria no skill (Q8 do plano da F4).
+* `sdlc-reviewer`: a primeira revisão achou bugs reais que o coder não viu (travamento por FIFO, falso verde por prefixo); o ciclo planner, coder, reviewer, correção, nova revisão se mostrou útil. Proposta: o brief do reviewer sempre pedir tentativa de entrada hostil e de falso verde.
+* `sdlc-planner`: de novo sem acesso à spec do Drive (sem o conector); o brief da sessão principal supre.
+* `drive-status`: sem lacuna.
+* Faltou um skill: nenhum novo. Nada foi publicado sem o "ok" do Elói.
+
 ## Onda 1, F3 — skill acceptance-from-spec (2026-11-21)
 
 Change `acceptance-from-spec`, arquivada. Fecha a Onda 1 (F1, F2 e F3). Sem push; PR e merge são do Elói.
