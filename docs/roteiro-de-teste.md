@@ -78,6 +78,28 @@ Projeto de prova: `emilianoeloi/calculadora_go`, clone descartável no scratchpa
 - **Instalação suja o `git status`:** os arquivos do apm se misturam à change; vale commitar a instalação à parte.
 - **Hooks e outra pasta:** desta vez a escrita no projeto de prova passou porque ele estava em `/private/tmp`, liberado em `allowed_write_roots`; a limitação de `CLAUDE_PROJECT_DIR` da prova anterior continua valendo para outras pastas.
 
+## Prova do reviewer (F4, task 6.4)
+
+Projeto mínimo `semfw` (Python `unittest`), apm da F4 instalado da fonte local, change de prova `saudacao-composta` montada com defeitos conhecidos, sem dizer ao reviewer o que esperar: um cenário novo sem teste, um requisito novo sem teste, um marcador `Spec:` com título errado (`Nome compostos`), um teste vazio (`assertTrue(True)`) e tasks marcadas sem código.
+
+| Defeito plantado | O reviewer real |
+|---|---|
+| cenário novo sem teste (`Nome composto`) | `SEM_TESTE`, severidade alta |
+| requisito novo sem teste (`Saudação formal`) | `SEM_TESTE`, severidade alta |
+| marcador com título errado | `ORFAO`, severidade média |
+| teste que não afirma o `Então` | apontado como falso verde (alta), com leitura do teste |
+| tasks marcadas sem código | apontado: `saudacao.py` não implementa nada novo |
+| cenário já existente e com teste | `COBERTO` (lido: afirma `Olá, Ana!` e código 0) |
+
+Veredito: **REPROVADO**. Ele também achou um defeito que eu não tinha plantado de propósito: a classe de teste nova estava depois do `if __name__ == "__main__"` e nunca rodava; foi um erro meu ao montar a fixture.
+
+**Atritos**
+- O reviewer, nessa execução, não tinha a ferramenta `Glob` (só `Bash` e `Read`) e usou `find . -name spec-trace.py`. Achou 4 cópias, 3 delas em `apm_modules/`. Usou a implantada em `.claude/hooks/apm/...`. Vale o agente dizer que a cópia certa é a do host, fora de `apm_modules/`, e que `find` é o plano B.
+- Sem o relatório do coder, o vermelho aparece como "não verificado", como o agente manda.
+- Ele não usou a reserva `grep -F`.
+
+**Limites.** É uma prova com um modelo e uma fixture. Ela mostra o comportamento de uma revisão, não a taxa de acerto; os dois cenários `SEM_TESTE` conhecidos de `sdlc-agent-roles` seguem sem teste automático.
+
 ## Itens conhecidos fora do roteiro
 
 - O formato dos agentes e dos hooks no Copilot não foi verificado num Copilot real.

@@ -18,7 +18,7 @@ Dois cenários de comportamento do modelo em `sdlc-agent-roles` ("Revisão de ch
 
 * 199 testes; `openspec validate --specs --strict`; sensor de Gherkin; neutralidade. `spec-trace` na change: 8 cobertos, 2 `SEM_TESTE` conhecidos, 0 órfãos.
 * sdlc-reviewer: primeiro REPROVADO (leitura de FIFO e de link para dispositivo travava, sufixo alfanumérico gerava falso `COBERTO`, cenário do README sem teste, órfãos falsos); tratados com teste primeiro; segunda revisão: aprovado com ressalvas.
-* **Não verificado:** a prova de comportamento do reviewer num projeto real (task 6.4). **Ressalvas baixas abertas:** janela entre `lstat` e `open` (usar `O_NONBLOCK` e `O_NOFOLLOW`), sufixos `_`, `-` e `(` contam como fechamento, subtestes com tab e espaço não separável.
+* **Prova de comportamento (task 6.4):** feita em projeto de prova com a change `saudacao-composta` e defeitos plantados; o reviewer real reprovou, achou o cenário novo e o requisito novo sem teste, o marcador órfão, o teste vazio e as tasks sem código (veja `docs/roteiro-de-teste.md`). Atrito: sem `Glob` ele usou `find` e achou cópias em `apm_modules/`. **Ressalvas baixas abertas:** janela entre `lstat` e `open` (usar `O_NONBLOCK` e `O_NOFOLLOW`), sufixos `_`, `-` e `(` contam como fechamento, subtestes com tab e espaço não separável.
 
 ### Retrospectiva de skills
 
