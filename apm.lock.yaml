@@ -18,7 +18,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:a186d5bec1d0650c9a52dfbb1ddd36b5cc0eef5f11bc44c6d80a6f67331a84cb
+  content_hash: sha256:a0637269e00e46b600f2423f19715a638d41563ec8868b47bd1283f4ee3268b6
 - kind: project-relative
   target: claude
   value: .claude/agents/sdlc-planner.md
@@ -27,7 +27,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:8cc0ac386466526530a5690cec180a98cdb3be99569306dd43b0561a9c56609a
+  content_hash: sha256:5b4e790faee52b79dc17a800ed003935e401b28d8d789d524bcb74313b1af2e9
 - kind: project-relative
   target: claude
   value: .claude/agents/sdlc-reviewer.md
@@ -36,7 +36,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:bb349651361caa10d0eecc64dc8594026a407ddbd9e9e31a44b36a634b44999f
+  content_hash: sha256:4abbabf04238b69b7bb490c8ae6570c06e963f23dc725de7a6f3b5e206eb619c
 - kind: project-relative
   target: claude
   value: .claude/commands/opsx-apply.md
@@ -156,6 +156,24 @@ deployments:
   content_hash: sha256:125386113324fd42cb369c00767d961cf8239def9723588b10914f2d42f7f8f2
 - kind: project-relative
   target: claude
+  value: .claude/skills/ci-automerge
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/ci-automerge/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ba4848e8977266eb1988dda703229e30e53a64f15d53c73f18408511aaa27570
+- kind: project-relative
+  target: claude
   value: .claude/skills/dev-harness-architect
   runtime: null
   scope: project
@@ -181,6 +199,42 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:dec69e4001f697fd334c8c0237f622163462078d96e6f3718d1f93e62e740b59
+- kind: project-relative
+  target: claude
+  value: .claude/skills/drive-reader-browser
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/drive-reader-browser/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:77663a22bde197cd39c596e3783c713f616e3a989ecb6100cce55e9bb41ad5af
+- kind: project-relative
+  target: claude
+  value: .claude/skills/drive-status
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/drive-status/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8296984fff91135b929b66aff0548093fd6cd747a8b542d49b6acd175010f359
 - kind: project-relative
   target: claude
   value: .claude/skills/harness
@@ -225,7 +279,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:9d3ad4069e638e900567a44cd643bfda9ab46a44a06fe7df98fbd919d2331b82
+  content_hash: sha256:aeb88fc58d787abede2522fa5609bcb44ef4390b82d1801e19099ed0feaa009c
 - kind: project-relative
   target: claude
   value: .claude/skills/harness/references/dev-harness-kit-export.md
@@ -252,7 +306,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:704cb980babe10a345c18bcf88d76ceb115e8e5427db1d6dd4d470abbe142554
+  content_hash: sha256:d3f04734c711146f7d4266f115486564c034ffced41d614de4d0a6cf6825abc1
 - kind: project-relative
   target: claude
   value: .claude/skills/install-dev-harness/templates/CLAUDE.md.template
@@ -405,7 +459,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:03f4211f329b8d87c3a590d0ac364cbe614e7a39f0c29e5f61893ed2f3e0faec
+  content_hash: sha256:68c51b0d70a927e7ef17a25328f2ee3d08720b65bc6c77e66c345ccf5ac1b295
 - kind: project-relative
   target: claude
   value: .claude/skills/skill-retrospective
@@ -579,6 +633,24 @@ deployments:
   content_hash: sha256:125386113324fd42cb369c00767d961cf8239def9723588b10914f2d42f7f8f2
 - kind: project-relative
   target: copilot
+  value: .agents/skills/ci-automerge
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/ci-automerge/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ba4848e8977266eb1988dda703229e30e53a64f15d53c73f18408511aaa27570
+- kind: project-relative
+  target: copilot
   value: .agents/skills/dev-harness-architect
   runtime: null
   scope: project
@@ -604,6 +676,42 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:dec69e4001f697fd334c8c0237f622163462078d96e6f3718d1f93e62e740b59
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/drive-reader-browser
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/drive-reader-browser/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:77663a22bde197cd39c596e3783c713f616e3a989ecb6100cce55e9bb41ad5af
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/drive-status
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/drive-status/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8296984fff91135b929b66aff0548093fd6cd747a8b542d49b6acd175010f359
 - kind: project-relative
   target: copilot
   value: .agents/skills/harness
@@ -648,7 +756,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:9d3ad4069e638e900567a44cd643bfda9ab46a44a06fe7df98fbd919d2331b82
+  content_hash: sha256:aeb88fc58d787abede2522fa5609bcb44ef4390b82d1801e19099ed0feaa009c
 - kind: project-relative
   target: copilot
   value: .agents/skills/harness/references/dev-harness-kit-export.md
@@ -675,7 +783,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:704cb980babe10a345c18bcf88d76ceb115e8e5427db1d6dd4d470abbe142554
+  content_hash: sha256:d3f04734c711146f7d4266f115486564c034ffced41d614de4d0a6cf6825abc1
 - kind: project-relative
   target: copilot
   value: .agents/skills/install-dev-harness/templates/CLAUDE.md.template
@@ -828,7 +936,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:03f4211f329b8d87c3a590d0ac364cbe614e7a39f0c29e5f61893ed2f3e0faec
+  content_hash: sha256:68c51b0d70a927e7ef17a25328f2ee3d08720b65bc6c77e66c345ccf5ac1b295
 - kind: project-relative
   target: copilot
   value: .agents/skills/skill-retrospective
@@ -999,7 +1107,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:a186d5bec1d0650c9a52dfbb1ddd36b5cc0eef5f11bc44c6d80a6f67331a84cb
+  content_hash: sha256:a0637269e00e46b600f2423f19715a638d41563ec8868b47bd1283f4ee3268b6
 - kind: project-relative
   target: copilot
   value: .github/agents/sdlc-planner.agent.md
@@ -1008,7 +1116,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:8cc0ac386466526530a5690cec180a98cdb3be99569306dd43b0561a9c56609a
+  content_hash: sha256:5b4e790faee52b79dc17a800ed003935e401b28d8d789d524bcb74313b1af2e9
 - kind: project-relative
   target: copilot
   value: .github/agents/sdlc-reviewer.agent.md
@@ -1017,7 +1125,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:bb349651361caa10d0eecc64dc8594026a407ddbd9e9e31a44b36a634b44999f
+  content_hash: sha256:4abbabf04238b69b7bb490c8ae6570c06e963f23dc725de7a6f3b5e206eb619c
 - kind: project-relative
   target: copilot
   value: .github/hooks/apm-harness.json
@@ -1129,9 +1237,15 @@ deployments:
 local_deployed_files:
 - .agents/skills/architecture-fitness-functions
 - .agents/skills/architecture-fitness-functions/SKILL.md
+- .agents/skills/ci-automerge
+- .agents/skills/ci-automerge/SKILL.md
 - .agents/skills/dev-harness-architect
 - .agents/skills/dev-harness-architect/SKILL.md
 - .agents/skills/dev-harness-architect/reference/harness-model.md
+- .agents/skills/drive-reader-browser
+- .agents/skills/drive-reader-browser/SKILL.md
+- .agents/skills/drive-status
+- .agents/skills/drive-status/SKILL.md
 - .agents/skills/harness
 - .agents/skills/harness-quadrant-process
 - .agents/skills/harness-quadrant-process/SKILL.md
@@ -1191,9 +1305,15 @@ local_deployed_files:
 - .claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py
 - .claude/skills/architecture-fitness-functions
 - .claude/skills/architecture-fitness-functions/SKILL.md
+- .claude/skills/ci-automerge
+- .claude/skills/ci-automerge/SKILL.md
 - .claude/skills/dev-harness-architect
 - .claude/skills/dev-harness-architect/SKILL.md
 - .claude/skills/dev-harness-architect/reference/harness-model.md
+- .claude/skills/drive-reader-browser
+- .claude/skills/drive-reader-browser/SKILL.md
+- .claude/skills/drive-status
+- .claude/skills/drive-status/SKILL.md
 - .claude/skills/harness
 - .claude/skills/harness-quadrant-process
 - .claude/skills/harness-quadrant-process/SKILL.md
@@ -1254,13 +1374,16 @@ local_deployed_files:
 - .github/prompts/opsx-update.prompt.md
 local_deployed_file_hashes:
   .agents/skills/architecture-fitness-functions/SKILL.md: sha256:125386113324fd42cb369c00767d961cf8239def9723588b10914f2d42f7f8f2
+  .agents/skills/ci-automerge/SKILL.md: sha256:ba4848e8977266eb1988dda703229e30e53a64f15d53c73f18408511aaa27570
   .agents/skills/dev-harness-architect/SKILL.md: sha256:780b39fccaad446344f10e23a4a89db58ec12756c099a40b9e89473eab8a38e7
   .agents/skills/dev-harness-architect/reference/harness-model.md: sha256:dec69e4001f697fd334c8c0237f622163462078d96e6f3718d1f93e62e740b59
+  .agents/skills/drive-reader-browser/SKILL.md: sha256:77663a22bde197cd39c596e3783c713f616e3a989ecb6100cce55e9bb41ad5af
+  .agents/skills/drive-status/SKILL.md: sha256:8296984fff91135b929b66aff0548093fd6cd747a8b542d49b6acd175010f359
   .agents/skills/harness-quadrant-process/SKILL.md: sha256:f18d14093c38e2386e012d2dec91ae74c6a4080d1b5c583a210ccbe1a9b957aa
   .agents/skills/harness-quadrant-process/references/quadrant-doc-template.md: sha256:d78f00562fefba88b9ac6b8f25385c7f0b2b828a4098235539095e92ac1f6ae7
-  .agents/skills/harness/SKILL.md: sha256:9d3ad4069e638e900567a44cd643bfda9ab46a44a06fe7df98fbd919d2331b82
+  .agents/skills/harness/SKILL.md: sha256:aeb88fc58d787abede2522fa5609bcb44ef4390b82d1801e19099ed0feaa009c
   .agents/skills/harness/references/dev-harness-kit-export.md: sha256:eb3b27fd4526f2fcaa15f6ae2fc45111a7575cc09ee3f020b524e7adbab4e662
-  .agents/skills/install-dev-harness/SKILL.md: sha256:704cb980babe10a345c18bcf88d76ceb115e8e5427db1d6dd4d470abbe142554
+  .agents/skills/install-dev-harness/SKILL.md: sha256:d3f04734c711146f7d4266f115486564c034ffced41d614de4d0a6cf6825abc1
   .agents/skills/install-dev-harness/templates/CLAUDE.md.template: sha256:b31e073bc4f80695bbd9e6afba8b517be3eac4cee2719dd3d0a99a871626d536
   .agents/skills/install-dev-harness/templates/harness.config.json.template: sha256:8444f21dd26a4be25bd79f3d47cc0c0c42e357faba0acfd0a71cdfbc52e196b2
   .agents/skills/install-dev-harness/templates/phase_cli.py: sha256:f72504b8e0523b1b2cd1405f3baeb49a13da4031639be7d61d9ab9da96af02f3
@@ -1270,7 +1393,7 @@ local_deployed_file_hashes:
   .agents/skills/openspec-propose/SKILL.md: sha256:92fc4bfde0595fb21645cebe0ab5379ce4ed09d6ec242dcfd61ea0cdd5ed7632
   .agents/skills/openspec-sync-specs/SKILL.md: sha256:3b3cfd2a4a4953ab09331c27033a38de20ff0f80b1d5fa0671b89488977d5609
   .agents/skills/openspec-update-change/SKILL.md: sha256:9dc07661d5e13660b903866b3c804f783dd22f54475a486aec71a99998246724
-  .agents/skills/openspec-workflow/SKILL.md: sha256:03f4211f329b8d87c3a590d0ac364cbe614e7a39f0c29e5f61893ed2f3e0faec
+  .agents/skills/openspec-workflow/SKILL.md: sha256:68c51b0d70a927e7ef17a25328f2ee3d08720b65bc6c77e66c345ccf5ac1b295
   .agents/skills/skill-retrospective/SKILL.md: sha256:b8a07d8ab8bc258565c42f3d3f3e1c46bd30da3afb46889d648c6976d164cdbd
   .agents/skills/spdd-analysis/SKILL.md: sha256:c82bd487eea70758672b3a1efccfc5bbe7c056009fb35b176dc615495b160e4d
   .agents/skills/spdd-analysis/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
@@ -1283,9 +1406,9 @@ local_deployed_file_hashes:
   .agents/skills/spdd-sync/SKILL.md: sha256:c2f05f038be42c58ff80058c00e5096b0db5a9144ad436a979084964095eebe9
   .agents/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .claude/agents/sdlc-auditor.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
-  .claude/agents/sdlc-coder.md: sha256:a186d5bec1d0650c9a52dfbb1ddd36b5cc0eef5f11bc44c6d80a6f67331a84cb
-  .claude/agents/sdlc-planner.md: sha256:8cc0ac386466526530a5690cec180a98cdb3be99569306dd43b0561a9c56609a
-  .claude/agents/sdlc-reviewer.md: sha256:bb349651361caa10d0eecc64dc8594026a407ddbd9e9e31a44b36a634b44999f
+  .claude/agents/sdlc-coder.md: sha256:a0637269e00e46b600f2423f19715a638d41563ec8868b47bd1283f4ee3268b6
+  .claude/agents/sdlc-planner.md: sha256:5b4e790faee52b79dc17a800ed003935e401b28d8d789d524bcb74313b1af2e9
+  .claude/agents/sdlc-reviewer.md: sha256:4abbabf04238b69b7bb490c8ae6570c06e963f23dc725de7a6f3b5e206eb619c
   .claude/commands/opsx-apply.md: sha256:cc529c6fc803294b6aaa167935edcc6cf29f5d6abfca5745cc6b2b66c52e4d1d
   .claude/commands/opsx-archive.md: sha256:7521ac8904458e2ee287015f009b6f7f5e55ca6b83849920bf2353e443853997
   .claude/commands/opsx-explore.md: sha256:46ed31adf3396460842a383324118e8d220b77fb49471a28a667a8551f3f3232
@@ -1298,13 +1421,16 @@ local_deployed_file_hashes:
   .claude/hooks/apm/.apm/hooks/scripts/session-start.py: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
   .claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py: sha256:0d4856d982916d10475d67ca26068c79c1336c2c08bebbea760a2f125dc5574e
   .claude/skills/architecture-fitness-functions/SKILL.md: sha256:125386113324fd42cb369c00767d961cf8239def9723588b10914f2d42f7f8f2
+  .claude/skills/ci-automerge/SKILL.md: sha256:ba4848e8977266eb1988dda703229e30e53a64f15d53c73f18408511aaa27570
   .claude/skills/dev-harness-architect/SKILL.md: sha256:780b39fccaad446344f10e23a4a89db58ec12756c099a40b9e89473eab8a38e7
   .claude/skills/dev-harness-architect/reference/harness-model.md: sha256:dec69e4001f697fd334c8c0237f622163462078d96e6f3718d1f93e62e740b59
+  .claude/skills/drive-reader-browser/SKILL.md: sha256:77663a22bde197cd39c596e3783c713f616e3a989ecb6100cce55e9bb41ad5af
+  .claude/skills/drive-status/SKILL.md: sha256:8296984fff91135b929b66aff0548093fd6cd747a8b542d49b6acd175010f359
   .claude/skills/harness-quadrant-process/SKILL.md: sha256:f18d14093c38e2386e012d2dec91ae74c6a4080d1b5c583a210ccbe1a9b957aa
   .claude/skills/harness-quadrant-process/references/quadrant-doc-template.md: sha256:d78f00562fefba88b9ac6b8f25385c7f0b2b828a4098235539095e92ac1f6ae7
-  .claude/skills/harness/SKILL.md: sha256:9d3ad4069e638e900567a44cd643bfda9ab46a44a06fe7df98fbd919d2331b82
+  .claude/skills/harness/SKILL.md: sha256:aeb88fc58d787abede2522fa5609bcb44ef4390b82d1801e19099ed0feaa009c
   .claude/skills/harness/references/dev-harness-kit-export.md: sha256:eb3b27fd4526f2fcaa15f6ae2fc45111a7575cc09ee3f020b524e7adbab4e662
-  .claude/skills/install-dev-harness/SKILL.md: sha256:704cb980babe10a345c18bcf88d76ceb115e8e5427db1d6dd4d470abbe142554
+  .claude/skills/install-dev-harness/SKILL.md: sha256:d3f04734c711146f7d4266f115486564c034ffced41d614de4d0a6cf6825abc1
   .claude/skills/install-dev-harness/templates/CLAUDE.md.template: sha256:b31e073bc4f80695bbd9e6afba8b517be3eac4cee2719dd3d0a99a871626d536
   .claude/skills/install-dev-harness/templates/harness.config.json.template: sha256:8444f21dd26a4be25bd79f3d47cc0c0c42e357faba0acfd0a71cdfbc52e196b2
   .claude/skills/install-dev-harness/templates/phase_cli.py: sha256:f72504b8e0523b1b2cd1405f3baeb49a13da4031639be7d61d9ab9da96af02f3
@@ -1314,7 +1440,7 @@ local_deployed_file_hashes:
   .claude/skills/openspec-propose/SKILL.md: sha256:92fc4bfde0595fb21645cebe0ab5379ce4ed09d6ec242dcfd61ea0cdd5ed7632
   .claude/skills/openspec-sync-specs/SKILL.md: sha256:3b3cfd2a4a4953ab09331c27033a38de20ff0f80b1d5fa0671b89488977d5609
   .claude/skills/openspec-update-change/SKILL.md: sha256:9dc07661d5e13660b903866b3c804f783dd22f54475a486aec71a99998246724
-  .claude/skills/openspec-workflow/SKILL.md: sha256:03f4211f329b8d87c3a590d0ac364cbe614e7a39f0c29e5f61893ed2f3e0faec
+  .claude/skills/openspec-workflow/SKILL.md: sha256:68c51b0d70a927e7ef17a25328f2ee3d08720b65bc6c77e66c345ccf5ac1b295
   .claude/skills/skill-retrospective/SKILL.md: sha256:b8a07d8ab8bc258565c42f3d3f3e1c46bd30da3afb46889d648c6976d164cdbd
   .claude/skills/spdd-analysis/SKILL.md: sha256:c82bd487eea70758672b3a1efccfc5bbe7c056009fb35b176dc615495b160e4d
   .claude/skills/spdd-analysis/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
@@ -1327,9 +1453,9 @@ local_deployed_file_hashes:
   .claude/skills/spdd-sync/SKILL.md: sha256:c2f05f038be42c58ff80058c00e5096b0db5a9144ad436a979084964095eebe9
   .claude/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .github/agents/sdlc-auditor.agent.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
-  .github/agents/sdlc-coder.agent.md: sha256:a186d5bec1d0650c9a52dfbb1ddd36b5cc0eef5f11bc44c6d80a6f67331a84cb
-  .github/agents/sdlc-planner.agent.md: sha256:8cc0ac386466526530a5690cec180a98cdb3be99569306dd43b0561a9c56609a
-  .github/agents/sdlc-reviewer.agent.md: sha256:bb349651361caa10d0eecc64dc8594026a407ddbd9e9e31a44b36a634b44999f
+  .github/agents/sdlc-coder.agent.md: sha256:a0637269e00e46b600f2423f19715a638d41563ec8868b47bd1283f4ee3268b6
+  .github/agents/sdlc-planner.agent.md: sha256:5b4e790faee52b79dc17a800ed003935e401b28d8d789d524bcb74313b1af2e9
+  .github/agents/sdlc-reviewer.agent.md: sha256:4abbabf04238b69b7bb490c8ae6570c06e963f23dc725de7a6f3b5e206eb619c
   .github/hooks/apm-harness.json: sha256:1844939cb35265f9c3628080a5ffba8d4ec890f75cfc9cd8a8dddd35a654b726
   .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
   .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-bash-guard.py: sha256:de9414085402d88aa8d03628b299d90e05344e4ace6319b339a980d1f11ab652

@@ -46,6 +46,13 @@ tona porque o relatório admitiu a falta do vermelho — a cobertura final compe
 teve de confiar sem prova. Se pular o vermelho por qualquer motivo, diga isso explicitamente no
 relatório, não deixe implícito.
 
+## Canvas manda sobre o brief
+
+- Se o brief da sessão principal omitir uma função, arquivo ou caso que o canvas **nomeia** na Operation, implemente conforme o canvas e **avise no relatório** que o brief omitiu. Não omita em silêncio nem decida sozinho cortar do escopo.
+- Quando uma Operation tem duas etapas (primeiro o módulo puro, depois a borda), cada etapa tem o **seu** vermelho: escreva, rode e registre a contagem de falhas da etapa antes de implementá-la.
+- Quando uma decisão tem verificações em ordem (se A, senão B, senão C), escreva um caso de teste para **cada ramo**, inclusive os que parecem inalcançáveis. Um ramo que nenhum caso alcança passa nos testes estruturais (regex sobre o código) e só aparece na revisão.
+- Se o limite de uso interromper você no meio, os testes vermelhos já escritos são o ponto de retomada: continue deles, não recomece.
+
 ## Entregável
 
 Uma mensagem objetiva com a lista de arquivos, as tasks marcadas, o resultado dos sensores (ou "sensores não configurados") e as divergências do canvas, para o reviewer e o humano lerem.

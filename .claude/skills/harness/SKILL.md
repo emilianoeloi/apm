@@ -9,7 +9,7 @@ description: >
 allowed-tools: Read, Grep, Glob, Bash(ruff:*), Bash(mypy:*), Bash(pytest:*)
 license: MIT
 metadata:
-  version: "3.1"
+  version: "3.2"
 ---
 
 # Harness do Projeto (Claude Code + Codex + GitHub Copilot + Antigravity + ADK)
@@ -114,6 +114,8 @@ O Google Antigravity não carrega `CLAUDE.md`, `.claude/settings.json`, `.github
 - Mantenha `AGENTS.md` na raiz apontando explicitamente para `CLAUDE.md` e `harness.config.json`.
 - Enquanto `.agents/hooks.json` não estiver conectado, acione `scripts/harness/phase_cli.py` e `sensors_command` via CLI na sessão principal em cada transição (`proposal` → `apply` → `done`).
 - Defina os subagentes `sdlc-planner`, `sdlc-coder`, `sdlc-reviewer` e `sdlc-auditor` na sessão a partir das especificações de `.claude/agents/sdlc-*.md`, garantindo que o `sdlc-reviewer` receba apenas ferramentas de leitura e que a sessão principal execute `sensors_command`, `openspec validate --strict` e `git status --porcelain` quando o reviewer não dispuser de shell.
+- Quando `.venv/bin/python` for um symlink para fora do workspace (ex.: `~/.local/share/uv/...`), subagentes em sandbox restrito ao repositório podem receber `Operation not permitted`; mantenha `sensors_command` executável pelo `python3` disponível no sandbox (com `importorskip` para extras opcionais) e rode a suíte completa da `.venv` na sessão principal.
+- Separe explicitamente o que entra em `code_prefixes` (delegado ao `sdlc-coder`, incluindo `Dockerfile` quando aplicável) dos arquivos raiz fora de `code_prefixes` (`README.md`, `CHANGELOG.md`, `.dockerignore`), que devem ser consolidados pela sessão principal.
 
 ## Harness de runtime (Google ADK)
 

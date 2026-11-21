@@ -60,6 +60,21 @@ bloqueia `git commit`/`add`/`merge`/`rebase`. Consulte a fase atual com
 - O PR de release só abre com um commit liberável (`feat`, `fix` ou incompatível) desde a última tag; `docs`, `chore` e `ci` ficam escondidos do CHANGELOG e não o provocam. Para forçar uma versão, use `fix` com o rodapé `Release-As: <versão>` na mensagem do commit de squash (nunca `release-as` na configuração).
 - Publicar (mesclar o PR de release) e dar push são atos do desenvolvedor.
 
+## Status no Drive
+
+Ao fim de toda interação que mudar algo (código, fase, branch, commit, PR, merge, decisão ou bloqueio), salve um novo arquivo APM_STATUS_V<n>.md no Google Drive, em PROJECT_INSTRUCTIONS/PROJETOS/APM.
+Leia o status mais novo antes e continue a numeração. Nunca edite um status antigo.
+Confira a pasta de novo logo antes de salvar. Se o número já existir, use o próximo.
+Comece o arquivo pelo título e pelo cabeçalho fixo, uma linha por campo, no formato "- Campo: valor".
+Campos do cabeçalho: Agente (CLAUDE-CODE, ANTIGRAVITY, HUMANO ou outro nome), Modelo, Estado (ANDAMENTO, BLOQUEADO, PARADO ou LANÇADO), Data e hora (America/Sao_Paulo), Onda, Fase do harness, Branch, Commits (hash curto), PR, Substitui.
+Agente e Modelo dizem quem fez esta interação. Dado ausente vira "não informado".
+Depois do cabeçalho, use as seções: Feito (até 5 linhas), Testado e Não testado, Próximo passo, Bloqueios.
+Interação só de leitura não gera status.
+Se o Drive falhar, salve em docs/STATUS.md e avise no fim da resposta.
+
+Numeração: continue o padrão do status mais novo da pasta.
+Dois agentes no projeto: cada um na sua branch, cada STATUS diz quem o escreveu, o segundo a salvar usa o número seguinte, e quem assume o trabalho do outro lê o STATUS dele antes de mexer.
+
 ## Escopo
 
 Este arquivo é um guia básico para o Claude Code. Detalhes de arquitetura,

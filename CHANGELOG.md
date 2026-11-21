@@ -1,5 +1,37 @@
 # Changelog
 
+## Onda 0 — preparo da rodada V2.0 (2026-11-21)
+
+Spec: APM_SETUP V2.0 (Drive). Nenhum push; a Onda 1 (F1, F2, F3) ainda não começou.
+
+### Versão
+
+* A spec falava em evoluir de 1.1.0 para 1.2.0, mas o repositório já estava em `1.5.0` (manifesto e `apm.yml`). Decisão do Elói: usar a versão mais atual. A próxima versão sai do release-please (sem `release-as`).
+* O apm é o próprio pacote (`apm.yml` sem dependências externas), então o skill `install-dev-harness` não foi rodado de novo. Ferramentas: `apm` 0.35.0, `openspec` 1.14.1, `python3` 3.14.5.
+
+### Feito
+
+* `apm install --target claude,copilot --force` ressincronizou as cópias implantadas (agentes `sdlc-coder`, `sdlc-planner`, `sdlc-reviewer` e cinco skills), que estavam atrás da fonte em `.apm/`.
+* Bloco "Status no Drive" (V1.7, APM) adicionado ao `CLAUDE.md`. Não há `AGENTS.md`.
+* `harness.config.json` mantido como está; hosts claude e copilot; artefatos OpenSpec em português do Brasil.
+
+### Verificação
+
+* `session-start.py` imprime JSON com `additionalContext`: ok. `stop-sensors.py` sai com 0: ok.
+* `openspec list` e `phase_cli.py show`: ok. `spdd-*` em `.claude/skills/`, `opsx-*` em `.claude/commands/` e `.github/prompts/`: ok.
+* Os quatro agentes `sdlc-*` em `.claude/agents/` e `.github/agents/`: ok. 110 testes ok.
+* Conector do Google Drive: leitura da spec ok. O primeiro `APM_STATUS` é salvo ao fim desta onda.
+
+### Observações
+
+* Antes do sync, 3 testes de cópia implantada falhavam, e `__pycache__` não rastreado quebrava o teste de termos proibidos. Caches removidos; rode os testes com `python3 -B`.
+* `gh` está sem credencial válida (401); o repositório público foi lido por `curl` e `git ls-remote`, o privado por SSH.
+
+### Retrospectiva de skills
+
+* Público (`apm` v1.5.0): 21 skills. Privado (`skills`): 43. O `drive-status` público precisa ser conferido contra o cabeçalho V1.7 na Onda 1.
+* `install-dev-harness`: sem lacuna nova nesta onda. Nada foi publicado.
+
 ## Preparação da 1.0.0 final (2026-11-12)
 
 Change `versao-final-1-0-0`. A prova da calculadora em Go foi aprovada pelo Elói; esta change faz a configuração propor a `1.0.0`. Nada é publicado até o Elói mesclar este PR e, depois, o PR de release.
