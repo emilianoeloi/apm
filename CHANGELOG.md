@@ -278,6 +278,13 @@ Spec: APM_SETUP V1.2. Nenhuma tag e nenhum push; a Onda 1 (1.0.0-alpha.1) ainda 
 * `install-dev-harness`: o template `harness.config.json.template` lista `.pre-commit-config.yaml` em `guide_files` mesmo sem o arquivo existir, gerando um "MISSING" falso (removido à mão aqui). O passo 3 só cobre `apm install <repo>#<tag>`, não a fonte local. `settings.hooks.json` traz uma chave `_comment` que precisou ser tirada ao criar `.claude/settings.json`. Proposta: atualizar o skill (público, serve a qualquer projeto). Nada publicado.
 * Skill novo: nenhum necessário nesta onda.
 
+## [1.4.0](https://github.com/emilianoeloi/apm/compare/v1.3.0...v1.4.0) (2026-11-21)
+
+
+### Features
+
+* **skills:** atualiza drive-status, install-dev-harness e harness com aprendizados de multi-agente e Cloud Run ([#28](https://github.com/emilianoeloi/apm/issues/28)) ([c20dd14](https://github.com/emilianoeloi/apm/commit/c20dd14a832136e2293e7057cc8ccfbd19bb991a))
+
 ## [1.3.0](https://github.com/emilianoeloi/apm/compare/v1.2.0...v1.3.0) (2026-11-20)
 
 
