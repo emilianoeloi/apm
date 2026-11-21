@@ -1507,8 +1507,8 @@ local_deployed_file_hashes:
   .agents/skills/spdd-sync/SKILL.md: sha256:c2f05f038be42c58ff80058c00e5096b0db5a9144ad436a979084964095eebe9
   .agents/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .claude/agents/sdlc-auditor.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
-  .claude/agents/sdlc-coder.md: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
-  .claude/agents/sdlc-planner.md: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
+  .claude/agents/sdlc-coder.md: sha256:914d9a5847f2e2501430faa5911960da410f28e708884cc0c0b0148942890c00
+  .claude/agents/sdlc-planner.md: sha256:300d5bd4ec6f71e40e9f6c96514cc4fab535315d40123daa56b9e1b8d4d32492
   .claude/agents/sdlc-reviewer.md: sha256:d8d48985bfeb86dbc38bbd4213afdcdc94ec98db4980e3a711fc6a62009b2a42
   .claude/commands/opsx-apply.md: sha256:cc529c6fc803294b6aaa167935edcc6cf29f5d6abfca5745cc6b2b66c52e4d1d
   .claude/commands/opsx-archive.md: sha256:7521ac8904458e2ee287015f009b6f7f5e55ca6b83849920bf2353e443853997
@@ -1558,8 +1558,8 @@ local_deployed_file_hashes:
   .claude/skills/spdd-sync/SKILL.md: sha256:c2f05f038be42c58ff80058c00e5096b0db5a9144ad436a979084964095eebe9
   .claude/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .github/agents/sdlc-auditor.agent.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
-  .github/agents/sdlc-coder.agent.md: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
-  .github/agents/sdlc-planner.agent.md: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
+  .github/agents/sdlc-coder.agent.md: sha256:914d9a5847f2e2501430faa5911960da410f28e708884cc0c0b0148942890c00
+  .github/agents/sdlc-planner.agent.md: sha256:300d5bd4ec6f71e40e9f6c96514cc4fab535315d40123daa56b9e1b8d4d32492
   .github/agents/sdlc-reviewer.agent.md: sha256:d8d48985bfeb86dbc38bbd4213afdcdc94ec98db4980e3a711fc6a62009b2a42
   .github/hooks/apm-harness.json: sha256:6c7cb7784319d515cfbd646c1509c32a536e2e4409a7126300e6797dd136ae97
   .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
