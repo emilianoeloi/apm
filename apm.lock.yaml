@@ -36,7 +36,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:15f640d4ff2b39d0ea2a99846bc740044567516d06604b81cfafd56efb40bc1f
+  content_hash: sha256:d8d48985bfeb86dbc38bbd4213afdcdc94ec98db4980e3a711fc6a62009b2a42
 - kind: project-relative
   target: claude
   value: .claude/commands/opsx-apply.md
@@ -153,7 +153,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:a5215762d6e4ef1e43ed2fa7bb68117394f211c96da47b565704fade618bc6b0
+  content_hash: sha256:e9291806e15335c34cf9283494976050f1ce9ea414659a4c826b452246fc500d
 - kind: project-relative
   target: claude
   value: .claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py
@@ -1188,7 +1188,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:15f640d4ff2b39d0ea2a99846bc740044567516d06604b81cfafd56efb40bc1f
+  content_hash: sha256:d8d48985bfeb86dbc38bbd4213afdcdc94ec98db4980e3a711fc6a62009b2a42
 - kind: project-relative
   target: copilot
   value: .github/hooks/apm-harness.json
@@ -1260,7 +1260,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:a5215762d6e4ef1e43ed2fa7bb68117394f211c96da47b565704fade618bc6b0
+  content_hash: sha256:e9291806e15335c34cf9283494976050f1ce9ea414659a4c826b452246fc500d
 - kind: project-relative
   target: copilot
   value: .github/hooks/scripts/apm/.apm/hooks/scripts/stop-sensors.py
@@ -1507,9 +1507,9 @@ local_deployed_file_hashes:
   .agents/skills/spdd-sync/SKILL.md: sha256:c2f05f038be42c58ff80058c00e5096b0db5a9144ad436a979084964095eebe9
   .agents/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .claude/agents/sdlc-auditor.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
-  .claude/agents/sdlc-coder.md: sha256:914d9a5847f2e2501430faa5911960da410f28e708884cc0c0b0148942890c00
-  .claude/agents/sdlc-planner.md: sha256:300d5bd4ec6f71e40e9f6c96514cc4fab535315d40123daa56b9e1b8d4d32492
-  .claude/agents/sdlc-reviewer.md: sha256:15f640d4ff2b39d0ea2a99846bc740044567516d06604b81cfafd56efb40bc1f
+  .claude/agents/sdlc-coder.md: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
+  .claude/agents/sdlc-planner.md: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
+  .claude/agents/sdlc-reviewer.md: sha256:d8d48985bfeb86dbc38bbd4213afdcdc94ec98db4980e3a711fc6a62009b2a42
   .claude/commands/opsx-apply.md: sha256:cc529c6fc803294b6aaa167935edcc6cf29f5d6abfca5745cc6b2b66c52e4d1d
   .claude/commands/opsx-archive.md: sha256:7521ac8904458e2ee287015f009b6f7f5e55ca6b83849920bf2353e443853997
   .claude/commands/opsx-explore.md: sha256:46ed31adf3396460842a383324118e8d220b77fb49471a28a667a8551f3f3232
@@ -1522,7 +1522,7 @@ local_deployed_file_hashes:
   .claude/hooks/apm/.apm/hooks/scripts/pre-tool-bash-guard.py: sha256:de9414085402d88aa8d03628b299d90e05344e4ace6319b339a980d1f11ab652
   .claude/hooks/apm/.apm/hooks/scripts/pre-tool-write-guard.py: sha256:b4b769559f947bcf50b400d2cf9e222f459c4d6704eacba8f389913a0cc352fe
   .claude/hooks/apm/.apm/hooks/scripts/session-start.py: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
-  .claude/hooks/apm/.apm/hooks/scripts/spec-trace.py: sha256:a5215762d6e4ef1e43ed2fa7bb68117394f211c96da47b565704fade618bc6b0
+  .claude/hooks/apm/.apm/hooks/scripts/spec-trace.py: sha256:e9291806e15335c34cf9283494976050f1ce9ea414659a4c826b452246fc500d
   .claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py: sha256:0d4856d982916d10475d67ca26068c79c1336c2c08bebbea760a2f125dc5574e
   .claude/skills/acceptance-from-spec/SKILL.md: sha256:e7356598174bb6f4b2d28136d8c07f293e6b65d3e58a51250e29ef77e6a1d260
   .claude/skills/architecture-fitness-functions/SKILL.md: sha256:125386113324fd42cb369c00767d961cf8239def9723588b10914f2d42f7f8f2
@@ -1558,9 +1558,9 @@ local_deployed_file_hashes:
   .claude/skills/spdd-sync/SKILL.md: sha256:c2f05f038be42c58ff80058c00e5096b0db5a9144ad436a979084964095eebe9
   .claude/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .github/agents/sdlc-auditor.agent.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
-  .github/agents/sdlc-coder.agent.md: sha256:914d9a5847f2e2501430faa5911960da410f28e708884cc0c0b0148942890c00
-  .github/agents/sdlc-planner.agent.md: sha256:300d5bd4ec6f71e40e9f6c96514cc4fab535315d40123daa56b9e1b8d4d32492
-  .github/agents/sdlc-reviewer.agent.md: sha256:15f640d4ff2b39d0ea2a99846bc740044567516d06604b81cfafd56efb40bc1f
+  .github/agents/sdlc-coder.agent.md: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
+  .github/agents/sdlc-planner.agent.md: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
+  .github/agents/sdlc-reviewer.agent.md: sha256:d8d48985bfeb86dbc38bbd4213afdcdc94ec98db4980e3a711fc6a62009b2a42
   .github/hooks/apm-harness.json: sha256:6c7cb7784319d515cfbd646c1509c32a536e2e4409a7126300e6797dd136ae97
   .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
   .github/hooks/scripts/apm/.apm/hooks/scripts/_gherkin.py: sha256:abc0f5b2eb2f8b190cfca531dbd3dde5b2167000f099c403bc5e1c6eb968ac55
@@ -1568,7 +1568,7 @@ local_deployed_file_hashes:
   .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-bash-guard.py: sha256:de9414085402d88aa8d03628b299d90e05344e4ace6319b339a980d1f11ab652
   .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-write-guard.py: sha256:b4b769559f947bcf50b400d2cf9e222f459c4d6704eacba8f389913a0cc352fe
   .github/hooks/scripts/apm/.apm/hooks/scripts/session-start.py: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
-  .github/hooks/scripts/apm/.apm/hooks/scripts/spec-trace.py: sha256:a5215762d6e4ef1e43ed2fa7bb68117394f211c96da47b565704fade618bc6b0
+  .github/hooks/scripts/apm/.apm/hooks/scripts/spec-trace.py: sha256:e9291806e15335c34cf9283494976050f1ce9ea414659a4c826b452246fc500d
   .github/hooks/scripts/apm/.apm/hooks/scripts/stop-sensors.py: sha256:0d4856d982916d10475d67ca26068c79c1336c2c08bebbea760a2f125dc5574e
   .github/prompts/opsx-apply.prompt.md: sha256:606297a1b99418258590e4e3642a46312651b41d26fb3f7bd9b4e50658d7029c
   .github/prompts/opsx-archive.prompt.md: sha256:2898d1ee82fcb51a3b1d6d138eb677ace07aac5389fbab956cb9bac5cbb5d419

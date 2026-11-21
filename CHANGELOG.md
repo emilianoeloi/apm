@@ -1,5 +1,27 @@
 # Changelog
 
+## Onda 3, F6 — endurecer o spec-trace (2026-11-21)
+
+Change `endurecer-spec-trace` (follow-up das revisões da F4, fora da spec V2.0), a partir do `main` com o PR #38 mesclado. Sem push; PR e merge são do Elói.
+
+### O que muda
+
+* `spec-trace.py` abre o arquivo de teste com `os.open` (`O_RDONLY`, `O_NONBLOCK`, `O_NOFOLLOW`) e `fstat` no descritor, sem a janela entre `lstat` e `open`.
+* Depois do título do cenário só vale um fechamento de comentário conhecido (constante `CLOSERS`) ou nada; sufixos como `-`, `_`, `.`, `(`, letra ou dígito deixam de casar e viram `ORFAO` (antes `Caso - feliz` saía `COBERTO` para `Caso`). Depois de um fechamento vem uma fronteira (fim da linha, espaço ou outro fechamento): `Caso#2`, `Caso'2` e `Caso*/x` também viram `ORFAO` (achado médio da revisão, corrigido com teste primeiro).
+* `sdlc-reviewer`: a cópia certa do script é a implantada do host, nunca a de `apm_modules/`; sem `Glob`, o plano B é `find . -name spec-trace.py -not -path "*/apm_modules/*"`.
+* Delta nas capabilities `spec-trace`, `sdlc-agent-roles` e `pacote-generico`; README com a regra do fim do título e o aviso de migração.
+
+### Impacto
+
+Se um projeto usa um fechamento fora da lista, o cenário passa a sair `ORFAO` mais `SEM_TESTE` (reprova). A F4 ainda não tinha tag publicada quando esta change foi feita (o PR de release #39 estava aberto), então o risco para projetos externos é baixo.
+
+### Verificação
+
+* 201 testes; `openspec validate --strict`; sensor de Gherkin; neutralidade. `spec-trace` na change: 7 cobertos, 0 `SEM_TESTE`, 1 herdado sem teste, 0 órfãos, 9 extras.
+* Vermelho natural pela asserção (47 testes, 11 falhas por asserção). O teste de tab e NBSP nasceu verde (caracterização): a mutação manual `lstrip()` para `lstrip(" ")` o faz falhar (28 subtestes), e o código foi restaurado.
+* Vermelho da fronteira: 5 testes, 7 falhas por asserção (`Caso#2`, `Caso'2`, `Caso"abc`, `Caso)extra`, `Caso*/x`, `Caso-->x`, `Caso//x`).
+* **Não verificado:** a prova de comportamento do reviewer sem `Glob`, com cópias em `apm_modules/` (task 6.4). A lista `CLOSERS` não foi confirmada contra projetos externos.
+
 ## Onda 3, F5 — afinar o skill acceptance-from-spec (2026-11-21)
 
 Change `afinar-skill-aceitacao` (follow-up das provas, fora da spec V2.0). Empilhada sobre a F4 (PR #38 aberto). Sem push; PR e merge são do Elói.

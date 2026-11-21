@@ -130,7 +130,7 @@ O `sdlc-reviewer` confere se cada `Cenário:` da change tem um teste ligado pela
 python3 -B <caminho>/spec-trace.py --root . --change <nome-da-change>
 ```
 
-O caminho muda por host (o reviewer o acha com `Glob **/spec-trace.py`). A saída tem uma linha por cenário, `spec-trace: ESTADO capability / requisito / cenário @ arquivo:linha`, e um resumo no fim.
+O caminho muda por host: o reviewer usa a cópia implantada do host (`.claude/hooks/apm/.apm/hooks/scripts/` ou `.github/hooks/scripts/apm/.apm/hooks/scripts/`), nunca a de `apm_modules/`; com `Glob` ele a acha por `**/spec-trace.py`, e sem `Glob` o plano B é `find . -name spec-trace.py -not -path "*/apm_modules/*"`. A saída tem uma linha por cenário, `spec-trace: ESTADO capability / requisito / cenário @ arquivo:linha`, e um resumo no fim.
 
 | Estado | Significado | Efeito no veredito |
 |---|---|---|
@@ -145,6 +145,10 @@ Só o cenário **novo ou alterado** da change é exigido; os herdados não. O ca
 **Limites.** O script prova o vínculo, não a qualidade do teste; essa parte é leitura do agente. Fixtures de teste que contêm uma linha `Spec:` dentro de uma string aparecem como `ORFAO`: o agente as descarta ao ler (monte a linha por constante para evitar). O comportamento do modelo no reviewer só foi coberto por testes de texto; falta a prova num projeto real. Por isso dois cenários de comportamento do modelo (`sdlc-agent-roles`: "Revisão de change com cenários" e "Cenário novo sem teste") ficam `SEM_TESTE` conhecidos, e o script sai 2 na change que os criou; só a prova num projeto real os cobre.
 
 **Projetos na versão anterior.** Depois de atualizar o apm e rodar `apm install`, o reviewer passa a reprovar cenário novo ou alterado sem teste. Cenários antigos não são exigidos.
+
+**Fim do título do marcador.** Depois do título do cenário, só vale um fechamento de comentário conhecido (`*/`, `-->`, `--]]`, `--}}`, `%}`, `?>`, aspas, `)`, `]`, `}`, `#` ou `//`) ou nada; qualquer outro sufixo (`-`, `_`, `.`, `(`, `:`, `;`, `,`, letra ou dígito) deixa a linha sem casar e ela vira `ORFAO`, o que antes podia aparecer como falso `COBERTO` (`Caso - feliz` casava com `Caso`). Depois de um fechamento vem uma fronteira: fim da linha, espaço (tab e espaço não separável inclusive) ou outro fechamento; um caractere colado ao fechamento (`Caso#2`, `Caso'2`, `Caso*/x`) também vira `ORFAO`, enquanto `") # x` e `*/ -->` continuam válidos. O arquivo de teste é aberto sem bloquear em FIFO ou dispositivo e, onde o sistema oferece `O_NOFOLLOW`, sem seguir link; onde não oferece, o `fstat` ainda protege FIFO e dispositivo.
+
+**Migração (fim do título).** Se um projeto usa um fechamento de comentário fora da lista, o cenário passa a sair `ORFAO` mais `SEM_TESTE`: o `ORFAO` mostra a linha exata, e o caminho durável é deixar o marcador sozinho no fim da linha (a forma canônica); acrescentar o fechamento à constante `CLOSERS` exige editar o script implantado, e o `apm install` o sobrescreve.
 
 ## Sensor de Gherkin
 

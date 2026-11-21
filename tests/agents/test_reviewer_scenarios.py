@@ -61,6 +61,15 @@ class TextoDoReviewerTest(unittest.TestCase):
             with self.subTest(termos=label):
                 self.assertIsNone(regex.search(text), regex.search(text))
 
+    # Spec: sdlc-agent-roles / Reviewer confere cada cenário contra um teste / Cópia certa do script
+    def test_copia_certa_do_script_e_plano_b_sem_glob(self):
+        text = reviewer()
+        for needle in (
+            "apm_modules", "find", ".claude/hooks/apm/.apm/hooks/scripts/spec-trace.py",
+            ".github/hooks/scripts/apm/.apm/hooks/scripts/spec-trace.py",
+        ):
+            with self.subTest(trecho=needle):
+                self.assertIn(needle, text)
 
     def test_saida_dois_do_script_nao_e_o_veredito(self):
         text = reviewer()
@@ -75,7 +84,7 @@ class ReadmeTest(unittest.TestCase):
     def test_readme_traz_a_secao_e_o_aviso_de_migracao(self):
         text = (REPO / "README.md").read_text(encoding="utf-8")
         self.assertIn("## Conferência de cenários na revisão", text)
-        for needle in ("reprova", "Cenários antigos não são exigidos", "ORFAO", "não a qualidade do teste"):
+        for needle in ("reprova", "Cenários antigos não são exigidos", "ORFAO", "não a qualidade do teste", "fechamento de comentário"):
             with self.subTest(trecho=needle):
                 self.assertIn(needle, text)
 
