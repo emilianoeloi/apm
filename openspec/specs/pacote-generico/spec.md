@@ -117,7 +117,7 @@ Cenário: Leitor de projeto na versão anterior
 - **THEN** encontra a seção "Testes de aceitação" e o aviso sobre a proposta de ferramenta e o `sensors_command`
 
 ### Requirement: Aviso de migração para a conferência de cenários
-O `README.md` SHALL trazer a seção "Conferência de cenários na revisão" e um aviso de migração para projetos na versão anterior, dizendo que depois de atualizar o pacote o reviewer reprova a change com cenário novo ou alterado sem teste ligado por `Spec:`, que cenários antigos não são exigidos, que o script `spec-trace.py` prova o vínculo e não a qualidade do teste, que fixtures com `Spec:` podem aparecer como órfãs e que depois do título só valem o fim da linha ou um fechamento de comentário conhecido, sob pena de `ORFAO`.
+O `README.md` SHALL trazer a seção "Conferência de cenários na revisão" com um aviso de migração para projetos na versão anterior: o reviewer passa a reprovar cenário novo ou alterado sem teste ligado por `Spec:`; cenários antigos não são exigidos; o `spec-trace.py` prova o vínculo, não a qualidade do teste; fixtures com `Spec:` podem aparecer como `ORFAO`; depois do título só valem o fim da linha ou um fechamento de comentário conhecido.
 
 ```gherkin
 Cenário: Leitor de projeto na versão anterior

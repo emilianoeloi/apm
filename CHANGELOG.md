@@ -28,6 +28,7 @@ Se um projeto usa um fechamento fora da lista, o cenário passa a sair `ORFAO` m
 * `sdlc-reviewer`: voltou a achar um defeito que o coder não viu (fronteira depois do fechamento, falso `COBERTO`); a regra da lista `CLOSERS` por prefixo estava incompleta. Proposta: o brief do coder pedir sempre uma tabela de casos hostis de borda ao endurecer uma regra de casamento.
 * `sdlc-coder`: seguiu a regra de conferir arquivos `*-E` e relatou a mutação manual do teste que nasce verde; funcionou. O skill ainda não diz como provar um teste de caracterização (mutação manual): proposta de uma linha no skill.
 * `sdlc-planner`: de novo sem acesso à spec do Drive; o brief supre.
+* Achado depois do arquivamento: `openspec validate --specs --strict` falhou em 3 requisitos cujo texto, alongado pelos deltas da F6, passou de 500 caracteres; o `--strict` da change não pegou. Encurtei os três textos nas specs principais (a lista de pastas ignoradas ficou só no script). Proposta: o planner rodar também `openspec validate --specs --strict` depois de simular o arquivamento, e o texto de requisito mirar abaixo de 500 caracteres.
 * Faltou um skill: nenhum novo. Nada foi publicado sem o "ok" do Elói.
 
 ## Onda 3, F5 — afinar o skill acceptance-from-spec (2026-11-21)

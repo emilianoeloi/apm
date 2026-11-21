@@ -76,7 +76,7 @@ Cenário: Título digitado errado
 - **THEN** a linha é ignorada
 
 ### Requirement: Busca em arquivos de teste com exclusões
-O script SHALL pesquisar, por padrão, os arquivos de texto da raiz do projeto, exceto as pastas de controle e de dependências (`.git`, `openspec`, `spdd`, `.harness`, `.claude`, `.github`, `.agents`, `.apm`, `apm_modules`, `node_modules`, `vendor`, `target`, `build`, `dist`, `__pycache__`, `.venv`, `venv`), os arquivos `.md`, os binários (com byte NUL) e os maiores que 1 MiB; a opção `--tests <caminho>`, repetível, SHALL restringir a busca aos caminhos dados; o script SHALL abrir cada arquivo sem seguir link simbólico e sem bloquear (`O_NOFOLLOW` e `O_NONBLOCK`, cada um onde o sistema o oferece) e SHALL conferir que é arquivo regular no descritor já aberto, ignorando FIFO, dispositivo e link, inclusive o arquivo trocado por um deles depois da listagem.
+O script SHALL pesquisar os arquivos de texto da raiz, exceto pastas de controle e de dependências (lista no script, como `.git` e `apm_modules`), `.md`, binários (byte NUL) e os maiores que 1 MiB; `--tests <caminho>`, repetível, SHALL restringir a busca; SHALL abrir cada arquivo sem seguir link e sem bloquear (`O_NOFOLLOW` e `O_NONBLOCK`, onde existirem) e conferir no descritor que é arquivo regular, ignorando FIFO, dispositivo e link, inclusive o trocado depois da listagem.
 
 ```gherkin
 Cenário: Marcador só em documentação

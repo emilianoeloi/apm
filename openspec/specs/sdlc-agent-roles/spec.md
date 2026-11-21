@@ -116,7 +116,7 @@ Cenário: Coder com cenário aprovado
 - **THEN** a busca não encontra nenhum
 
 ### Requirement: Reviewer confere cada cenário contra um teste
-O `sdlc-reviewer` SHALL conferir que cada `Cenário:` novo ou alterado pela change tem teste ligado pela linha `Spec:`, usando o `spec-trace.py` achado por `Glob` (ou, sem a ferramenta `Glob`, por `find` que exclua `apm_modules`) ou, sem o script, `grep -F` da trinca no fonte dos testes, SHALL usar a cópia implantada do host (`.claude/hooks/apm/.apm/hooks/scripts/` ou `.github/hooks/scripts/apm/.apm/hooks/scripts/`) e nunca a de `apm_modules/`, SHALL ler cada teste ligado para confirmar que afirma o `Então`, SHALL tratar o cenário herdado sem teste como informativo e SHALL entregar a seção "Cenários x testes" sem alterar arquivo nem as `tools`.
+O `sdlc-reviewer` SHALL conferir que cada `Cenário:` novo ou alterado pela change tem teste ligado pela linha `Spec:`, usando o `spec-trace.py` da cópia implantada do host (nunca a de `apm_modules/`), achado por `Glob` ou, sem `Glob`, por `find` sem `apm_modules`, ou, sem o script, `grep -F` da trinca; SHALL ler cada teste ligado para confirmar que afirma o `Então`, tratar o herdado sem teste como informativo e entregar a seção "Cenários x testes" sem alterar arquivo nem as `tools`.
 
 ```gherkin
 Cenário: Revisão de change com cenários
