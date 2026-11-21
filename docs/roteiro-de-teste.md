@@ -100,6 +100,18 @@ Veredito: **REPROVADO**. Ele também achou um defeito que eu não tinha plantado
 
 **Limites.** É uma prova com um modelo e uma fixture. Ela mostra o comportamento de uma revisão, não a taxa de acerto; os dois cenários `SEM_TESTE` conhecidos de `sdlc-agent-roles` seguem sem teste automático.
 
+## Prova das convenções do skill e da cópia do reviewer (F5 e F6, tasks 6.4)
+
+Projeto mínimo `semfw` (Python `unittest`), com o apm do `main` já com a F5 e a F6 (skill 1.1 e `spec-trace.py` endurecido), instalado da fonte local. Change de prova `despedida`: programa que imprime `Tchau, <nome>!`, erro com código 2 sem argumento e `--formal` com `Até logo, <nome>.`. Planner, coder e reviewer reais, sem dizer o que esperar; a sessão principal aprovou as decisões baixas da fixture (Q1 a Q3) como recomendadas.
+
+| Passo | Resultado |
+|---|---|
+| Planner real (F5, "Tasks de teste") | um teste por `Cenário:` do bloco, cada um com a linha `Spec:`; o `#### Scenario:` extra ("Formal sem nome") ligado por `Extra:`, nunca `Spec:`; o teste de erro afirma o conteúdo (stdout vazio, stderr com "Erro:" e "nome"), não só o código 2; reconheceu o `unittest` já aprovado no `CLAUDE.md`, sem parar para propor ferramenta |
+| Coder real (F5, vermelho pela asserção) | vermelho por cenário: `'' != 'Tchau, Ana!'`, `1 != 2` e `'Tchau, Ana!' != 'Até logo, Ana.'`; verde com os 6 testes pelo `sensors_command`; `Extra:` no extra; nenhum arquivo `*-E` |
+| Reviewer real (F6, cópia do host) | sem `Glob` nesta execução, usou `find`, achou 4 cópias do `spec-trace.py` (3 em `apm_modules/`) e usou a implantada no host; 3 `COBERTO`, 0 órfãos, 1 extra; leu cada teste; veredito aprovado |
+
+**Limites.** O falso verde de "Sem argumento" não foi exercido: o coder implementou o passo 1 antes de rodar o teste de erro, e este falhou com código 1 (`IndexError`), não com 2; o que a prova mostra é que o planner e o coder escreveram o teste de erro afirmando o conteúdo. O planner não invocou os skills `spdd-analysis` e `spdd-reasons-canvas` (escreveu a análise e o canvas à mão e declarou), e Q2 e Q3 (argumento depois do nome, argumentos extras) ficam sem cenário nem teste. É uma prova com um modelo e uma fixture, sem taxa de acerto.
+
 ## Itens conhecidos fora do roteiro
 
 - O formato dos agentes e dos hooks no Copilot não foi verificado num Copilot real.
