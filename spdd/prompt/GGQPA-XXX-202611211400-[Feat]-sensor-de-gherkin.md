@@ -105,6 +105,7 @@ Conservador: só adições; `_common.py` e os demais hooks não mudam (exceto `h
 ### Create Library - .apm/hooks/scripts/_gherkin.py
 1. Responsibility: regra de formato e requisitos efetivos.
 2. API: `effective_requirements(root: Path) -> list` de `Requisito`, `validate(body) -> list[str]`, `parse_requirements`, `parse_delta` (com `RENAMED`).
+4. Implementado além do previsto: `Requisito` ganhou o campo `error` (arquivo ilegível vira requisito com falha, o sensor cita o arquivo e sai 2 sem traceback); `RENAMED` aceita pares `- FROM:` e `- TO:` com ou sem crases; `tests/specs/test_gherkin_blocks.py` usa o adaptador `efetivos()` para não definir `effective_requirements`, e um teste por AST garante a fonte única.
 3. Docstring, só stdlib, sem termos proibidos. Estimativa: ~110 linhas (~25 novas).
 
 ### Create Script - .apm/hooks/scripts/gherkin-sensor.py
@@ -122,7 +123,7 @@ Conservador: só adições; `_common.py` e os demais hooks não mudam (exceto `h
 1. `apm install --target claude,copilot`; conferir `PostToolUse` em `.claude/apm-hooks.json` e `.github/hooks/`, `diff` dos scripts e `claude plugin validate .claude/agents`.
 
 ### Update Project (sessão principal, fora do coder)
-1. `harness.config.json`: `sensors_command` = `python3 -m unittest discover -s tests -t . && python3 .apm/hooks/scripts/gherkin-sensor.py`.
+1. `harness.config.json`: `sensors_command` = `python3 -m unittest discover -s tests -t . && python3 .apm/hooks/scripts/gherkin-sensor.py`. Implementado com `-B` nos dois comandos (`python3 -B ...`), para não gerar `__pycache__`.
 2. `README.md`: seção "Sensor de Gherkin" e linha na tabela de hooks.
 3. `CLAUDE.md`: quality gate. `openspec/config.yaml`: opcional (Q6).
 
@@ -146,3 +147,5 @@ Conservador: só adições; `_common.py` e os demais hooks não mudam (exceto `h
 5. Single Source Constraints: nenhuma cópia da regra de formato fora de `_gherkin.py`.
 6. Honesty Constraints: `PostToolUse` no Copilot "não verificado" até teste em host real.
 7. Release Constraints: sem push, tag ou merge sem o "ok" do Elói; PR `feat(hooks):`.
+
+<!-- Sync pós-implementação: ressalvas baixas do reviewer abertas (regex `openspec validate` casa por texto; `--root` inválido sai 0 com aviso; faltam testes do ramo Q3 e do fail-open do modo hook). Task 5.5 (disparo ao vivo) não verificada. -->

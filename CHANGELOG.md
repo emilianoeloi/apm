@@ -1,5 +1,32 @@
 # Changelog
 
+## Onda 1, F2 — sensor de Gherkin (2026-11-21)
+
+Change `sensor-de-gherkin`, arquivada. Sem push; PR e merge são do Elói.
+
+### O que muda
+
+* `gherkin-sensor.py` e a biblioteca `_gherkin.py` (só biblioteca padrão): conferem o bloco `gherkin` de cada requisito, aplicam os deltas das changes ativas (`ADDED`, `MODIFIED`, `REMOVED`, `RENAMED`) e saem 2 citando `capability / Requirement / change`.
+* Hook `PostToolUse` (Bash) roda o sensor depois de um `openspec validate`; o `sensors_command` deste repo roda os testes e depois o sensor (Stop e pre-commit).
+* A regra do formato vive só em `_gherkin.py`; o teste da F1 passou a importá-la.
+* Capability nova `gherkin-sensor` (8 requisitos); `hook-runtime` ganha o `PostToolUse` e o helper `_gherkin`. README: seção "Sensor de Gherkin".
+
+### Verificação
+
+* 141 testes e `openspec validate --specs --strict` (8 specs): ok. Vermelho natural em cada etapa.
+* sdlc-reviewer: aprovado com ressalvas; o README foi corrigido (disparo ao vivo não verificado).
+* **Não verificado:** o disparo do hook numa sessão real (task 5.5) e o `PostToolUse` num Copilot real.
+* **Ressalvas abertas (baixas):** o regex casa por texto (`git commit -m "openspec validate"` dispara, ruído sem dano); `--root` inválido sai 0 com aviso; faltam testes do ramo de erro inesperado (código 2) e do fail-open do modo hook.
+
+### Retrospectiva de skills
+
+* Usados: `openspec-workflow`, `spdd-sync`, `skill-retrospective`, `install-dev-harness` (ganhou nota sobre o sensor) e os agentes `sdlc-planner`, `sdlc-coder`, `sdlc-reviewer`.
+* `sdlc-coder`: investigou o aviso do `apm install` depois do install, não antes; o brief deve exigir a ordem. Escrita fora de `code_prefixes` (README, `harness.config.json`, `CLAUDE.md`) voltou à sessão principal de novo: considerar uma lista de "docs do projeto" que o coder possa tocar (proposta, não feita).
+* `sdlc-planner`: não leu a spec do Drive, usou só o brief; vale uma linha no agente para ler a fonte quando o brief a cita (proposta).
+* `spdd-sync`: o caminho curto para desvios aditivos pequenos, proposto na F1, se confirmou.
+* Aviso do `apm install` "skills replaced by a different package": só `harness` apareceu, sem nomear o outro pacote; investigar no `apm`.
+* Faltou um skill: nenhum novo. `acceptance-from-spec` nasce na F3. Nada foi publicado sem o "ok" do Elói.
+
 ## Onda 1, F1 — cenários Gherkin na spec (2026-11-21)
 
 Change `cenarios-gherkin-na-spec`, arquivada. Sem push; PR e merge são do Elói.
