@@ -1,150 +1,141 @@
 # apm
 
-Pacote APM público e genérico, com Lean Inception, Harness e SDLC em skills, agentes e hooks, para qualquer stack (iOS, Rust, JavaScript, Go e outras). É instalado por versão e entregue para `claude` e `copilot`.
+[![Release](https://img.shields.io/github/v/release/emilianoeloi/apm)](https://github.com/emilianoeloi/apm/releases)
+[![Licença: MIT](https://img.shields.io/badge/licença-MIT-blue.svg)](LICENSE)
 
-Consumo (no projeto), pelo pré-lançamento da `1.0.0`, que é a versão com os hooks genéricos e os agentes de SDLC:
+Pacote APM (Agent Package Manager) público e genérico, com Lean Inception, Harness e SDLC em skills, agentes e hooks, para qualquer stack (iOS, Rust, JavaScript, Go e outras). É instalado por versão e entregue para `claude` e `copilot`.
+
+O SDLC do pacote é **verificável**: todo requisito da spec tem um cenário Gherkin conferido por sensor, todo cenário novo tem um teste de aceitação escrito antes do código, e o revisor confere o vínculo entre cenário e teste.
+
+## Índice
+
+- [Instalação](#instalação)
+- [O que o pacote entrega](#o-que-o-pacote-entrega)
+- [Fluxo de desenvolvimento](#fluxo-de-desenvolvimento-openspec--openspdd)
+- [Agentes de SDLC](#agentes-de-sdlc)
+- [Hooks](#hooks)
+- [Testes de aceitação](#testes-de-aceitação)
+- [Conferência de cenários na revisão](#conferência-de-cenários-na-revisão)
+- [Sensor de Gherkin](#sensor-de-gherkin)
+- [Migração](#migração)
+- [Versões e releases](#versões-e-releases)
+- [Contribuindo](#contribuindo) e [Licença](#licença)
+
+## Instalação
+
+Requisitos: o CLI `apm`, o `python3` (os hooks usam só a biblioteca padrão) e, para o fluxo de especificação, o CLI `openspec` 1 ou maior.
+
+No `apm.yml` do projeto:
 
 ```yaml
 dependencies:
   apm:
-    - emilianoeloi/apm#v1.0.0-alpha.1
+    - emilianoeloi/apm#v2.0.0
 ```
 
-Depois rode `apm install --target claude,copilot` e commite `apm.yml`, `apm.lock.yaml` e os diretórios implantados. A `v0.3.1` continua sendo a última versão **estável** (com o conteúdo do cowboy) até a `1.0.0` sair; veja "Pré-lançamento da 1.0.0" abaixo.
+Depois rode `apm install --target claude,copilot` e commite `apm.yml`, `apm.lock.yaml` e os diretórios implantados. Hooks são código executável: revise os scripts antes de instalar.
 
-Layout: `.apm/skills/*`, `.apm/prompts/*`, `.apm/agents/*`, `.apm/hooks/*` (registro e scripts de hook), `.apm/scripts/*` (`phase_cli.py` e pre-commit genérico) e `.apm/templates/*` (`harness.config.json` e modelo do quadrante).
+## O que o pacote entrega
 
-## Migração da 0.3.x
+| Pasta em `.apm/` | Conteúdo |
+|---|---|
+| `skills/` | Lean Inception, harness, OpenSpec (`openspec-*`), OpenSPDD (`spdd-*`), `acceptance-from-spec`, `skill-retrospective`, `install-dev-harness` e outros |
+| `agents/` | Os quatro agentes `sdlc-*` |
+| `prompts/` | Os comandos `/opsx-*` |
+| `hooks/` | O registro e os scripts de hook (inclui `gherkin-sensor.py` e `spec-trace.py`) |
+| `scripts/` | `phase_cli.py` (gate de fase) e o pre-commit genérico |
+| `templates/` | O modelo de `harness.config.json` e o do quadrante do harness |
 
-A limpeza do projeto de origem (`cowboy`, uma calculadora em COBOL) removeu, de forma **incompatível**:
+## Fluxo de desenvolvimento (OpenSpec + OpenSPDD)
 
-- os agentes `cobol-vibecoder`, `cobol-planner`, `cobol-coder`, `cobol-reviewer` e `readme-writer`;
-- os prompts `criar-programa`, `implementar-soma`, `implementar-subtracao`, `implementar-log`, `testar-programa`, `atualizar-readme` e `manutencao-repositorio`;
-- as skills `cobol-calculadora`, `vibe-coding-fundamentals` e `readme-manutencao`;
-- o hook de encerramento `cowboy.json` (rodava `make fitness`) e o script de pre-commit que compilava COBOL.
-
-O conteúdo não foi movido: quem ainda precisa dele deve manter a dependência na tag `v0.3.1`, que guarda o estado antigo. O hook de encerramento que o substitui é genérico (veja "Hooks" abaixo), e os agentes de SDLC são os `sdlc-*` descritos em "Agentes de SDLC". Os agentes da 0.3.x não têm equivalente direto.
-
-## Migração para a 2.0
-
-A 2.0 torna o SDLC do pacote **verificável**: todo requisito da spec tem um cenário Gherkin conferido por sensor, e todo cenário novo tem um teste de aceitação escrito antes do código e conferido na revisão. É uma versão **incompatível** para quem já usa a 1.x, porque o fluxo passa a falhar onde antes passava:
-
-| O que muda | Efeito num projeto da 1.x | O que fazer |
-|---|---|---|
-| Specs com bloco Gherkin (seção "Sensor de Gherkin") | O sensor `gherkin-sensor.py` sai 2 em todo requisito sem bloco, e o hook `PostToolUse` o mostra depois de um `openspec validate` | Faça o retrofit das specs numa change própria, só com o bloco, e arquive-a antes da próxima feature. Opcional: componha o sensor ao `sensors_command` |
-| `sdlc-coder` e o skill `acceptance-from-spec` (seção "Testes de aceitação") | O coder escreve primeiro o teste de cada `Cenário:`, com a linha `Spec:`, e prova o vermelho e o verde; sem ferramenta de teste, para com `BLOQUEADO` | Garanta uma ferramenta de teste aprovada no arquivo raiz do agente e um `sensors_command` que a execute |
-| `sdlc-reviewer` e o `spec-trace.py` (seção "Conferência de cenários na revisão") | O reviewer reprova cenário novo ou alterado sem teste ligado, e o falso verde | Ligue cada teste ao cenário pela linha `Spec:`; cenários antigos não são exigidos |
-| Convenções do skill 1.1 e fim do título do marcador | Extras levam `Extra:`; depois do título só vale um fechamento de comentário conhecido, e outro sufixo vira `ORFAO` | Deixe o marcador sozinho no fim da linha |
-| Planner | As tasks de teste têm um teste por `Cenário:` do bloco | Nada a fazer |
-
-Passos: atualize a dependência para a `v2.0.0`, rode `apm install --target claude,copilot` (revise os scripts de hook novos, que são código executável), faça o retrofit das specs, rode `openspec validate --specs --strict` e o sensor de Gherkin, e só então declare a primeira fase `proposal`. Sem retrofit, o primeiro `openspec validate` já mostra os requisitos sem cenário. A prova do fluxo em projetos reais está em `docs/roteiro-de-teste.md`.
-
-## Workflow SDD (OpenSpec + OpenSPDD)
-
-O pacote mantém **vendorizadas** as skills e prompts de OpenSpec e OpenSPDD, então `apm install` entrega o fluxo completo para `claude` e `copilot`:
+O pacote mantém **vendorizadas** as skills e prompts de OpenSpec e OpenSPDD, então `apm install` entrega o fluxo completo:
 
 | Origem | Em `.apm/` | Comandos |
 |---|---|---|
 | OpenSpec | `skills/openspec-*` (6) e `prompts/opsx-*.prompt.md` | `/opsx-propose`, `/opsx-explore`, `/opsx-apply`, `/opsx-update`, `/opsx-sync`, `/opsx-archive` |
 | OpenSPDD (original, `openspdd generate -t codex`) | `skills/spdd-*` (5) | `/spdd-analysis`, `/spdd-reasons-canvas`, `/spdd-generate`, `/spdd-sync`, `/spdd-prompt-update` |
 
-Depois de cada feature, o skill `skill-retrospective` fecha o ciclo: decide se skills existentes devem ser atualizados ou se um novo deve ser criado.
+Depois de cada feature, o skill `skill-retrospective` decide se skills existentes devem ser atualizados ou se um novo deve ser criado. Os skills autorais (`openspec-workflow`, `install-dev-harness`) integram o fluxo com o gate de fase; o OpenSPDD é mantido sem alterações. O estado por projeto (`openspec/`) é criado com `openspec init --tools none`.
 
-Skills autorais (`openspec-workflow`, `install-dev-harness`) integram o fluxo com o gate de fase do harness; o OpenSPDD é mantido sem alterações. O estado por projeto (`openspec/`) é criado com `openspec init --tools none`.
-
-### Atualizando o vendor
+Para atualizar o vendor (requer os CLIs `openspec` e `openspdd`):
 
 ```bash
-python3 scripts/sync-vendor.py   # requer os CLIs openspec e openspdd
-git diff                         # revise antes de publicar
+python3 scripts/sync-vendor.py
+git diff   # revise antes de publicar
 ```
 
-As versões usadas ficam em [vendor.json](vendor.json). Não edite à mão os arquivos vendorizados — o próximo sync os sobrescreve; customizações vão nas skills autorais.
+As versões usadas ficam em [vendor.json](vendor.json). Não edite à mão os arquivos vendorizados: o próximo sync os sobrescreve; customizações vão nas skills autorais.
 
 ## Agentes de SDLC
 
-Quatro agentes de papel único e fonte única (`.apm/agents/sdlc-*.agent.md`), que o `apm install` entrega para `claude` (`.claude/agents/`) e `copilot` (`.github/agents/`). **A sessão principal dispara cada um; eles não se chamam entre si** (cada um devolve o resultado a ela).
+Quatro agentes de papel único e fonte única (`.apm/agents/sdlc-*.agent.md`), entregues para `claude` (`.claude/agents/`) e `copilot` (`.github/agents/`). **A sessão principal dispara cada um; eles não se chamam entre si.**
 
-| Agente | Fase | O que faz | Escreve | Ferramentas |
-|---|---|---|---|---|
-| `sdlc-planner` | `proposal` | proposta OpenSpec validada, análise e REASONS Canvas (skills `openspec-explore`, `openspec-propose`, `spdd-analysis`, `spdd-reasons-canvas`) | só `planning_write_prefixes` (por padrão `openspec/` e `spdd/`); nunca código | `Read, Grep, Glob, Write, Edit, Bash, Skill` |
-| `sdlc-coder` | `apply` | código pelas Operations do canvas (skills `acceptance-from-spec`, `spdd-generate` e `openspec-apply-change`; o teste de aceitação de cada cenário vem antes do código), tasks marcadas e sensores antes de entregar; para e avisa se não houver canvas | só `code_prefixes` e os checkboxes do `tasks.md` | `Read, Grep, Glob, Write, Edit, Bash, Skill` |
-| `sdlc-reviewer` | depois da implementação | confere código, Operations e tasks, roda `openspec validate --strict` e os sensores e entrega um relatório com veredito e achados (arquivo, linha e Operation) | nada: somente leitura | `Read, Grep, Glob, Bash` |
-| `sdlc-auditor` | sob demanda (opcional) | responde dúvidas e audita conformidade, arquitetura e segurança com evidências de arquivo e linha | nada: somente leitura | `Read, Grep, Glob, Bash` |
+| Agente | Fase | O que faz | Escreve |
+|---|---|---|---|
+| `sdlc-planner` | `proposal` | proposta OpenSpec validada, análise e REASONS Canvas | só `planning_write_prefixes` (por padrão `openspec/` e `spdd/`); nunca código |
+| `sdlc-coder` | `apply` | código pelas Operations do canvas, com o teste de aceitação de cada cenário antes do código (skill `acceptance-from-spec`); roda os sensores antes de entregar; para se não houver canvas | só `code_prefixes` e os checkboxes do `tasks.md` |
+| `sdlc-reviewer` | depois da implementação | confere código, Operations, tasks e o vínculo cenário-teste; roda `openspec validate --strict` e os sensores; entrega relatório com veredito | nada: somente leitura |
+| `sdlc-auditor` | sob demanda | responde dúvidas e audita conformidade, arquitetura e segurança com evidências de arquivo e linha | nada: somente leitura |
 
-**Ordem de disparo**, sempre pela sessão principal:
+**Ordem de disparo**
 
-1. Pedido de funcionalidade: declare a fase (`python3 scripts/harness/phase_cli.py set proposal <change>`; o planner declara sozinho se não houver fase) e dispare o `sdlc-planner`.
+1. Pedido de funcionalidade: declare a fase (`python3 scripts/harness/phase_cli.py set proposal <change>`) e dispare o `sdlc-planner`.
 2. O humano revisa e aprova a proposta, a análise e o canvas.
-3. Declare `python3 scripts/harness/phase_cli.py set apply <change>` e dispare o `sdlc-coder`.
-4. Dispare o `sdlc-reviewer` e leia o relatório; o humano decide o merge. Depois, a sessão principal reconcilia com `/spdd-sync`, arquiva (`openspec archive`) e faz a retrospectiva de skills.
-5. Dispare o `sdlc-auditor` quando quiser tirar uma dúvida ou auditar.
+3. Declare `set apply <change>` e dispare o `sdlc-coder`.
+4. Dispare o `sdlc-reviewer` e leia o relatório; o humano decide o merge. Depois, `/spdd-sync`, `openspec archive` e a retrospectiva de skills.
 
-**Formato.** Um arquivo serve aos dois hosts: o frontmatter tem só `name`, `description` e `tools`, com nomes de ferramenta do Claude Code (o Copilot os aceita como alias), sem `model` e sem `handoffs`. Nenhum agente cita linguagem, pasta ou comando de um projeto: as pastas e o comando de sensores vêm do `harness.config.json`, e as regras, do arquivo raiz do agente (`CLAUDE.md` ou `AGENTS.md`).
+Um arquivo serve aos dois hosts: o frontmatter tem só `name`, `description` e `tools`. Nenhum agente cita linguagem, pasta ou comando de um projeto: as pastas e o comando de sensores vêm do `harness.config.json`, e as regras, do arquivo raiz do agente (`CLAUDE.md` ou `AGENTS.md`).
 
-**Limites e verificação.**
-
-- O somente leitura do reviewer e do auditor vem de ferramentas mínimas (sem `Write` e `Edit`) e do texto; o `Bash` que eles têm ainda poderia escrever arquivos, por isso o relatório confirma que o `git status --porcelain` final é igual ao inicial. A imposição mecânica está prevista para a Onda 2.
-- O escopo do coder em `apply` não tem bloqueio mecânico; o reviewer o confere pelo diff e registra um achado de escopo.
-- Comprovado: o contrato (testes em `tests/agents/`), a validação do Claude Code (`claude plugin validate .claude/agents`) e um teste de fumaça do reviewer e do auditor no Claude Code, sem nenhuma alteração no repositório. **Não comprovado:** o comportamento do `sdlc-planner` e do `sdlc-coder` (que escrevem) fora de um projeto real, que é o que o projeto de prova vai exercitar, e o carregamento dos quatro no Copilot.
+**Limites.** O somente leitura do reviewer e do auditor vem de ferramentas mínimas (sem `Write` e `Edit`) e do texto; o `Bash` que eles têm ainda poderia escrever, por isso o relatório confirma que o `git status --porcelain` final é igual ao inicial. O escopo do coder em `apply` não tem bloqueio mecânico: o reviewer o confere pelo diff. O carregamento dos quatro agentes no Copilot não foi verificado num Copilot real. Veja as provas em [docs/roteiro-de-teste.md](docs/roteiro-de-teste.md).
 
 ## Hooks
 
-O pacote entrega os hooks pelo APM: `apm install --target claude,copilot` copia os scripts (com o helper `_common.py`) e os registra em `.claude/settings.json` e `.github/hooks/`, sem cópia manual. Hooks são código executável: revise os scripts antes de instalar. Por padrão o APM não exige aprovação (o `apm install` da tag `v1.0.0-alpha.1` instalou os hooks direto); se o `apm.yml` do projeto declara um bloco `executables:`, aprove o pacote com `apm approve emilianoeloi/apm`.
+`apm install --target claude,copilot` copia os scripts (com o helper `_common.py`) e os registra em `.claude/settings.json` e `.github/hooks/`. Se o `apm.yml` do projeto declara um bloco `executables:`, aprove o pacote com `apm approve emilianoeloi/apm`.
 
 | Evento | Script | O que faz |
 |---|---|---|
 | `SessionStart` | `session-start.py` | injeta fase, branch e guias no contexto da sessão |
 | `PreToolUse` (escrita) | `pre-tool-write-guard.py` | bloqueia credenciais, escrita fora da raiz do projeto e código na fase `proposal` |
-| `PreToolUse` (Bash) | `pre-tool-bash-guard.py` | bloqueia `git push`, `git reset --hard`, `git clean -f`, `git branch -D` e `rm -rf` (só quando são o comando, não quando aparecem em texto) e, em `proposal`, os que mutam o repositório |
+| `PreToolUse` (Bash) | `pre-tool-bash-guard.py` | bloqueia `git push`, `git reset --hard`, `git clean -f`, `git branch -D` e `rm -rf` (só quando são o comando) e, em `proposal`, os que mutam o repositório |
 | `PostToolUse` (Bash) | `gherkin-sensor.py --on-validate` | depois de um `openspec validate`, falha com código 2 se algum requisito não tiver bloco Gherkin |
 | `Stop` | `stop-sensors.py` | roda o comando de sensores do projeto e só deixa encerrar se ele passar |
 
 Tudo é configurado pelo `harness.config.json` do projeto (modelo em `.apm/templates/`):
 
-- `sensors_command`: o comando que o `Stop` roda (raiz do projeto como diretório de trabalho). **Vazio por padrão: sem comando, nada bloqueia**, e o hook não depende de Makefile nem de stack. Saída diferente de 0 ou estouro de `sensors_timeout_seconds` (50 s) bloqueia o encerramento e mostra a saída. O comando vem do arquivo do próprio projeto e roda em shell: revise-o como qualquer outro hook.
+- `sensors_command`: o comando que o `Stop` roda. **Vazio por padrão: sem comando, nada bloqueia.** Saída diferente de 0 ou estouro de `sensors_timeout_seconds` (50 s) bloqueia o encerramento e mostra a saída. O comando roda em shell: revise-o como qualquer outro hook.
 - `allowed_write_roots`: diretórios absolutos fora do projeto onde a escrita é permitida (por exemplo `/tmp`); vazio por padrão.
 - Fase, prefixos de planejamento e de código, nomes de arquivo e padrões de comando bloqueados.
 
-Configuração ou payload ausente, corrompido ou de tipo errado nunca derruba nem trava um hook: só desliga os checks que dependem dela. As defesas embutidas (credenciais, `git push` e demais comandos destrutivos) continuam valendo sem configuração. O harness é uma rede de segurança contra deslizes do agente, não um sandbox: formas como `env X=1 git push` não são detectadas.
+Configuração ou payload ausente, corrompido ou de tipo errado nunca derruba nem trava um hook: só desliga os checks que dependem dela. As defesas embutidas (credenciais, `git push` e demais comandos destrutivos) continuam valendo sem configuração. O harness é uma rede de segurança contra deslizes do agente, não um sandbox: formas como `env X=1 git push` não são detectadas. O pre-commit genérico (`.apm/scripts/git-hooks/pre-commit`) roda o mesmo `sensors_command`; veja o skill `install-dev-harness`.
 
-O pre-commit genérico (`.apm/scripts/git-hooks/pre-commit`) roda o mesmo `sensors_command` antes de cada commit; veja o skill `install-dev-harness` para instalar.
-
-**Verificação.** O bloqueio foi comprovado no Claude Code (Bash e escrita, pelo código de saída 2). O formato do Copilot (`.github/hooks/`, decisão `deny` por JSON) é gerado pelo APM e coberto por testes de saída, mas **não foi verificado num Copilot real**.
+O bloqueio foi comprovado no Claude Code (código de saída 2). O formato do Copilot (`.github/hooks/`) é gerado pelo APM e coberto por testes de saída, mas **não foi verificado num Copilot real**.
 
 ## Testes de aceitação
 
 O skill `acceptance-from-spec` faz o `sdlc-coder`, na fase `apply`, escrever **primeiro** o teste de aceitação de cada `Cenário:` aprovado da change, provar que ele falha, implementar e provar que ele passa. O skill não fixa ferramenta de teste: descobre a do projeto.
 
-1. **Ligação com a spec.** Cada teste leva uma linha literal, em comentário ou no nome do teste: `Spec: <capability> / <nome do requisito> / <título do cenário>`, com os três textos copiados da spec. É a convenção que a revisão por cenário (F4, ainda não entregue) conferirá por busca de texto.
-2. **Vermelho antes do código.** O coder relata o comando, a contagem de falhas e o motivo, sem stubs artificiais. Se o teste já nasce verde, ele relata isso.
+1. **Ligação com a spec.** Cada teste leva uma linha literal, em comentário ou no nome do teste: `Spec: <capability> / <nome do requisito> / <título do cenário>`, com os três textos copiados da spec.
+2. **Vermelho antes do código.** O coder relata o comando, a contagem de falhas e o motivo, sem stubs artificiais. O vermelho vem da asserção do `Então`, não de erro do ambiente: um programa ausente costuma sair com código de erro genérico e fazer passar um teste que só confere o código. Teste que passa sem o programa existir é **falso verde**; afirme o conteúdo, não só o código de saída.
 3. **Verde depois.** O coder roda o teste e o `sensors_command` e confere que o comando **executa** a aceitação; se não executa ou está vazio, diz "sensores não configurados" em vez de afirmar que passou.
-4. **Sem framework: propõe e espera.** O coder descobre a ferramenta (arquivo raiz do agente, `sensors_command`, testes existentes, manifesto de build). Se não houver, não escreve nem instala nada: devolve de uma a três opções e para até você aprovar; depois a sessão principal o dispara de novo com a ferramenta aprovada.
+4. **Sem framework: propõe e espera.** O coder descobre a ferramenta (arquivo raiz do agente, `sensors_command`, testes existentes, manifesto de build). Se não houver, não escreve nem instala nada: devolve de uma a três opções com o relatório `BLOQUEADO` e para até a aprovação.
 
-Para a aceitação valer como sensor, componha o teste ao `sensors_command` do `harness.config.json` do projeto.
-
-**Projetos que ainda não usam o skill (migração para a aceitação).** Atualize a dependência do apm e rode `apm install`. A partir daí o coder exige o teste de aceitação antes do código; a primeira `apply` num projeto sem ferramenta de teste para e pede a sua escolha; e o `sensors_command` precisa rodar a aceitação. A única mudança de configuração é compor a aceitação ao `sensors_command`. Se o projeto já tem specs do OpenSpec, o sensor de Gherkin falha até cada requisito ganhar o bloco `gherkin` (na prova, 14 requisitos): faça o retrofit numa change própria, só com o bloco, e arquive-a antes da próxima feature.
-
-**Convenções afinadas (skill 1.1).**
-- **Vermelho pela asserção.** O vermelho precisa vir da asserção do `Então`, não de erro do ambiente: um programa ausente costuma sair com código de erro genérico e fazer passar um teste que só confere o código. Teste que passa sem o programa existir é **falso verde**; rode-o antes de o programa existir ou afirme o conteúdo, não só o código de saída. Em linguagem compilada, símbolo de produção ausente declarado vale como vermelho.
-- **`#### Scenario:` extras.** Um extra com comportamento distinto leva a linha `Extra: <capability> / <requisito> / <título>`, nunca `Spec:`; o `spec-trace` ignora o rótulo `Extra:` e o extra não vira `ORFAO`.
+**Convenções.**
+- **`#### Scenario:` extras.** Um extra com comportamento distinto leva a linha `Extra: <capability> / <requisito> / <título>`, nunca `Spec:`; o `spec-trace` ignora o rótulo `Extra:`.
 - **Fixtures.** Monte a linha `Spec:` de exemplo por constante, em tempo de execução, para não criar `ORFAO` no próprio teste.
 - **Cenário só de prova humana.** Um cenário que descreve o comportamento do modelo e só uma prova humana cobre fica como `SEM_TESTE` conhecido, com a decisão do humano registrada no `design.md`; não ligue um teste de texto que finja cobri-lo.
-- **Tasks do planner.** O `sdlc-planner` gera as tasks de teste com um teste por `Cenário:` do bloco; extras só se distintos. Cenário idêntico ao da spec principal não exige teste novo e vai como informativo.
+- **Tasks do planner.** O `sdlc-planner` gera as tasks de teste com um teste por `Cenário:` do bloco. Cenário idêntico ao da spec principal não exige teste novo.
 
-**Migração para o skill 1.1.** Atualize a dependência do apm e rode `apm install`. Não há mudança de configuração; as convenções acima passam a valer nas próximas changes, e o coder passa a reportar falso verde e cenário só de prova humana.
-
-**Prova.** O fluxo foi exercitado em dois projetos de prova (uma calculadora em Go, com ferramenta de teste, e um projeto mínimo sem nenhuma, onde o coder parou, propôs opções e só retomou depois da aprovação); veja `docs/roteiro-de-teste.md`. Os testes do pacote provam o texto do skill e do agente; o comportamento do modelo foi observado só nessas duas provas.
+**Migração.** Em projetos que ainda não usam o skill, atualize a dependência do apm e rode `apm install`: a partir daí o coder exige o teste antes do código, a primeira `apply` sem ferramenta de teste para e pede a sua escolha, e o `sensors_command` precisa rodar a aceitação. O skill 1.1 só acrescenta as convenções acima. Detalhes no [guia de migração](docs/migracao.md).
 
 ## Conferência de cenários na revisão
 
-O `sdlc-reviewer` confere se cada `Cenário:` da change tem um teste ligado pela linha `Spec: <capability> / <requisito> / <cenário>` (a convenção de "Testes de aceitação"). Ele continua **somente leitura**: usa o script `spec-trace.py`, que só lê e não deixa rastro, e cita o resultado no relatório.
+O `sdlc-reviewer` confere se cada `Cenário:` da change tem um teste ligado pela linha `Spec:`. Ele continua **somente leitura**: usa o script `spec-trace.py`, que só lê e não deixa rastro, e cita o resultado no relatório.
 
 ```bash
 python3 -B <caminho>/spec-trace.py --root . --change <nome-da-change>
 ```
 
-O caminho muda por host: o reviewer usa a cópia implantada do host (`.claude/hooks/apm/.apm/hooks/scripts/` ou `.github/hooks/scripts/apm/.apm/hooks/scripts/`), nunca a de `apm_modules/`; com `Glob` ele a acha por `**/spec-trace.py`, e sem `Glob` o plano B é `find . -name spec-trace.py -not -path "*/apm_modules/*"`. A saída tem uma linha por cenário, `spec-trace: ESTADO capability / requisito / cenário @ arquivo:linha`, e um resumo no fim.
+O reviewer usa a cópia implantada do host (`.claude/hooks/apm/.apm/hooks/scripts/` ou `.github/hooks/scripts/apm/.apm/hooks/scripts/`), nunca a de `apm_modules/`. Com `Glob` ele a acha por `**/spec-trace.py`; sem `Glob`, o plano B é `find . -name spec-trace.py -not -path "*/apm_modules/*"`. A saída tem uma linha por cenário, `spec-trace: ESTADO capability / requisito / cenário @ arquivo:linha`, e um resumo no fim.
 
 | Estado | Significado | Efeito no veredito |
 |---|---|---|
@@ -154,15 +145,13 @@ O caminho muda por host: o reviewer usa a cópia implantada do host (`.claude/ho
 | `ORFAO` | linha `Spec:` sem cenário correspondente | achado de severidade média |
 | `AMBIGUO` | a linha casa com mais de um cenário | achado de severidade média |
 
-Só o cenário **novo ou alterado** da change é exigido; os herdados não. O casamento é no código-fonte dos testes, nunca na saída do executor (o Go, por exemplo, troca espaços por `_` no nome do subteste). O agente também reprova o **falso verde**: o teste que não afirma o `Então` do cenário, ou que passaria sem o código, o que ele decide lendo o teste. Sem o relatório do coder, o vermelho aparece como "não verificado".
+Só o cenário **novo ou alterado** da change é exigido: cenários antigos não são exigidos. O agente também reprova o **falso verde** (o teste que não afirma o `Então` ou que passaria sem o código), o que ele decide lendo o teste. A saída 2 do script não é o veredito: só `SEM_TESTE` reprova.
 
-**Limites.** O script prova o vínculo, não a qualidade do teste; essa parte é leitura do agente. Fixtures de teste que contêm uma linha `Spec:` dentro de uma string aparecem como `ORFAO`: o agente as descarta ao ler (monte a linha por constante para evitar). O comportamento do modelo no reviewer só foi coberto por testes de texto; falta a prova num projeto real. Por isso dois cenários de comportamento do modelo (`sdlc-agent-roles`: "Revisão de change com cenários" e "Cenário novo sem teste") ficam `SEM_TESTE` conhecidos, e o script sai 2 na change que os criou; só a prova num projeto real os cobre.
+**Fim do título do marcador.** Depois do título do cenário só vale um fechamento de comentário conhecido (`*/`, `-->`, `--]]`, `--}}`, `%}`, `?>`, aspas, `)`, `]`, `}`, `#` ou `//`) ou nada, seguido de uma fronteira (fim da linha, espaço ou outro fechamento). Qualquer outro sufixo (`-`, `_`, `.`, `(`, letra ou dígito) deixa a linha sem casar e ela vira `ORFAO`. O casamento é no código-fonte dos testes, nunca na saída do executor. O arquivo de teste é aberto sem bloquear em FIFO ou dispositivo e, onde o sistema oferece `O_NOFOLLOW`, sem seguir link.
 
-**Projetos na versão anterior.** Depois de atualizar o apm e rodar `apm install`, o reviewer passa a reprovar cenário novo ou alterado sem teste. Cenários antigos não são exigidos.
+**Limites.** O script prova o vínculo, não a qualidade do teste: essa parte é leitura do agente. Fixtures com uma linha `Spec:` dentro de uma string aparecem como `ORFAO` (monte a linha por constante). O comportamento do modelo no reviewer foi exercitado em provas com um modelo e uma fixture, sem taxa de acerto. Dois cenários de comportamento do modelo (`sdlc-agent-roles`) ficam `SEM_TESTE` conhecidos.
 
-**Fim do título do marcador.** Depois do título do cenário, só vale um fechamento de comentário conhecido (`*/`, `-->`, `--]]`, `--}}`, `%}`, `?>`, aspas, `)`, `]`, `}`, `#` ou `//`) ou nada; qualquer outro sufixo (`-`, `_`, `.`, `(`, `:`, `;`, `,`, letra ou dígito) deixa a linha sem casar e ela vira `ORFAO`, o que antes podia aparecer como falso `COBERTO` (`Caso - feliz` casava com `Caso`). Depois de um fechamento vem uma fronteira: fim da linha, espaço (tab e espaço não separável inclusive) ou outro fechamento; um caractere colado ao fechamento (`Caso#2`, `Caso'2`, `Caso*/x`) também vira `ORFAO`, enquanto `") # x` e `*/ -->` continuam válidos. O arquivo de teste é aberto sem bloquear em FIFO ou dispositivo e, onde o sistema oferece `O_NOFOLLOW`, sem seguir link; onde não oferece, o `fstat` ainda protege FIFO e dispositivo.
-
-**Migração (fim do título).** Se um projeto usa um fechamento de comentário fora da lista, o cenário passa a sair `ORFAO` mais `SEM_TESTE`: o `ORFAO` mostra a linha exata, e o caminho durável é deixar o marcador sozinho no fim da linha (a forma canônica); acrescentar o fechamento à constante `CLOSERS` exige editar o script implantado, e o `apm install` o sobrescreve.
+**Migração.** Depois de atualizar o apm, o reviewer passa a reprovar cenário novo ou alterado sem teste ligado. Cenários antigos não são exigidos. Se um projeto usa um fechamento de comentário fora da lista, o cenário passa a sair `ORFAO`; o caminho durável é deixar o marcador sozinho no fim da linha. Veja o [guia de migração](docs/migracao.md).
 
 ## Sensor de Gherkin
 
@@ -174,30 +163,29 @@ gherkin: sensor-gate / Requirement: Exemplo [change minha-change]: esperado exat
 
 Ele lê as specs principais e aplica os deltas das changes ativas (`ADDED`, `MODIFIED`, `REMOVED` e `RENAMED`; `archive/` é ignorado). A raiz vem de `--root`, depois de `CLAUDE_PROJECT_DIR`, depois do `.git`; sem pasta `openspec/` ele sai 0 com um aviso.
 
-- **Junto do `openspec validate`:** o hook `PostToolUse` roda o sensor depois de qualquer `openspec validate` no Bash e mostra a falha à sessão. Funciona sem editar a configuração do projeto.
-- **No Stop e no pre-commit:** componha no `sensors_command` do `harness.config.json`, por exemplo `python3 -m unittest discover -s tests -t . && python3 <caminho>/gherkin-sensor.py`. Nos modelos entregues o comando segue vazio.
-- **Não verificado ao vivo:** no Claude Code o registro do hook foi conferido e o payload simulado dispara o sensor, mas o disparo numa sessão real ainda não foi testado; no Copilot o `PostToolUse` também não foi verificado.
-- **Limite conhecido:** o casamento é por texto (`openspec validate`), então um comando que só cite essa frase também roda o sensor (ruído, sem dano), e `openspec --no-color validate` não o dispara.
+- **Junto do `openspec validate`:** o hook `PostToolUse` roda o sensor depois de qualquer `openspec validate` no Bash. Funciona sem editar a configuração do projeto.
+- **No Stop e no pre-commit:** componha no `sensors_command`, por exemplo `python3 -m unittest discover -s tests -t . && python3 <caminho>/gherkin-sensor.py`. Nos modelos entregues o comando segue vazio.
+- **Limites:** o casamento do comando é por texto, então um comando que só cite `openspec validate` também roda o sensor (ruído, sem dano). O disparo do hook numa sessão real e no Copilot não foi verificado.
 
 O `openspec validate --strict` segue como juiz da estrutura; o sensor só confere o bloco.
 
-## Releases (automáticos)
+## Migração
 
-Os releases saem do GitHub Actions com o [release-please](https://github.com/googleapis/release-please-action):
+Versões incompatíveis e o que fazer em cada uma estão no [guia de migração](docs/migracao.md):
 
-1. Use **Conventional Commits** nos títulos dos PRs (`feat:`, `fix:`, `docs:`, `chore:`…). O workflow `pr-title` confere.
-2. Ao mesclar na `main`, o bot abre ou atualiza um **PR de release** com a versão nova (`feat` → MINOR, `fix` → PATCH, `!` → MAJOR) e o `CHANGELOG.md`.
-3. **Revisar e mesclar o PR de release** é o ato humano. Ao mesclar, o bot cria a tag `vX.Y.Z` e o GitHub Release.
-4. No consumidor, atualize o `ref` no `apm.yml`, rode `apm install` e commite `apm.yml`, `apm.lock.yaml` e os diretórios implantados.
+- **1.x para 2.0:** specs sem bloco Gherkin passam a falhar no sensor, o coder exige o teste de aceitação antes do código e o reviewer reprova cenário novo sem teste.
+- **0.3.x para 1.0:** a limpeza do projeto de origem (`cowboy`, uma calculadora em COBOL) removeu, de forma incompatível, os agentes, prompts, skills e hooks de COBOL. O conteúdo não foi movido: quem ainda precisa dele mantém a dependência na tag `v0.3.1`.
 
-A linha `version:` do `apm.yml` é atualizada pelo bot (pelo `extra-files` do `release-please-config.json`, sem marcador no arquivo); não edite a versão à mão. Tags `v*` são protegidas contra apagar e mover.
+## Versões e releases
 
-### Pré-lançamento da 1.0.0
+Os releases são automáticos, com o [release-please](https://github.com/googleapis/release-please-action) e **Conventional Commits** nos títulos dos PRs: `feat` gera MINOR, `fix` gera PATCH e `!` gera MAJOR. O bot mantém um PR de release com a versão e o [CHANGELOG](CHANGELOG.md); **mesclar esse PR é o ato humano** que cria a tag `vX.Y.Z` e o GitHub Release. Tags `v*` não se apagam nem se movem. A `v0.3.1` foi a última versão com o conteúdo do projeto de origem, e a `v1.0.0` foi a primeira estável genérica.
 
-A `1.0.0-alpha.1` foi o pré-lançamento da `1.0.0`. A prova em um projeto real (a calculadora em Go) foi aprovada, e a configuração do release-please já propõe a `1.0.0` final.
+Detalhes (como forçar uma versão, cuidados antes de mesclar e o histórico): [docs/releases.md](docs/releases.md). O registro de desenvolvimento por onda está em [docs/historico.md](docs/historico.md).
 
-- **Última versão estável:** a `v0.3.1`, até a `1.0.0` sair. O GitHub Release do pré-lançamento é marcado como "pre-release"; a tag `v1.0.0-alpha.1` já está publicada e quem quiser testá-lo aponta para ela de forma explícita (`emilianoeloi/apm#v1.0.0-alpha.1`). Quem não fixa a tag não deve esperar receber um pré-lançamento.
-- **Estado:** a configuração está na versão final (`prerelease: false`): o próximo PR de release propõe a `1.0.0`. Ao mesclá-lo, o Elói publica a tag `v1.0.0` e um GitHub Release completo, sem a marca de pré-lançamento. Não haverá `1.0.0-alpha.2`. **Atenção:** o bot só abre o PR de release quando há ao menos um commit "liberável" desde a última tag (`feat`, `fix` ou mudança incompatível); commits `docs`, `chore` e `ci` não bastam (o log do workflow diz "No user facing commits found"). Para a `1.0.0`, o commit que a provoca é um `fix` com o rodapé `Release-As: 1.0.0` na mensagem do commit de squash.
-- **Configuração:** `versioning: "prerelease"` e `prerelease-type: "alpha.1"` continuam em `release-please-config.json` até a tag `v1.0.0` existir: sem a estratégia de pré-lançamento, o bot proporia `2.0.0-alpha.1` ou `1.1.0-alpha.1` a partir de um alpha. Depois da tag, as duas chaves saem. Um teste (`tests/release/`) guarda isso.
-- **Não use `release-as`:** ele fixa a versão e, se ninguém o remover depois do release, todo PR de release repete a mesma versão. Um teste (`tests/release/`) impede que ele entre na configuração.
-- **Antes de mesclar o PR de release,** confira o título, a versão no `apm.yml` e no `.release-please-manifest.json` e o CHANGELOG: uma tag publicada não se apaga nem se move. Mesclar continua sendo ato humano; nenhuma etapa automática faz isso.
+## Contribuindo
+
+Veja o [CONTRIBUTING.md](CONTRIBUTING.md). Os testes rodam com `python3 -B -m unittest discover -s tests -t .`.
+
+## Licença
+
+[MIT](LICENSE).
