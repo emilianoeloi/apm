@@ -249,6 +249,16 @@ saída; vazio nunca bloqueia. Configuração ausente, corrompida ou de tipo erra
 nunca derruba um hook — só desliga os checks que dependem dela; as defesas
 acima continuam valendo.
 
+Sensor de Gherkin: o pacote entrega `gherkin-sensor.py` (e a biblioteca
+`_gherkin.py`) ao lado dos hooks. Um hook `PostToolUse` (matcher `Bash`) o roda
+sozinho quando o comando contém `openspec validate`, saindo com 2 e citando
+capability e requisito quando falta o bloco Gherkin. Ele não entra no
+`sensors_command`, que segue vazio nos modelos. Para ter o sensor também no
+Stop, componha-o ao `sensors_command` do projeto com o caminho onde o host
+implantou os scripts (varia por host), por exemplo
+`<comando de testes> && python3 <caminho-implantado>/gherkin-sensor.py`.
+No Copilot, o `PostToolUse` não foi verificado.
+
 Isso não substitui revisão humana para `git push` — o hook bloqueia a
 execução automática; o agente ainda deve pedir confirmação explícita ao
 usuário antes de rodar o comando manualmente fora do hook.

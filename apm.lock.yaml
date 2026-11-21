@@ -102,6 +102,24 @@ deployments:
   content_hash: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
 - kind: project-relative
   target: claude
+  value: .claude/hooks/apm/.apm/hooks/scripts/_gherkin.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b78d18f546365a88e160898e6240cecf82e3144c6677e2237e80ac4278211aa9
+- kind: project-relative
+  target: claude
+  value: .claude/hooks/apm/.apm/hooks/scripts/gherkin-sensor.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:fee18e465ad5161481dc8123376e7e630b642d189473d166b6d06ff92f77d7f9
+- kind: project-relative
+  target: claude
   value: .claude/hooks/apm/.apm/hooks/scripts/pre-tool-bash-guard.py
   runtime: null
   scope: project
@@ -306,7 +324,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:d3f04734c711146f7d4266f115486564c034ffced41d614de4d0a6cf6825abc1
+  content_hash: sha256:f9b9ba78c835ff640ba4a223ccede1db44fe8ed387e862e7b3b8a2aa4d233e73
 - kind: project-relative
   target: claude
   value: .claude/skills/install-dev-harness/templates/CLAUDE.md.template
@@ -783,7 +801,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:d3f04734c711146f7d4266f115486564c034ffced41d614de4d0a6cf6825abc1
+  content_hash: sha256:f9b9ba78c835ff640ba4a223ccede1db44fe8ed387e862e7b3b8a2aa4d233e73
 - kind: project-relative
   target: copilot
   value: .agents/skills/install-dev-harness/templates/CLAUDE.md.template
@@ -1134,7 +1152,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:1844939cb35265f9c3628080a5ffba8d4ec890f75cfc9cd8a8dddd35a654b726
+  content_hash: sha256:6c7cb7784319d515cfbd646c1509c32a536e2e4409a7126300e6797dd136ae97
 - kind: project-relative
   target: copilot
   value: .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py
@@ -1144,6 +1162,24 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
+- kind: project-relative
+  target: copilot
+  value: .github/hooks/scripts/apm/.apm/hooks/scripts/_gherkin.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b78d18f546365a88e160898e6240cecf82e3144c6677e2237e80ac4278211aa9
+- kind: project-relative
+  target: copilot
+  value: .github/hooks/scripts/apm/.apm/hooks/scripts/gherkin-sensor.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:fee18e465ad5161481dc8123376e7e630b642d189473d166b6d06ff92f77d7f9
 - kind: project-relative
   target: copilot
   value: .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-bash-guard.py
@@ -1299,6 +1335,8 @@ local_deployed_files:
 - .claude/commands/opsx-sync.md
 - .claude/commands/opsx-update.md
 - .claude/hooks/apm/.apm/hooks/scripts/_common.py
+- .claude/hooks/apm/.apm/hooks/scripts/_gherkin.py
+- .claude/hooks/apm/.apm/hooks/scripts/gherkin-sensor.py
 - .claude/hooks/apm/.apm/hooks/scripts/pre-tool-bash-guard.py
 - .claude/hooks/apm/.apm/hooks/scripts/pre-tool-write-guard.py
 - .claude/hooks/apm/.apm/hooks/scripts/session-start.py
@@ -1362,6 +1400,8 @@ local_deployed_files:
 - .github/agents/sdlc-reviewer.agent.md
 - .github/hooks/apm-harness.json
 - .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py
+- .github/hooks/scripts/apm/.apm/hooks/scripts/_gherkin.py
+- .github/hooks/scripts/apm/.apm/hooks/scripts/gherkin-sensor.py
 - .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-bash-guard.py
 - .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-write-guard.py
 - .github/hooks/scripts/apm/.apm/hooks/scripts/session-start.py
@@ -1383,7 +1423,7 @@ local_deployed_file_hashes:
   .agents/skills/harness-quadrant-process/references/quadrant-doc-template.md: sha256:d78f00562fefba88b9ac6b8f25385c7f0b2b828a4098235539095e92ac1f6ae7
   .agents/skills/harness/SKILL.md: sha256:aeb88fc58d787abede2522fa5609bcb44ef4390b82d1801e19099ed0feaa009c
   .agents/skills/harness/references/dev-harness-kit-export.md: sha256:eb3b27fd4526f2fcaa15f6ae2fc45111a7575cc09ee3f020b524e7adbab4e662
-  .agents/skills/install-dev-harness/SKILL.md: sha256:d3f04734c711146f7d4266f115486564c034ffced41d614de4d0a6cf6825abc1
+  .agents/skills/install-dev-harness/SKILL.md: sha256:f9b9ba78c835ff640ba4a223ccede1db44fe8ed387e862e7b3b8a2aa4d233e73
   .agents/skills/install-dev-harness/templates/CLAUDE.md.template: sha256:b31e073bc4f80695bbd9e6afba8b517be3eac4cee2719dd3d0a99a871626d536
   .agents/skills/install-dev-harness/templates/harness.config.json.template: sha256:8444f21dd26a4be25bd79f3d47cc0c0c42e357faba0acfd0a71cdfbc52e196b2
   .agents/skills/install-dev-harness/templates/phase_cli.py: sha256:f72504b8e0523b1b2cd1405f3baeb49a13da4031639be7d61d9ab9da96af02f3
@@ -1416,6 +1456,8 @@ local_deployed_file_hashes:
   .claude/commands/opsx-sync.md: sha256:dea22f65e19200e435c25b86d813ca20aefcb4a868ec08ef85bda4742a399775
   .claude/commands/opsx-update.md: sha256:fb24721463e58a3d102c3d08117deebdbb09eb33e072743f31b31ccc006e4afc
   .claude/hooks/apm/.apm/hooks/scripts/_common.py: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
+  .claude/hooks/apm/.apm/hooks/scripts/_gherkin.py: sha256:b78d18f546365a88e160898e6240cecf82e3144c6677e2237e80ac4278211aa9
+  .claude/hooks/apm/.apm/hooks/scripts/gherkin-sensor.py: sha256:fee18e465ad5161481dc8123376e7e630b642d189473d166b6d06ff92f77d7f9
   .claude/hooks/apm/.apm/hooks/scripts/pre-tool-bash-guard.py: sha256:de9414085402d88aa8d03628b299d90e05344e4ace6319b339a980d1f11ab652
   .claude/hooks/apm/.apm/hooks/scripts/pre-tool-write-guard.py: sha256:b4b769559f947bcf50b400d2cf9e222f459c4d6704eacba8f389913a0cc352fe
   .claude/hooks/apm/.apm/hooks/scripts/session-start.py: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
@@ -1430,7 +1472,7 @@ local_deployed_file_hashes:
   .claude/skills/harness-quadrant-process/references/quadrant-doc-template.md: sha256:d78f00562fefba88b9ac6b8f25385c7f0b2b828a4098235539095e92ac1f6ae7
   .claude/skills/harness/SKILL.md: sha256:aeb88fc58d787abede2522fa5609bcb44ef4390b82d1801e19099ed0feaa009c
   .claude/skills/harness/references/dev-harness-kit-export.md: sha256:eb3b27fd4526f2fcaa15f6ae2fc45111a7575cc09ee3f020b524e7adbab4e662
-  .claude/skills/install-dev-harness/SKILL.md: sha256:d3f04734c711146f7d4266f115486564c034ffced41d614de4d0a6cf6825abc1
+  .claude/skills/install-dev-harness/SKILL.md: sha256:f9b9ba78c835ff640ba4a223ccede1db44fe8ed387e862e7b3b8a2aa4d233e73
   .claude/skills/install-dev-harness/templates/CLAUDE.md.template: sha256:b31e073bc4f80695bbd9e6afba8b517be3eac4cee2719dd3d0a99a871626d536
   .claude/skills/install-dev-harness/templates/harness.config.json.template: sha256:8444f21dd26a4be25bd79f3d47cc0c0c42e357faba0acfd0a71cdfbc52e196b2
   .claude/skills/install-dev-harness/templates/phase_cli.py: sha256:f72504b8e0523b1b2cd1405f3baeb49a13da4031639be7d61d9ab9da96af02f3
@@ -1456,8 +1498,10 @@ local_deployed_file_hashes:
   .github/agents/sdlc-coder.agent.md: sha256:a0637269e00e46b600f2423f19715a638d41563ec8868b47bd1283f4ee3268b6
   .github/agents/sdlc-planner.agent.md: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
   .github/agents/sdlc-reviewer.agent.md: sha256:4abbabf04238b69b7bb490c8ae6570c06e963f23dc725de7a6f3b5e206eb619c
-  .github/hooks/apm-harness.json: sha256:1844939cb35265f9c3628080a5ffba8d4ec890f75cfc9cd8a8dddd35a654b726
+  .github/hooks/apm-harness.json: sha256:6c7cb7784319d515cfbd646c1509c32a536e2e4409a7126300e6797dd136ae97
   .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
+  .github/hooks/scripts/apm/.apm/hooks/scripts/_gherkin.py: sha256:b78d18f546365a88e160898e6240cecf82e3144c6677e2237e80ac4278211aa9
+  .github/hooks/scripts/apm/.apm/hooks/scripts/gherkin-sensor.py: sha256:fee18e465ad5161481dc8123376e7e630b642d189473d166b6d06ff92f77d7f9
   .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-bash-guard.py: sha256:de9414085402d88aa8d03628b299d90e05344e4ace6319b339a980d1f11ab652
   .github/hooks/scripts/apm/.apm/hooks/scripts/pre-tool-write-guard.py: sha256:b4b769559f947bcf50b400d2cf9e222f459c4d6704eacba8f389913a0cc352fe
   .github/hooks/scripts/apm/.apm/hooks/scripts/session-start.py: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e

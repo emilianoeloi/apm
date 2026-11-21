@@ -83,6 +83,7 @@ O pacote entrega os hooks pelo APM: `apm install --target claude,copilot` copia 
 | `SessionStart` | `session-start.py` | injeta fase, branch e guias no contexto da sessão |
 | `PreToolUse` (escrita) | `pre-tool-write-guard.py` | bloqueia credenciais, escrita fora da raiz do projeto e código na fase `proposal` |
 | `PreToolUse` (Bash) | `pre-tool-bash-guard.py` | bloqueia `git push`, `git reset --hard`, `git clean -f`, `git branch -D` e `rm -rf` (só quando são o comando, não quando aparecem em texto) e, em `proposal`, os que mutam o repositório |
+| `PostToolUse` (Bash) | `gherkin-sensor.py --on-validate` | depois de um `openspec validate`, falha com código 2 se algum requisito não tiver bloco Gherkin |
 | `Stop` | `stop-sensors.py` | roda o comando de sensores do projeto e só deixa encerrar se ele passar |
 
 Tudo é configurado pelo `harness.config.json` do projeto (modelo em `.apm/templates/`):
@@ -96,6 +97,23 @@ Configuração ou payload ausente, corrompido ou de tipo errado nunca derruba ne
 O pre-commit genérico (`.apm/scripts/git-hooks/pre-commit`) roda o mesmo `sensors_command` antes de cada commit; veja o skill `install-dev-harness` para instalar.
 
 **Verificação.** O bloqueio foi comprovado no Claude Code (Bash e escrita, pelo código de saída 2). O formato do Copilot (`.github/hooks/`, decisão `deny` por JSON) é gerado pelo APM e coberto por testes de saída, mas **não foi verificado num Copilot real**.
+
+## Sensor de Gherkin
+
+Todo requisito das specs do OpenSpec traz um bloco ` ```gherkin ` com `Cenário:`, `Dado`, `Quando` e `Então`, antes do primeiro `#### Scenario:`. O sensor `gherkin-sensor.py` (só biblioteca padrão, ao lado dos outros hooks) confere isso e **falha com código 2 citando o requisito**; sem violação, sai 0 e fica mudo.
+
+```text
+gherkin: sensor-gate / Requirement: Exemplo [change minha-change]: esperado exatamente 1 bloco gherkin, achei 0
+```
+
+Ele lê as specs principais e aplica os deltas das changes ativas (`ADDED`, `MODIFIED`, `REMOVED` e `RENAMED`; `archive/` é ignorado). A raiz vem de `--root`, depois de `CLAUDE_PROJECT_DIR`, depois do `.git`; sem pasta `openspec/` ele sai 0 com um aviso.
+
+- **Junto do `openspec validate`:** o hook `PostToolUse` roda o sensor depois de qualquer `openspec validate` no Bash e mostra a falha à sessão. Funciona sem editar a configuração do projeto.
+- **No Stop e no pre-commit:** componha no `sensors_command` do `harness.config.json`, por exemplo `python3 -m unittest discover -s tests -t . && python3 <caminho>/gherkin-sensor.py`. Nos modelos entregues o comando segue vazio.
+- **Não verificado ao vivo:** no Claude Code o registro do hook foi conferido e o payload simulado dispara o sensor, mas o disparo numa sessão real ainda não foi testado; no Copilot o `PostToolUse` também não foi verificado.
+- **Limite conhecido:** o casamento é por texto (`openspec validate`), então um comando que só cite essa frase também roda o sensor (ruído, sem dano), e `openspec --no-color validate` não o dispara.
+
+O `openspec validate --strict` segue como juiz da estrutura; o sensor só confere o bloco.
 
 ## Releases (automáticos)
 

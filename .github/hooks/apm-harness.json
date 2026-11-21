@@ -21,6 +21,14 @@
         "timeout": 5
       }
     ],
+    "postToolUse": [
+      {
+        "matcher": "Bash",
+        "type": "command",
+        "command": "python3 \".github/hooks/scripts/apm/.apm/hooks/scripts/gherkin-sensor.py\" --on-validate",
+        "timeout": 10
+      }
+    ],
     "agentStop": [
       {
         "type": "command",
