@@ -1,6 +1,6 @@
 ---
 name: skill-retrospective
-description: Use ao fechar uma feature (depois do merge, ou antes de arquivar a mudança) para decidir se algum skill conhecido precisa de atualização ou se um skill novo deve ser criado. Cobre o que a feature ensinou, atualizar vs criar, em qual repositório (público ou privado) cada coisa entra, como versionar e o que nunca pode entrar num skill.
+description: Use ao fechar uma feature (depois do merge, ou antes de arquivar a mudança) para decidir se algum skill conhecido precisa de atualização ou se um skill novo deve ser criado. Cobre o que a feature ensinou, atualizar vs criar, em qual repositório (público ou privado) cada coisa entra, publicação automatizada via CI (Conventional Commits + release-please) e o que nunca pode entrar num skill.
 license: MIT
 metadata:
   author: Emiliano Barbosa
@@ -72,7 +72,32 @@ assunto tiver nome próprio e gatilho de ativação próprio.
 2. Versionar o pacote: `PATCH` correção · `MINOR` skill novo ou seção nova compatível ·
    `MAJOR` quebra de comportamento. A tag é criada **depois** do merge.
 3. No projeto consumidor, depois da tag nova: atualizar o `ref` no `apm.yml`, rodar
-   `apm install` e commitar `apm.yml`, `apm.lock.yaml` e os diretórios implantados.
+   `apm install` (em CI: `apm install --frozen && apm audit --ci`) e commitar `apm.yml`,
+   `apm.lock.yaml` e os diretórios implantados (**não** commite `apm_modules/`).
+
+### Automação de release no CI (`pr-title` + `release-please`)
+
+Nos repositórios de skills (público e privado), a publicação segue o mesmo fluxo automatizado
+em GitHub Actions:
+
+1. **Validação do título do PR (`pr-title.yml`):** exige **Conventional Commits**
+   (`tipo(escopo opcional)!: descrição`). O título do PR vira a mensagem do commit de *squash*
+   na `main` e define o cálculo da versão:
+   - `fix:` → `PATCH` · `feat:` → `MINOR` · `!` ou `BREAKING CHANGE` → `MAJOR`.
+   - `docs:`, `chore:` e `ci:` ficam ocultos do `CHANGELOG.md` e **não** disparam a abertura
+     do PR de release. Só um commit liberável (`feat`, `fix` ou quebra) aciona o bot.
+2. **PR de release automático (`release-please.yml`):** a cada push na `main`, o bot abre ou
+   atualiza um PR de release com a versão calculada, o `CHANGELOG.md`, o
+   `.release-please-manifest.json` e o `apm.yml` (via `extra-files` / marcador
+   `x-release-please-version`).
+   - **Não** edite a versão do `apm.yml` à mão: o bot mantém `apm.yml` e manifesto alinhados.
+   - **Não** coloque `release-as` fixo no `release-please-config.json` (se esquecido, trava as
+     próximas versões). Para forçar uma versão pontualmente, use `fix` com o rodapé
+     `Release-As: <versão>` na mensagem do commit de *squash*.
+3. **Publicar é ato humano (sem `auto-merge`):** revise a versão proposta e mescle o PR de
+   release manualmente. **Tags `v*` são protegidas** (não se apagam nem se movem). Ao mesclar,
+   o bot cria a tag `vX.Y.Z` (`include-v-in-tag: true`, `include-component-in-tag: false`) e o
+   GitHub Release — só então atualize o `ref` no projeto consumidor.
 
 ## Passo 7 — Registrar a decisão
 
@@ -87,4 +112,7 @@ Skills: <skill> atualizado (<o que>) · <skill> criado (<por quê>) · nada a mu
 - Transformar a retrospectiva em cerimônia longa: se nada foi aprendido, diga "nada a mudar" e pare.
 - Criar skill demais: dois skills com responsabilidade parecida competem na ativação.
 - Copiar para o skill um detalhe do projeto (nome, ID, e-mail) em vez do princípio por trás dele.
+- Abrir PR de skill novo ou ajuste relevante como `docs:` ou `chore:` achando que vai gerar release (não aciona o `release-please`).
+- Editar a versão no `apm.yml` à mão ou deixar `release-as` preso no `release-please-config.json`.
+- Mesclar o PR de release sem conferir a versão proposta: tags `v*` são protegidas e irreversíveis.
 - Esquecer de atualizar o `ref` no projeto consumidor: o skill novo existe, mas ninguém o usa.
