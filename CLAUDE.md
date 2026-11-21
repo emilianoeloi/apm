@@ -37,7 +37,7 @@ bloqueia `git commit`/`add`/`merge`/`rebase`. Consulte a fase atual com
 
 | Etapa | Comando | Fase |
 |---|---|---|
-| Propor | `/opsx-propose` | `proposal` |
+| Propor (cada requisito com bloco ```` ```gherkin ````: `Dado`/`Quando`/`Então`) | `/opsx-propose` | `proposal` |
 | Validar | `openspec validate <change> --strict` | `proposal` |
 | Analisar | `/spdd-analysis openspec/changes/<change>` | `proposal` |
 | Canvas | `/spdd-reasons-canvas spdd/analysis/<arquivo>` | `proposal` |

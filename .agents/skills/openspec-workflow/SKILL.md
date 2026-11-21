@@ -144,6 +144,38 @@ casos de borda no mesmo parágrafo. Em vez de um requisito longo, separe: a regr
 segundo `### Requirement:` quando o caso de borda for, na prática, outra regra (por exemplo,
 "qual rótulo alimenta este campo" separado de "o campo sempre existe e nunca é undefined").
 
+## Cenários Gherkin nas specs
+
+Cada `### Requirement:` novo ou modificado (`ADDED`/`MODIFIED`) traz **um** bloco cercado
+```` ```gherkin ````, em português, para a intenção ficar testável e legível por máquina.
+
+- **Posição**: depois do parágrafo normativo (`SHALL`/`MUST`) e antes do primeiro `#### Scenario:`.
+- **Conteúdo**: ao menos um `Cenário: <título>` com `Dado`, `Quando` e `Então`, nessa ordem, um passo por
+  linha. `E` e `Mas` continuam o passo anterior; linhas vazias e comentários `#` são aceitos. `Então` leva
+  acento (`Entao` reprova).
+- **Rastro**: o título do `Cenário:` repete o de um `#### Scenario:` do mesmo requisito.
+- **Convivência**: os `#### Scenario:` com `WHEN`/`THEN` permanecem em todo requisito; `openspec validate
+  --strict` passa com os dois. Requisitos em `REMOVED` não levam bloco.
+
+Exemplo:
+
+````
+### Requirement: Exemplo
+O sistema SHALL fazer algo.
+
+```gherkin
+Cenário: Caso feliz
+  Dado um estado inicial
+  E uma condição extra
+  Quando a ação acontece
+  Então o resultado é observado
+```
+
+#### Scenario: Caso feliz
+- **WHEN** a ação acontece
+- **THEN** o resultado é observado
+````
+
 ## Roteiro manual e spec devem bater com o código
 
 Roteiros de verificação manual, README e specs descrevem comportamento: confira-os contra o

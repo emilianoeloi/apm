@@ -5,6 +5,13 @@
 ### Requirement: A configuração propõe a versão final 1.0.0
 Depois da prova aprovada, o release-please SHALL propor `1.0.0` a partir de `1.0.0-alpha.1` com `prerelease` falso, mantendo a estratégia `prerelease` ativa até a tag `v1.0.0` existir, e a configuração SHALL NOT conter `release-as`.
 
+```gherkin
+Cenário: Versão proposta
+  Dado a versão 1.0.0-alpha.1 e prerelease falso
+  Quando a estratégia recebe commits de qualquer tipo, inclusive incompatíveis
+  Então a próxima versão é 1.0.0
+```
+
 #### Scenario: Configuração da versão final
 - **WHEN** a configuração é lida enquanto o manifesto está em `1.0.0-alpha.1`
 - **THEN** `prerelease` é falso, `versioning` continua `prerelease` e não existe `release-as`
@@ -20,12 +27,26 @@ Depois da prova aprovada, o release-please SHALL propor `1.0.0` a partir de `1.0
 ### Requirement: Estratégia de pré-lançamento mantida até a tag final
 Enquanto a versão do manifesto for um pré-lançamento, a configuração SHALL manter `"versioning": "prerelease"`, porque a estratégia padrão proporia `2.0.0-alpha.1` ou `1.1.0-alpha.1` em vez da `1.0.0`.
 
+```gherkin
+Cenário: Manifesto em pré-lançamento
+  Dado um manifesto com sufixo de pré-lançamento
+  Quando a configuração é lida
+  Então versioning é prerelease
+```
+
 #### Scenario: Manifesto em pré-lançamento
 - **WHEN** a versão do manifesto contém um sufixo de pré-lançamento
 - **THEN** `versioning` é `prerelease`
 
 ### Requirement: A versão final é provocada por um commit liberável com Release-As
 O release-please SHALL abrir o PR de release da versão final apenas depois de um commit liberável (`fix` ou `feat`) desde a última tag, e esse commit SHALL levar o rodapé `Release-As: 1.0.0` na mensagem do commit de squash.
+
+```gherkin
+Cenário: Commit liberável com Release-As
+  Dado um commit fix com o rodapé Release-As: 1.0.0 na main
+  Quando o release-please roda
+  Então o bot abre o PR de release propondo 1.0.0
+```
 
 #### Scenario: Só commits escondidos
 - **WHEN** os commits desde a tag são só `docs`, `chore` e `ci`

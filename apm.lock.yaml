@@ -27,7 +27,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:5b4e790faee52b79dc17a800ed003935e401b28d8d789d524bcb74313b1af2e9
+  content_hash: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
 - kind: project-relative
   target: claude
   value: .claude/agents/sdlc-reviewer.md
@@ -459,7 +459,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:68c51b0d70a927e7ef17a25328f2ee3d08720b65bc6c77e66c345ccf5ac1b295
+  content_hash: sha256:61a5cc8a48e1c60d37197059951ba87f6f225462e9621731b69e726d06fa27c2
 - kind: project-relative
   target: claude
   value: .claude/skills/skill-retrospective
@@ -936,7 +936,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:68c51b0d70a927e7ef17a25328f2ee3d08720b65bc6c77e66c345ccf5ac1b295
+  content_hash: sha256:61a5cc8a48e1c60d37197059951ba87f6f225462e9621731b69e726d06fa27c2
 - kind: project-relative
   target: copilot
   value: .agents/skills/skill-retrospective
@@ -1116,7 +1116,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:5b4e790faee52b79dc17a800ed003935e401b28d8d789d524bcb74313b1af2e9
+  content_hash: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
 - kind: project-relative
   target: copilot
   value: .github/agents/sdlc-reviewer.agent.md
@@ -1393,7 +1393,7 @@ local_deployed_file_hashes:
   .agents/skills/openspec-propose/SKILL.md: sha256:92fc4bfde0595fb21645cebe0ab5379ce4ed09d6ec242dcfd61ea0cdd5ed7632
   .agents/skills/openspec-sync-specs/SKILL.md: sha256:3b3cfd2a4a4953ab09331c27033a38de20ff0f80b1d5fa0671b89488977d5609
   .agents/skills/openspec-update-change/SKILL.md: sha256:9dc07661d5e13660b903866b3c804f783dd22f54475a486aec71a99998246724
-  .agents/skills/openspec-workflow/SKILL.md: sha256:68c51b0d70a927e7ef17a25328f2ee3d08720b65bc6c77e66c345ccf5ac1b295
+  .agents/skills/openspec-workflow/SKILL.md: sha256:61a5cc8a48e1c60d37197059951ba87f6f225462e9621731b69e726d06fa27c2
   .agents/skills/skill-retrospective/SKILL.md: sha256:b8a07d8ab8bc258565c42f3d3f3e1c46bd30da3afb46889d648c6976d164cdbd
   .agents/skills/spdd-analysis/SKILL.md: sha256:c82bd487eea70758672b3a1efccfc5bbe7c056009fb35b176dc615495b160e4d
   .agents/skills/spdd-analysis/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
@@ -1407,7 +1407,7 @@ local_deployed_file_hashes:
   .agents/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .claude/agents/sdlc-auditor.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
   .claude/agents/sdlc-coder.md: sha256:a0637269e00e46b600f2423f19715a638d41563ec8868b47bd1283f4ee3268b6
-  .claude/agents/sdlc-planner.md: sha256:5b4e790faee52b79dc17a800ed003935e401b28d8d789d524bcb74313b1af2e9
+  .claude/agents/sdlc-planner.md: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
   .claude/agents/sdlc-reviewer.md: sha256:4abbabf04238b69b7bb490c8ae6570c06e963f23dc725de7a6f3b5e206eb619c
   .claude/commands/opsx-apply.md: sha256:cc529c6fc803294b6aaa167935edcc6cf29f5d6abfca5745cc6b2b66c52e4d1d
   .claude/commands/opsx-archive.md: sha256:7521ac8904458e2ee287015f009b6f7f5e55ca6b83849920bf2353e443853997
@@ -1440,7 +1440,7 @@ local_deployed_file_hashes:
   .claude/skills/openspec-propose/SKILL.md: sha256:92fc4bfde0595fb21645cebe0ab5379ce4ed09d6ec242dcfd61ea0cdd5ed7632
   .claude/skills/openspec-sync-specs/SKILL.md: sha256:3b3cfd2a4a4953ab09331c27033a38de20ff0f80b1d5fa0671b89488977d5609
   .claude/skills/openspec-update-change/SKILL.md: sha256:9dc07661d5e13660b903866b3c804f783dd22f54475a486aec71a99998246724
-  .claude/skills/openspec-workflow/SKILL.md: sha256:68c51b0d70a927e7ef17a25328f2ee3d08720b65bc6c77e66c345ccf5ac1b295
+  .claude/skills/openspec-workflow/SKILL.md: sha256:61a5cc8a48e1c60d37197059951ba87f6f225462e9621731b69e726d06fa27c2
   .claude/skills/skill-retrospective/SKILL.md: sha256:b8a07d8ab8bc258565c42f3d3f3e1c46bd30da3afb46889d648c6976d164cdbd
   .claude/skills/spdd-analysis/SKILL.md: sha256:c82bd487eea70758672b3a1efccfc5bbe7c056009fb35b176dc615495b160e4d
   .claude/skills/spdd-analysis/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
@@ -1454,7 +1454,7 @@ local_deployed_file_hashes:
   .claude/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .github/agents/sdlc-auditor.agent.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
   .github/agents/sdlc-coder.agent.md: sha256:a0637269e00e46b600f2423f19715a638d41563ec8868b47bd1283f4ee3268b6
-  .github/agents/sdlc-planner.agent.md: sha256:5b4e790faee52b79dc17a800ed003935e401b28d8d789d524bcb74313b1af2e9
+  .github/agents/sdlc-planner.agent.md: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
   .github/agents/sdlc-reviewer.agent.md: sha256:4abbabf04238b69b7bb490c8ae6570c06e963f23dc725de7a6f3b5e206eb619c
   .github/hooks/apm-harness.json: sha256:1844939cb35265f9c3628080a5ffba8d4ec890f75cfc9cd8a8dddd35a654b726
   .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f
