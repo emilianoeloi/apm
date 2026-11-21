@@ -4,6 +4,7 @@ Cada teste de cenário traz a linha de ligação (`Spec:` + trinca) em comentár
 usam a constante TAG para que fixtures não virem linhas órfãs na leitura deste próprio repositório.
 """
 
+import json
 import os
 import subprocess
 import sys
@@ -91,6 +92,7 @@ class VinculoTest(TraceCase):
         self.state_line(result, "SEM_TESTE", "cap / Req / Dois")
 
     # Extra (#### Scenario: sem Cenário: no bloco, não exigido): spec-trace / Script confere o vínculo cenário-teste / Todos cobertos
+    # Extra (#### Scenario: sem Cenário: no bloco, não exigido): spec-trace / Fim do título do marcador / Marcador sozinho na linha
     def test_todos_cobertos(self):
         self.delta("cap", section("ADDED", requirement("Req", ["Um", "Dois"])))
         self.put("tests/test_a.py", f"# {link('cap', 'Req', 'Um')}\n# {link('cap', 'Req', 'Dois')}\n")
@@ -110,19 +112,34 @@ class VinculoTest(TraceCase):
         self.assertNotIn("Caso @", result.stdout)
         self.state_line(result, "SEM_TESTE", "cap / Req / Caso")
 
+    # Spec: spec-trace / Fim do título do marcador / Fechamento conhecido depois do título
     def test_fechamento_de_comentario_depois_do_titulo(self):
         self.delta("cap", section("ADDED", requirement("Req", ["Um"])))
-        for closing in (' */', '")', "'''", " -->"):
-            with self.subTest(fechamento=closing):
-                self.put("tests/test_a.txt", f"/* {link('cap', 'Req', 'Um')}{closing}\n")
+        closers = ("*/", "-->", "--]]", "--}}", "%}", "?>", '"', "'", "`", ")", "]", "}", "#", "//")
+        spaces = ("", " ", "\t", "\u00a0")
+        for closing in closers:
+            for space in spaces:
+                with self.subTest(fechamento=closing, espaco=space):
+                    self.put("tests/test_a.txt", f"/* {link('cap', 'Req', 'Um')}{space}{closing}\n")
+                    result = self.trace()
+                    self.assertEqual(result.returncode, 0, result.stdout)
+                    self.state_line(result, "COBERTO", "/ Um")
+        for tail in ('") # x', "*/ -->", "*/-->", "\r"):
+            with self.subTest(resto=tail):
+                self.put("tests/test_a.txt", f"/* {link('cap', 'Req', 'Um')}{tail}\n")
                 result = self.trace()
                 self.assertEqual(result.returncode, 0, result.stdout)
                 self.state_line(result, "COBERTO", "/ Um")
 
-
-    def test_sufixo_alfanumerico_depois_do_titulo_vira_orfao(self):
+    # Spec: spec-trace / Fim do título do marcador / Sufixo que não é fechamento
+    def test_sufixo_que_nao_e_fechamento_vira_orfao(self):
         self.delta("cap", section("ADDED", requirement("Req", ["Caso"])))
-        for typo in ("Caso extra digitado errado", "Casos", "Caso2", "Caso  além"):
+        typos = ("Caso extra digitado errado", "Casos", "Caso2", "Caso  além")
+        typos += tuple("Caso" + suffix for suffix in (
+            " - feliz", "_2", ".", " (extra)", ", feliz", "#2", "'2", '"abc', ")extra", "*/x", "-->x", "//x",
+            ":", ";", ",", " é",
+        ))
+        for typo in typos:
             with self.subTest(linha=typo):
                 self.put("tests/test_a.py", f"# {link('cap', 'Req', typo)}\n")
                 result = self.trace()
@@ -312,6 +329,42 @@ class RastroERobustezTest(TraceCase):
         self.assertTrue(SCRIPT.exists(), "script ausente")
         return self.run_script(SCRIPT, "", args=["--root", str(self.root), *args], timeout=10)
 
+    # Spec: spec-trace / Busca em arquivos de teste com exclusões / Arquivo trocado por FIFO depois da listagem
+    def test_arquivo_trocado_por_fifo_depois_da_listagem(self):
+        target = self.put("tests_race.py", "x = 1\n")
+        child = (
+            "import importlib.util, json, os, sys\n"
+            "from pathlib import Path\n"
+            "spec = importlib.util.spec_from_file_location('spec_trace', sys.argv[1])\n"
+            "mod = importlib.util.module_from_spec(spec)\n"
+            "spec.loader.exec_module(mod)\n"
+            "target, flags, real = sys.argv[2], [], os.open\n"
+            "def wrapper(path, flag, *args, **kwargs):\n"
+            "    flags.append(flag)\n"
+            "    os.unlink(target)\n"
+            "    os.mkfifo(target)\n"
+            "    return real(path, flag, *args, **kwargs)\n"
+            "os.open = wrapper\n"
+            "result = mod.read_text(Path(target))\n"
+            "print(json.dumps({'flags': flags, 'result': result}))\n"
+        )
+        try:
+            result = subprocess.run(
+                [sys.executable, "-B", "-I", "-c", child, str(SCRIPT), str(target)],
+                capture_output=True, text=True, timeout=10,
+            )
+        except subprocess.TimeoutExpired:
+            self.fail("o script travou ao abrir o arquivo trocado por FIFO")
+        self.assertNoTraceback(result)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        seen = json.loads(result.stdout.strip().splitlines()[-1])
+        self.assertTrue(seen["flags"], "a abertura não passou por os.open: sem O_NONBLOCK e O_NOFOLLOW")
+        for name in ("O_NONBLOCK", "O_NOFOLLOW"):
+            with self.subTest(flag=name):
+                self.assertTrue(seen["flags"][0] & getattr(os, name), f"{name} ausente nas flags {seen['flags'][0]}")
+        self.assertIsNone(seen["result"])
+
+    # Extra (#### Scenario: sem Cenário: no bloco, não exigido): spec-trace / Busca em arquivos de teste com exclusões / Link, FIFO e dispositivo
     def test_fifo_nao_trava_o_script(self):
         self.delta("cap", section("ADDED", requirement("Req", ["Um"])))
         os.mkfifo(self.root / "tests_fifo.py")
@@ -319,6 +372,7 @@ class RastroERobustezTest(TraceCase):
         self.assertNoTraceback(result)
         self.state_line(result, "SEM_TESTE", "cap / Req / Um")
 
+    # Extra (#### Scenario: sem Cenário: no bloco, não exigido): spec-trace / Busca em arquivos de teste com exclusões / Link, FIFO e dispositivo
     def test_link_simbolico_para_dispositivo_nao_trava_o_script(self):
         self.delta("cap", section("ADDED", requirement("Req", ["Um"])))
         (self.root / "zero.py").symlink_to("/dev/zero")

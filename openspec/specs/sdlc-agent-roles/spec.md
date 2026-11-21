@@ -116,7 +116,7 @@ Cenário: Coder com cenário aprovado
 - **THEN** a busca não encontra nenhum
 
 ### Requirement: Reviewer confere cada cenário contra um teste
-O `sdlc-reviewer` SHALL conferir que cada `Cenário:` novo ou alterado pela change tem teste ligado pela linha `Spec:`, usando o `spec-trace.py` achado por `Glob` ou, sem ele, `grep -F` da trinca no fonte dos testes, SHALL ler cada teste ligado para confirmar que afirma o `Então`, SHALL tratar o cenário herdado sem teste como informativo e SHALL entregar a seção "Cenários x testes" sem alterar arquivo nem as `tools`.
+O `sdlc-reviewer` SHALL conferir que cada `Cenário:` novo ou alterado pela change tem teste ligado pela linha `Spec:`, usando o `spec-trace.py` da cópia implantada do host (nunca a de `apm_modules/`), achado por `Glob` ou, sem `Glob`, por `find` sem `apm_modules`, ou, sem o script, `grep -F` da trinca; SHALL ler cada teste ligado para confirmar que afirma o `Então`, tratar o herdado sem teste como informativo e entregar a seção "Cenários x testes" sem alterar arquivo nem as `tools`.
 
 ```gherkin
 Cenário: Revisão de change com cenários
@@ -124,6 +124,12 @@ Cenário: Revisão de change com cenários
   Quando o reviewer é disparado
   Então o relatório traz a seção Cenários x testes com o estado e o arquivo:linha de cada cenário
   E o git status --porcelain final é igual ao inicial
+
+Cenário: Cópia certa do script
+  Dado o texto do agente reviewer
+  Quando ele é lido
+  Então diz que a cópia certa é a implantada do host, fora de apm_modules
+  E diz que find, excluindo apm_modules, é o plano B quando não há Glob
 ```
 
 #### Scenario: Revisão de change com cenários
@@ -141,6 +147,10 @@ Cenário: Revisão de change com cenários
 #### Scenario: Ferramentas inalteradas
 - **WHEN** o frontmatter do reviewer é lido
 - **THEN** `tools` continua `Read, Grep, Glob, Bash`
+
+#### Scenario: Cópia certa do script
+- **WHEN** o texto do reviewer é lido
+- **THEN** ele manda usar a cópia implantada do host, fora de `apm_modules/`, e cita `find` (sem `apm_modules`) como plano B sem `Glob`
 
 ### Requirement: Achados de cenário e veredito
 O `sdlc-reviewer` SHALL classificar como alta, com veredito `REPROVADO`, o cenário novo ou alterado sem teste e o teste ligado que não afirma o `Então` (falso verde), e como média a linha `Spec:` órfã, o marcador ambíguo e a cobertura sem a linha `Spec:`; cada achado SHALL citar arquivo, linha e Operation, e sem o relatório do coder o reviewer SHALL dizer "vermelho não verificado".
@@ -168,3 +178,52 @@ Cenário: Cenário novo sem teste
 #### Scenario: Cobertura sem marcador
 - **WHEN** o reviewer acha por leitura um teste que cobre o cenário sem a linha `Spec:`
 - **THEN** o achado cai para média e cita o arquivo do teste
+
+### Requirement: Coder aplica as convenções afinadas do skill
+O `sdlc-coder` SHALL apontar, em seu texto, as convenções afinadas do skill `acceptance-from-spec` (vermelho pela asserção e falso verde, anotação `Extra:` do cenário extra, herdado informativo e prova humana como pendente) sem duplicar o texto do skill, e SHALL relatá-las por cenário no Entregável, sem mudar `tools` nem os limites de escrita.
+
+```gherkin
+Cenário: Texto do coder cita as convenções
+  Dado o texto do sdlc-coder
+  Quando ele é lido
+  Então cita o vermelho pela asserção, o Extra:, o herdado informativo e a prova humana
+  E as tools continuam as mesmas
+
+Cenário: Coder real aplica as convenções
+  Dado uma change com um cenário só de prova humana e um extra com comportamento distinto
+  Quando o sdlc-coder real é disparado em apply
+  Então o relatório traz o cenário de prova humana como pendente e o extra anotado com Extra:
+```
+
+#### Scenario: Texto do coder cita as convenções
+- **WHEN** o texto do `sdlc-coder` é lido
+- **THEN** cita o vermelho pela asserção, a anotação `Extra:`, o cenário herdado como informativo e a prova humana como pendente, e `tools` continua `Read, Grep, Glob, Write, Edit, Bash, Skill`
+
+#### Scenario: Coder real aplica as convenções
+- **WHEN** o `sdlc-coder` real é disparado sobre uma change com um cenário só de prova humana e um extra com comportamento distinto
+- **THEN** o relatório traz o cenário de prova humana como pendente e o extra anotado com `Extra:`
+
+### Requirement: Planner gera tasks coerentes com o skill
+O `sdlc-planner` SHALL gerar as tasks de teste com um teste por `Cenário:` do bloco `gherkin` (nunca por `#### Scenario:` sem `Cenário:`), SHALL anotar com `Extra:` o extra que mereça teste e SHALL registrar em `design.md`, na seção "Cenários só de prova humana", o `Cenário:` que só a prova humana cobre, com a task de prova correspondente.
+
+```gherkin
+Cenário: Texto do planner cita a regra das tasks
+  Dado o texto do sdlc-planner
+  Quando ele é lido
+  Então manda um teste por Cenário: do bloco
+  E cita o Extra: e a seção Cenários só de prova humana
+
+Cenário: Planner real gera tasks coerentes
+  Dado um pedido com um requisito que tem um cenário e um extra
+  Quando o sdlc-planner real é disparado
+  Então as tasks de teste listam um teste por Cenário: do bloco
+  E o extra e a prova humana seguem a convenção
+```
+
+#### Scenario: Texto do planner cita a regra das tasks
+- **WHEN** o texto do `sdlc-planner` é lido
+- **THEN** manda um teste por `Cenário:` do bloco, cita a anotação `Extra:` e a seção "Cenários só de prova humana", e `tools` continua `Read, Grep, Glob, Write, Edit, Bash, Skill`
+
+#### Scenario: Planner real gera tasks coerentes
+- **WHEN** o `sdlc-planner` real é disparado sobre um pedido com um cenário e um extra
+- **THEN** as tasks de teste listam um teste por `Cenário:` do bloco e o extra e a prova humana seguem a convenção

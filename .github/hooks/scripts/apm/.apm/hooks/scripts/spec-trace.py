@@ -18,8 +18,11 @@ arquivos acima de 1 MiB. `--tests` restringe a busca aos caminhos dados (as excl
 
 Saída 2 não é o veredito: `SEM_TESTE` pesa como severidade alta (o reviewer reprova), mas `ORFAO` e
 `AMBIGUO` também saem 2 e são de severidade média (ressalva, não reprovação); quem decide é o agente.
-Fim do título: o resto da linha deve ser vazio ou começar (após espaços) por caractere não alfanumérico
-(`*/`, `")`, `-->`); sufixo alfanumérico vira `ORFAO`.
+Fim do título: o resto da linha deve ser vazio ou começar (após espaço, tab ou NBSP) por um fechamento
+conhecido (CLOSERS: `*/`, `-->`, `--]]`, `--}}`, `%}`, `?>`, `"`, `'`, `` ` ``, `)`, `]`, `}`, `#`, `//`); qualquer
+outro sufixo (`-`, `_`, `.`, `(`, letra ou dígito) deixa a linha sem casar, e ela vira `ORFAO`.
+Depois do fechamento, só vale o fim da linha, espaço (tab e NBSP inclusive) ou outro fechamento conhecido: `#2`,
+`"abc` e `*/x` não casam; `") # x` e `*/ -->` casam.
 
 Somente leitura: não cria nem altera arquivo, não grava bytecode e não chama git. Prova o vínculo, nunca a
 qualidade do teste. Saída: 0 se não há SEM_TESTE, ORFAO nem AMBIGUO; 2 nos demais casos (erro inesperado inclusive).
@@ -44,6 +47,7 @@ EXCLUDED_DIRS = frozenset({
 MAX_BYTES = 1024 * 1024
 MARK = "Spec:"
 SEP = " / "
+CLOSERS = ("*/", "-->", "--]]", "--}}", "%}", "?>", '"', "'", "`", ")", "]", "}", "#", "//")
 
 
 def norm(steps: str) -> str:
@@ -107,25 +111,48 @@ def candidate_files(root: Path, tests: list):
 
 
 def read_text(path: Path):
-    """Texto do arquivo ou None se não for arquivo regular, for link, `.md`, grande, binário ou ilegível."""
+    """Texto do arquivo ou None se não for arquivo regular, for link, `.md`, grande, binário ou ilegível.
+
+    Abre sem seguir link e sem bloquear (onde o sistema oferece) e confere o tipo no descritor já aberto:
+    o arquivo trocado por FIFO, dispositivo ou link depois da listagem é ignorado, sem janela de corrida.
+    """
     if path.suffix.lower() == ".md":
         return None
+    flags = os.O_RDONLY | getattr(os, "O_NONBLOCK", 0) | getattr(os, "O_NOFOLLOW", 0)
     try:
-        if not stat.S_ISREG(os.lstat(path).st_mode):  # FIFO, dispositivo e link: ler pode travar
+        descriptor = os.open(path, flags)
+    except OSError:
+        return None
+    try:
+        if not stat.S_ISREG(os.fstat(descriptor).st_mode):  # FIFO, dispositivo: ler pode travar
             return None
-        with open(path, "rb") as handle:
+        with os.fdopen(descriptor, "rb", closefd=False) as handle:
             data = handle.read(MAX_BYTES + 1)
         if len(data) > MAX_BYTES or b"\0" in data:
             return None
         return data.decode("utf-8")
     except (OSError, UnicodeDecodeError):
         return None
+    finally:
+        os.close(descriptor)
 
 
 def ends_title(rest: str) -> bool:
-    """True se o resto da linha após o título é vazio ou começa por caractere não alfanumérico."""
+    """True se o resto da linha após o título é vazio ou começa (após espaços) por um fechamento conhecido.
+
+    Depois de cada fechamento vem uma fronteira: fim da linha, espaço (tab e NBSP inclusive) ou outro
+    fechamento conhecido; qualquer outro caractere colado ao fechamento (`#2`, `"abc`, `*/x`) não casa.
+    """
     rest = rest.lstrip()
-    return not rest or not rest[0].isalnum()
+    if not rest:
+        return True
+    while True:
+        closer = next((c for c in CLOSERS if rest.startswith(c)), None)
+        if closer is None:
+            return False
+        rest = rest[len(closer):]
+        if not rest or rest[0].isspace():
+            return True
 
 
 def scan(root: Path, tests: list, literals: set):

@@ -117,15 +117,30 @@ Cenário: Leitor de projeto na versão anterior
 - **THEN** encontra a seção "Testes de aceitação" e o aviso sobre a proposta de ferramenta e o `sensors_command`
 
 ### Requirement: Aviso de migração para a conferência de cenários
-O `README.md` SHALL trazer a seção "Conferência de cenários na revisão" e um aviso de migração para projetos na versão anterior, dizendo que depois de atualizar o pacote o reviewer reprova a change com cenário novo ou alterado sem teste ligado por `Spec:`, que cenários antigos não são exigidos, que o script `spec-trace.py` prova o vínculo e não a qualidade do teste e que fixtures com `Spec:` podem aparecer como órfãs.
+O `README.md` SHALL trazer a seção "Conferência de cenários na revisão" com um aviso de migração para projetos na versão anterior: o reviewer passa a reprovar cenário novo ou alterado sem teste ligado por `Spec:`; cenários antigos não são exigidos; o `spec-trace.py` prova o vínculo, não a qualidade do teste; fixtures com `Spec:` podem aparecer como `ORFAO`; depois do título só valem o fim da linha ou um fechamento de comentário conhecido.
 
 ```gherkin
 Cenário: Leitor de projeto na versão anterior
   Dado alguém que usa a versão anterior do pacote
   Quando lê o README.md
   Então encontra a seção e o aviso sobre o reviewer reprovar cenário sem teste
+  E encontra a regra do fim do título do marcador
 ```
 
 #### Scenario: Leitor de projeto na versão anterior
 - **WHEN** quem usa a versão anterior lê o `README.md`
-- **THEN** encontra a seção "Conferência de cenários na revisão" e o aviso de migração
+- **THEN** encontra a seção "Conferência de cenários na revisão", o aviso de migração e a regra do fim do título do marcador
+
+### Requirement: Aviso de migração para o skill afinado
+O `README.md` SHALL acrescentar à seção "Testes de aceitação" um aviso de migração para projetos na versão anterior, dizendo o que muda no coder, no planner e na decisão do humano levada ao reviewer.
+
+```gherkin
+Cenário: Leitor de projeto na versão anterior
+  Dado alguém que usa a versão anterior do pacote
+  Quando lê o README.md
+  Então encontra, em Testes de aceitação, o aviso sobre o falso verde, o Extra:, a fixture por constante e a prova humana
+```
+
+#### Scenario: Leitor de projeto na versão anterior
+- **WHEN** quem usa a versão anterior lê o `README.md`
+- **THEN** encontra, na seção "Testes de aceitação", o aviso sobre falso verde, `Extra:`, fixture por constante, prova humana e a decisão do humano no brief do reviewer

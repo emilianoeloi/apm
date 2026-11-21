@@ -56,6 +56,10 @@ Cenário: Caso feliz
 - **THEN** o resultado é observado
 ````
 
+## Tasks de teste
+
+As tasks de teste seguem o skill `acceptance-from-spec`: um teste por `Cenário:` do bloco `gherkin`, nunca por `#### Scenario:` sem `Cenário:`. O extra só ganha task se descrever comportamento observável distinto, e então o teste leva `Extra:` com a trinca, não `Spec:`. O `Cenário:` que só a prova humana cobre (comportamento do modelo) entra em `design.md`, na seção "Cenários só de prova humana", com a task de prova correspondente; não ganha task de teste automatizado.
+
 ## Escrita permitida
 
 Só dentro das pastas de `planning_write_prefixes` (por padrão `openspec/` e `spdd/`). Enquanto a fase é `proposal`, o gate de fase bloqueia o resto. Se um bloqueio acontecer, não tente contornar: explique o que ia escrever e pare.

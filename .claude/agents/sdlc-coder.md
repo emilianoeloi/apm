@@ -60,4 +60,6 @@ Uma mensagem objetiva com a lista de arquivos, as tasks marcadas, o resultado do
 
 Por cenário aprovado: o teste ligado (linha `Spec:`), o vermelho (comando, contagem de falhas e motivo) e o verde. Cenário sem teste vai como pendente.
 
+Siga, por cenário, as convenções do skill `acceptance-from-spec` sem copiá-las: vermelho pela asserção do cenário (erro do ambiente não conta; teste que passa sem o programa é falso verde), `Extra:` no teste do cenário extra, herdado em requisito modificado como informativo e cenário de prova humana como pendente, com a decisão do humano. Relate esses itens em listas à parte.
+
 Sem framework de teste definido, o relatório é **BLOQUEADO: ferramenta de teste não definida**: nada escrito, aguardando ferramenta. Traz 1 a 3 opções, cada uma com motivo, custo, pasta dos testes, comando e como entraria no `sensors_command`. As Operations sem cenário seguem normalmente e entram como pendente (sem teste de aceitação); só a Operation com cenário fica bloqueada.

@@ -109,7 +109,16 @@ O skill `acceptance-from-spec` faz o `sdlc-coder`, na fase `apply`, escrever **p
 
 Para a aceitação valer como sensor, componha o teste ao `sensors_command` do `harness.config.json` do projeto.
 
-**Projetos na versão anterior.** Atualize a dependência do apm e rode `apm install`. A partir daí o coder exige o teste de aceitação antes do código; a primeira `apply` num projeto sem ferramenta de teste para e pede a sua escolha; e o `sensors_command` precisa rodar a aceitação. A única mudança de configuração é compor a aceitação ao `sensors_command`. Se o projeto já tem specs do OpenSpec, o sensor de Gherkin falha até cada requisito ganhar o bloco `gherkin` (na prova, 14 requisitos): faça o retrofit numa change própria, só com o bloco, e arquive-a antes da próxima feature.
+**Projetos que ainda não usam o skill (migração para a aceitação).** Atualize a dependência do apm e rode `apm install`. A partir daí o coder exige o teste de aceitação antes do código; a primeira `apply` num projeto sem ferramenta de teste para e pede a sua escolha; e o `sensors_command` precisa rodar a aceitação. A única mudança de configuração é compor a aceitação ao `sensors_command`. Se o projeto já tem specs do OpenSpec, o sensor de Gherkin falha até cada requisito ganhar o bloco `gherkin` (na prova, 14 requisitos): faça o retrofit numa change própria, só com o bloco, e arquive-a antes da próxima feature.
+
+**Convenções afinadas (skill 1.1).**
+- **Vermelho pela asserção.** O vermelho precisa vir da asserção do `Então`, não de erro do ambiente: um programa ausente costuma sair com código de erro genérico e fazer passar um teste que só confere o código. Teste que passa sem o programa existir é **falso verde**; rode-o antes de o programa existir ou afirme o conteúdo, não só o código de saída. Em linguagem compilada, símbolo de produção ausente declarado vale como vermelho.
+- **`#### Scenario:` extras.** Um extra com comportamento distinto leva a linha `Extra: <capability> / <requisito> / <título>`, nunca `Spec:`; o `spec-trace` ignora o rótulo `Extra:` e o extra não vira `ORFAO`.
+- **Fixtures.** Monte a linha `Spec:` de exemplo por constante, em tempo de execução, para não criar `ORFAO` no próprio teste.
+- **Cenário só de prova humana.** Um cenário que descreve o comportamento do modelo e só uma prova humana cobre fica como `SEM_TESTE` conhecido, com a decisão do humano registrada no `design.md`; não ligue um teste de texto que finja cobri-lo.
+- **Tasks do planner.** O `sdlc-planner` gera as tasks de teste com um teste por `Cenário:` do bloco; extras só se distintos. Cenário idêntico ao da spec principal não exige teste novo e vai como informativo.
+
+**Migração para o skill 1.1.** Atualize a dependência do apm e rode `apm install`. Não há mudança de configuração; as convenções acima passam a valer nas próximas changes, e o coder passa a reportar falso verde e cenário só de prova humana.
 
 **Prova.** O fluxo foi exercitado em dois projetos de prova (uma calculadora em Go, com ferramenta de teste, e um projeto mínimo sem nenhuma, onde o coder parou, propôs opções e só retomou depois da aprovação); veja `docs/roteiro-de-teste.md`. Os testes do pacote provam o texto do skill e do agente; o comportamento do modelo foi observado só nessas duas provas.
 
@@ -121,7 +130,7 @@ O `sdlc-reviewer` confere se cada `Cenário:` da change tem um teste ligado pela
 python3 -B <caminho>/spec-trace.py --root . --change <nome-da-change>
 ```
 
-O caminho muda por host (o reviewer o acha com `Glob **/spec-trace.py`). A saída tem uma linha por cenário, `spec-trace: ESTADO capability / requisito / cenário @ arquivo:linha`, e um resumo no fim.
+O caminho muda por host: o reviewer usa a cópia implantada do host (`.claude/hooks/apm/.apm/hooks/scripts/` ou `.github/hooks/scripts/apm/.apm/hooks/scripts/`), nunca a de `apm_modules/`; com `Glob` ele a acha por `**/spec-trace.py`, e sem `Glob` o plano B é `find . -name spec-trace.py -not -path "*/apm_modules/*"`. A saída tem uma linha por cenário, `spec-trace: ESTADO capability / requisito / cenário @ arquivo:linha`, e um resumo no fim.
 
 | Estado | Significado | Efeito no veredito |
 |---|---|---|
@@ -136,6 +145,10 @@ Só o cenário **novo ou alterado** da change é exigido; os herdados não. O ca
 **Limites.** O script prova o vínculo, não a qualidade do teste; essa parte é leitura do agente. Fixtures de teste que contêm uma linha `Spec:` dentro de uma string aparecem como `ORFAO`: o agente as descarta ao ler (monte a linha por constante para evitar). O comportamento do modelo no reviewer só foi coberto por testes de texto; falta a prova num projeto real. Por isso dois cenários de comportamento do modelo (`sdlc-agent-roles`: "Revisão de change com cenários" e "Cenário novo sem teste") ficam `SEM_TESTE` conhecidos, e o script sai 2 na change que os criou; só a prova num projeto real os cobre.
 
 **Projetos na versão anterior.** Depois de atualizar o apm e rodar `apm install`, o reviewer passa a reprovar cenário novo ou alterado sem teste. Cenários antigos não são exigidos.
+
+**Fim do título do marcador.** Depois do título do cenário, só vale um fechamento de comentário conhecido (`*/`, `-->`, `--]]`, `--}}`, `%}`, `?>`, aspas, `)`, `]`, `}`, `#` ou `//`) ou nada; qualquer outro sufixo (`-`, `_`, `.`, `(`, `:`, `;`, `,`, letra ou dígito) deixa a linha sem casar e ela vira `ORFAO`, o que antes podia aparecer como falso `COBERTO` (`Caso - feliz` casava com `Caso`). Depois de um fechamento vem uma fronteira: fim da linha, espaço (tab e espaço não separável inclusive) ou outro fechamento; um caractere colado ao fechamento (`Caso#2`, `Caso'2`, `Caso*/x`) também vira `ORFAO`, enquanto `") # x` e `*/ -->` continuam válidos. O arquivo de teste é aberto sem bloquear em FIFO ou dispositivo e, onde o sistema oferece `O_NOFOLLOW`, sem seguir link; onde não oferece, o `fstat` ainda protege FIFO e dispositivo.
+
+**Migração (fim do título).** Se um projeto usa um fechamento de comentário fora da lista, o cenário passa a sair `ORFAO` mais `SEM_TESTE`: o `ORFAO` mostra a linha exata, e o caminho durável é deixar o marcador sozinho no fim da linha (a forma canônica); acrescentar o fechamento à constante `CLOSERS` exige editar o script implantado, e o `apm install` o sobrescreve.
 
 ## Sensor de Gherkin
 

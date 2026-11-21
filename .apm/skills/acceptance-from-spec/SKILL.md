@@ -4,7 +4,7 @@ description: Use na fase apply, antes de implementar uma Operation que realiza u
 license: MIT
 metadata:
   author: Emiliano Barbosa
-  version: "1.0"
+  version: "1.1"
 ---
 
 # Skill — Aceitação a partir da spec (teste primeiro, por cenário)
@@ -28,6 +28,11 @@ Leia os deltas em `openspec/changes/<change>/specs/*/spec.md`. Pegue os blocos `
 `Cenário:`) dos requisitos sob `## ADDED Requirements` e `## MODIFIED Requirements`. `REMOVED` não gera
 teste. Os `#### Scenario:` extras (WHEN/THEN) só viram teste se descreverem um comportamento observável
 distinto. Monte a lista: capability, nome do requisito, título do cenário. Um teste por `Cenário:`.
+Em requisito `MODIFIED`, o `Cenário:` idêntico (título e passos) ao da spec principal é *herdado*:
+não precisa de teste novo e vai no relatório como informativo; o cenário novo ou de passos alterados
+exige teste. O `#### Scenario:` extra que ganhar teste leva a linha
+`Extra: <capability> / <nome do requisito> / <título do #### Scenario>`, nunca `Spec:` (o `spec-trace`
+apontaria `ORFAO`).
 Se nenhum requisito ADDED/MODIFIED traz `Cenário:` no bloco `gherkin`, o skill não se aplica: não invente
 teste, registre isso no relatório e siga com as Operations normalmente.
 
@@ -64,12 +69,19 @@ Spec: <capability> / <nome do requisito> / <título do cenário>
 
 Exemplo: `Spec: checkout / Pagamento aprovado / Cartão válido confirma o pedido`. O separador é ` / `.
 Um teste pode cobrir mais de um cenário repetindo a linha. Título ou nome com ` / ` é ambíguo: avise.
+Fixture ou exemplo de teste que precise de uma linha `Spec:` com três campos: monte-a por constante
+(rótulo concatenado em tempo de execução). A linha literal no fonte do teste sai como `ORFAO`.
 
 ### 5. Vermelho (antes do código)
 
 Rode o teste com o comando mais estreito que o framework oferecer (senão, o `sensors_command`).
 Relate o comando, a contagem de falhas e o motivo do vermelho: **asserção** que falha, ou **símbolo de
 produção ainda inexistente**. Cite a mensagem de falha, para um erro de digitação não passar por vermelho.
+O vermelho vem da asserção do `Então` do cenário (conteúdo da saída ou efeito observável).
+Não aceite como vermelho o erro do ambiente (arquivo, módulo ou comando ausente, código de saída
+genérico): relate a asserção que falhou. Em linguagem compilada, o símbolo de produção ausente declarado vale. Teste que
+passa com o programa ausente é falso verde: rode-o antes de o programa existir e reforce-o afirmando o
+conteúdo, não só o código de saída.
 Proibido criar implementação vazia ou valor fixo só para o teste executar (sem stubs). Se o teste já
 passa antes do código, relate (teste fraco ou funcionalidade já existente) e não siga em silêncio. Se
 não conseguir observar o vermelho, diga que pulou e por quê.
@@ -90,6 +102,9 @@ filtro). Se estiver vazio ou não os executar, diga "sensores não configurados"
 Para cada cenário: a linha `Spec:`, o arquivo do teste, o vermelho (comando, contagem de falhas,
 motivo) e o verde (comando, contagem). Cenário sem teste com a sua linha `Spec:` entra como
 **pendente**; não declare a Operation concluída. Liste também as pendências fora de `code_prefixes`.
+Cenário cujo comportamento é do modelo e só uma prova humana cobre: relate como pendente de prova humana
+(`SEM_TESTE` conhecido), com a decisão do humano; não crie teste que finja cobri-lo
+nem o ligue por `Spec:`. Liste à parte os extras anotados, os herdados (informativo) e as provas humanas.
 
 ## Limites
 
