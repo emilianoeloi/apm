@@ -12,7 +12,7 @@ allowed-tools: Read, Write, Edit, Bash, Glob
 license: MIT
 metadata:
   author: exported-from-uimaker-adk
-  version: "2.1"
+  version: "2.2"
 ---
 
 # Skill — Install Dev Harness (APM + OpenSpec + OpenSPDD)
@@ -294,3 +294,5 @@ Aprendido ao instalar este harness num projeto consumidor real (app estático se
 - **Mudança que altera a rotina de quem opera o sistema** (um login que passa a pedir menos
   escopo, uma sincronização que deixa de rodar sozinha) precisa estar no README e no changelog
   e ser dita antes de publicar.
+- **Arquivos de container e documentação raiz na fase `apply`:** O `sdlc-coder` valida se cada arquivo tocado pertence a `code_prefixes`. Quando uma change inclui containerização (`Dockerfile`, `.dockerignore`) ou documentação operacional na raiz (`README.md`, `CHANGELOG.md`), inclua `Dockerfile` em `code_prefixes` quando o coder for implementá-lo e deixe os arquivos fora de `code_prefixes` (`.dockerignore`, `README.md`, `CHANGELOG.md`) explicitamente atribuídos à sessão principal, evitando falso positivo de desvio de escopo no `sdlc-reviewer`.
+- **Ambientes virtuais (`.venv`) com symlinks externos em subagentes com sandbox:** Quando `.venv/bin/python` aponta para um interpretador fora do workspace (ex.: `~/.local/share/uv/python/...`), subagentes restritos ao sandbox do diretório do projeto podem receber `Operation not permitted`. Rode a suíte padrão com o `python3` do sistema dentro do subagente (usando `pytest.importorskip` para extras opcionais) e execute a suíte completa de `.venv/bin/python` na sessão principal.
