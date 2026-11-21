@@ -50,6 +50,32 @@ Roteiro de aceite do pacote `apm` (spec APM_SETUP V1.2). Cada passo diz o que ro
 - **Formato de saída decimal:** o formato escolhido (`strconv.FormatFloat` com `'g'`) imprime `1e+06` para um milhão e `1.23456789e+08` para 123456789; é decisão de produto da calculadora, registrada como característica conhecida, e não falha do harness.
 - **Nomes `GGQPA-XXX`:** os skills de SPDD geram arquivos com um número de ticket que o projeto não tem; vale a pena aceitar um prefixo configurável.
 
+## Prova da Onda 1 da rodada V2.0 (cenário, teste de aceitação e sensor)
+
+Projeto de prova: `emilianoeloi/calculadora_go`, clone descartável no scratchpad, apm instalado da **fonte local** (sem push nem tag) na branch `feat/f3-acceptance-from-spec`. Mudança de prova: a operação `resto`.
+
+| Passo | Resultado |
+|---|---|
+| Instalar o apm novo no projeto | `go test ./...` segue verde; skill, sensor, hook `PostToolUse` e agentes instalados |
+| Rodar o sensor nas specs existentes | **Falha com 14 violações** (nenhum requisito tinha bloco): projetos antigos precisam de retrofit |
+| Retrofit dos 14 requisitos (change própria) | Sensor sai 0 com a change ativa e depois de arquivada; texto e cenários WHEN/THEN idênticos |
+| Planner gera `operacao-de-resto` | Requisitos com bloco gherkin e `#### Scenario:`; `openspec validate --strict` e sensor ok |
+| Coder escreve o teste antes do código | Vermelho: build falhou com 3 `undefined: Resto`; na CLI, 2 testes de topo e 7 subtestes falharam. Verde: `go test ./...` com 17 subtestes `Spec:` |
+| Reviewer confere | Aprovado com ressalvas; mutações pensadas (módulo estilo Python, `math.Remainder`, sem `b==0`, sem `verificarFinito`) seriam pegas |
+| `git push` | Bloqueio coberto pelos testes do hook; não tentado de novo |
+
+**Limites da prova.** O ramo "sem framework: propõe e espera" não foi exercitado (o Go já tem testes). O disparo ao vivo do hook `PostToolUse` não foi observado numa sessão real; só o payload simulado. O vermelho vem do relatório do coder e da estrutura dos testes; o git não registra a ordem das escritas. Nenhum cenário de `resto` ficou sem teste, mas 3 cenários herdados de um requisito modificado ficaram sem linha `Spec:`.
+
+**Achados para o pacote**
+- **Retrofit é parte da migração:** adotar o sensor num projeto com specs antigas falha até o bloco ser acrescentado; o README agora avisa.
+- **Skill e tasks divergem:** o skill manda um teste por `Cenário:` do bloco; o planner mandou cobrir também todos os `#### Scenario:`. Alinhar.
+- **Cenário herdado em requisito modificado:** não está dito se precisa de teste `Spec:`; a F4 precisa decidir.
+- **Sensor não lê testes:** sai 0 sem nenhuma linha `Spec:`; o vínculo só será conferido pela F4.
+- **Nome de subteste (Go):** espaços viram `_` e ` / ` vira hierarquia; o `grep` no fonte é o mais seguro.
+- **Teste defensivo sem cenário:** o skill não diz como marcá-lo.
+- **Instalação suja o `git status`:** os arquivos do apm se misturam à change; vale commitar a instalação à parte.
+- **Hooks e outra pasta:** desta vez a escrita no projeto de prova passou porque ele estava em `/private/tmp`, liberado em `allowed_write_roots`; a limitação de `CLAUDE_PROJECT_DIR` da prova anterior continua valendo para outras pastas.
+
 ## Itens conhecidos fora do roteiro
 
 - O formato dos agentes e dos hooks no Copilot não foi verificado num Copilot real.
