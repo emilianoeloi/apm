@@ -1,5 +1,32 @@
 # Changelog
 
+## Onda 1, F1 — cenários Gherkin na spec (2026-11-21)
+
+Change `cenarios-gherkin-na-spec`, arquivada. Sem push; PR e merge são do Elói.
+
+### O que muda
+
+* Todo requisito das specs do OpenSpec traz um bloco cercado ` ```gherkin ` (`Cenário:`, `Dado`, `Quando`, `Então`), antes do primeiro `#### Scenario:`. O `#### Scenario:` com WHEN/THEN continua, pois o `--strict` o exige.
+* O `sdlc-planner`, o skill `openspec-workflow`, `rules.specs` do `openspec/config.yaml` e o `CLAUDE.md` exigem o bloco.
+* Retrofit dos 31 requisitos das 6 specs; capability nova `spec-gherkin-scenarios`.
+* Teste de formato em `tests/specs/test_gherkin_blocks.py` e `BlocoGherkinTest` no contrato dos agentes. O sensor de Gherkin é a F2.
+* `versao-final-1-0-0` foi arquivada antes, por dependência de ordem do delta `release-versioning`.
+
+### Verificação
+
+* 117 testes e `openspec validate --specs --strict` (7 specs): ok.
+* sdlc-reviewer: aprovado com ressalvas, tratadas abaixo.
+* **Não verificado:** o planner com o modelo real gerando o bloco (task 4.4); o aviso do `apm install` sobre "2 skills replaced by a different package"; amostra negativa para bloco sem fechamento.
+
+### Retrospectiva de skills
+
+* Usados: `install-dev-harness` (não rodado: o apm é o próprio pacote), `openspec-workflow`, `spdd-sync`, `skill-retrospective` e os agentes `sdlc-planner`, `sdlc-coder`, `sdlc-reviewer`.
+* `openspec-workflow` e `sdlc-planner`: atualizados nesta change. `openspec-propose` não, por ser gerado pelo CLI.
+* `sdlc-coder`: o escopo de escrita não cobre `openspec/config.yaml`, o que obrigou a sessão principal a aplicar a task; vale a change que o coder possa tocar `rules` ao planejar (proposta, não feita).
+* `spdd-sync`: ficou melhor com um passo para o caso de desvios pequenos e aditivos sem pedir plano (proposta).
+* `drive-status` público: já usa o cabeçalho com Agente, Modelo e Estado; falta conferir o campo Substitui na F2/F3.
+* Faltou um skill: nenhum novo. `acceptance-from-spec` nasce na F3. Nada foi publicado sem o "ok" do Elói.
+
 ## Onda 0 — preparo da rodada V2.0 (2026-11-21)
 
 Spec: APM_SETUP V2.0 (Drive). Nenhum push; a Onda 1 (F1, F2, F3) ainda não começou.

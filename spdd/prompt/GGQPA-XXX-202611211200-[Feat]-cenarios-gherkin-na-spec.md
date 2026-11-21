@@ -100,7 +100,7 @@ Conservador: só adições. Nenhum arquivo de terceiros (`openspec-propose`, hoo
 ### Create Tests - tests/specs/test_gherkin_blocks.py (primeiro, vermelho)
 1. Responsibility: provar o formato do bloco em todo requisito efetivo.
 2. Criar `tests/specs/__init__.py` e o teste com: leitor de requisitos efetivos (parse de `## ADDED/MODIFIED/REMOVED Requirements` dos deltas ativos, troca pelo nome do requisito, exclusão dos removidos); função de validação que devolve a lista de erros.
-3. Testes: uma tabela sobre todos os requisitos efetivos (cada um sem erros) e uma tabela de amostras negativas (sem bloco, bloco depois do cenário, sem `Então`, `Entao` sem acento, passos fora de ordem, título sem correspondência) em que cada uma reprova; uma amostra positiva com `E` e dois `Cenário:`.
+3. Testes: uma tabela sobre todos os requisitos efetivos (cada um sem erros) e uma tabela de amostras negativas (sem bloco, bloco depois do cenário, sem `Então`, `Entao` sem acento, passos fora de ordem, título sem correspondência, e, acrescentada na implementação, dois blocos no mesmo requisito) em que cada uma reprova; uma amostra positiva com `E` e dois `Cenário:`.
 4. Verificar que o teste falha antes do leitor existir e que as negativas reprovam.
 5. Estimativa: ~110 linhas de teste em tabela.
 
@@ -108,6 +108,7 @@ Conservador: só adições. Nenhum arquivo de terceiros (`openspec-propose`, hoo
 1. Responsibility: guardar a instrução e a implantação.
 2. Acrescentar: `sdlc-planner.agent.md` e `openspec-workflow/SKILL.md` citam ```` ```gherkin ````, `Dado`, `Quando` e `Então`; as cópias de `.claude/agents`, `.github/agents`, `.claude/skills` e `.agents/skills` são idênticas à fonte.
 3. Verificar vermelho com o texto atual. Estimativa: ~30 linhas.
+4. Implementado como a classe `BlocoGherkinTest` (2 testes), separada de `ImplantacaoTest`; o teste de cópias do `ImplantacaoTest` passou a cobrir também a cópia do planner.
 
 ### Update Agent - .apm/agents/sdlc-planner.agent.md
 1. Responsibility: o planner passa a gerar o bloco.
@@ -119,7 +120,7 @@ Conservador: só adições. Nenhum arquivo de terceiros (`openspec-propose`, hoo
 2. Estimativa: ~35 linhas.
 
 ### Update Config - openspec/config.yaml
-1. Responsibility: `rules.specs` exige o bloco ao gerar specs neste repositório. Feito pela sessão principal ou pelo humano (fora do escopo de escrita do coder).
+1. Responsibility: `rules.specs` exige o bloco ao gerar specs neste repositório. Feito pela sessão principal ou pelo humano (fora do escopo de escrita do coder). Feito pela sessão principal; `openspec instructions specs --change <change> --json` exibe a regra.
 2. Estimativa: ~8 linhas.
 
 ### Update Docs - CLAUDE.md
