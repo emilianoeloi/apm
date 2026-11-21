@@ -18,11 +18,20 @@ Dois cenários de `sdlc-agent-roles` ("Coder real aplica as convenções" e "Pla
 
 * 213 testes; `openspec validate --strict`; sensor de Gherkin; neutralidade. `spec-trace` na change: 9 cobertos, 2 `SEM_TESTE` conhecidos, 0 órfãos, 4 extras.
 * Vermelho natural pela asserção: 48 testes, 29 falhas em 11 métodos, todas por trecho ausente. Os testes de caracterização do `spec-trace` não têm vermelho (o script já se comportava assim).
-* **Não verificado:** o coder e o planner reais seguindo as convenções (task 6.4).
+* **Não verificado:** o coder e o planner reais seguindo as convenções (task 6.4). **Ressalvas baixas abertas:** "símbolo ausente" e "módulo ausente" se sobrepõem em linguagem interpretada no passo 5 do skill (e a linha 82 ficou longa); o needle `asserção` em `AfinacaoDosAgentesTest` já existe em outro trecho do coder e passaria sem o parágrafo novo.
+
+### Retrospectiva de skills
+
+* Usados: `acceptance-from-spec` (afinado nesta change, aplicando-se a si mesmo), `spdd-sync`, `skill-retrospective` e os agentes `sdlc-planner`, `sdlc-coder` e `sdlc-reviewer`.
+* `acceptance-from-spec` 1.1: fecha os atritos das provas. Fica o limite de testes por trecho: sensíveis a quebra de linha e a maiúscula, obrigam a reescrever o texto do skill. Proposta: testar por conceito (palavras-chave normalizadas) e não por frase.
+* `sdlc-coder`: o `sed -i` do macOS deixou um `tasks.md-E` na pasta da change; vale uma linha no agente para marcar tasks com `sed -i ''` e conferir arquivos `*-E` antes de devolver.
+* `sdlc-reviewer`: achou a sobreposição "símbolo ausente" e "módulo ausente" e o needle fraco; o ciclo planner, coder, reviewer segue útil.
+* `sdlc-planner`: de novo sem acesso à spec do Drive; escreveu a análise e o canvas direto, sem invocar `spdd-analysis` e `spdd-reasons-canvas`. Proposta: o agente declarar quando pula esses skills.
+* Faltou um skill: nenhum novo. Nada foi publicado sem o "ok" do Elói.
 
 ## Onda 2, F4 — reviewer confere cenário contra teste (2026-11-21)
 
-Change `reviewer-confere-cenarios`, arquivada. Empilhada sobre a F3 (PRs #33 a #36 abertos). Sem push; PR e merge são do Elói.
+Change `reviewer-confere-cenarios`, arquivada. Empilhada sobre a F3 (PR consolidado #38). Sem push; PR e merge são do Elói.
 
 ### O que muda
 

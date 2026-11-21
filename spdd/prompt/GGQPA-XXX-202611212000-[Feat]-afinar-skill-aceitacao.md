@@ -88,6 +88,8 @@ Conservador: só adições; a fonte do texto é o skill; `spec-trace.py`, review
 ### Update Skill - .apm/skills/acceptance-from-spec/SKILL.md
 1. Responsibility: `version: "1.1"`; passo 1 (herdado informativo; `Extra:` nunca `Spec:`); passo 4 (fixture por constante); passo 5 (vermelho pela asserção; erro do ambiente; falso verde; símbolo ausente em linguagem compilada); passo 8 (prova humana; listas de extras, herdados e provas humanas). Só adições, sem termo de stack. Estimativa: ~19 linhas (116 no total).
 
+Implementado: skill com 112 linhas (projetado ~116), `version: "1.1"`; o teste de versão usa `assertIn('version: "1.1"', texto)` porque o leitor `frontmatter()` ignora linhas indentadas (a `version` está sob `metadata`); `AfinacaoDosAgentesTest` em `test_contract.py` aceita `falso verde` ou `asserção` para o coder (needle fraco: ressalva aberta); `CaracterizacaoSpecTraceTest` roda o `spec-trace.py` real (`Extra:` não vira `ORFAO`, a mesma linha com `Spec:` vira) e um teste do fonte sem linha `Spec:` literal fora de comentário. Os testes por trecho são sensíveis a quebra de linha e maiúscula; o texto do skill foi reescrito para casar.
+
 ### Update Agent - .apm/agents/sdlc-coder.agent.md
 1. Responsibility: parágrafo no Entregável apontando as convenções do skill por cenário, sem copiar. Estimativa: ~4 linhas.
 
@@ -120,3 +122,5 @@ Conservador: só adições; a fonte do texto é o skill; `spec-trace.py`, review
 4. Neutrality Constraints: `grep` de neutralidade vazia; `STACK_TERMS` não casa no skill nem nos agentes.
 5. Honesty Constraints: os 2 cenários de comportamento do modelo ficam `SEM_TESTE` conhecidos; teste de caracterização declarado como tal; comportamento do modelo "não verificado" até a 6.4.
 6. Release Constraints: sem push, tag ou merge sem o "ok" do Elói; PR `feat(agents):` empilhado sobre a F4 (#38).
+
+<!-- Sync pós-implementação. Decisão do Emiliano: os 2 cenários de sdlc-agent-roles que só prova humana cobre (Coder real aplica as convenções; Planner real gera tasks coerentes) ficam SEM_TESTE conhecidos, cobertos pela 6.4 (não feita). Ressalvas baixas abertas: símbolo ausente vs módulo ausente em linguagem interpretada (skill passo 5, linha 82 longa); needle fraco `asserção` em AfinacaoDosAgentesTest. -->
