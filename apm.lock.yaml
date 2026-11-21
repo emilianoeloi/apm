@@ -18,7 +18,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
+  content_hash: sha256:914d9a5847f2e2501430faa5911960da410f28e708884cc0c0b0148942890c00
 - kind: project-relative
   target: claude
   value: .claude/agents/sdlc-planner.md
@@ -27,7 +27,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
+  content_hash: sha256:300d5bd4ec6f71e40e9f6c96514cc4fab535315d40123daa56b9e1b8d4d32492
 - kind: project-relative
   target: claude
   value: .claude/agents/sdlc-reviewer.md
@@ -180,7 +180,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:b08f1b2138bd8c25eeb048262a26ccdb19d75f627f2c1d55bc9293098116602f
+  content_hash: sha256:e7356598174bb6f4b2d28136d8c07f293e6b65d3e58a51250e29ef77e6a1d260
 - kind: project-relative
   target: claude
   value: .claude/skills/architecture-fitness-functions
@@ -675,7 +675,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:b08f1b2138bd8c25eeb048262a26ccdb19d75f627f2c1d55bc9293098116602f
+  content_hash: sha256:e7356598174bb6f4b2d28136d8c07f293e6b65d3e58a51250e29ef77e6a1d260
 - kind: project-relative
   target: copilot
   value: .agents/skills/architecture-fitness-functions
@@ -1170,7 +1170,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
+  content_hash: sha256:914d9a5847f2e2501430faa5911960da410f28e708884cc0c0b0148942890c00
 - kind: project-relative
   target: copilot
   value: .github/agents/sdlc-planner.agent.md
@@ -1179,7 +1179,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
+  content_hash: sha256:300d5bd4ec6f71e40e9f6c96514cc4fab535315d40123daa56b9e1b8d4d32492
 - kind: project-relative
   target: copilot
   value: .github/agents/sdlc-reviewer.agent.md
@@ -1473,7 +1473,7 @@ local_deployed_files:
 - .github/prompts/opsx-sync.prompt.md
 - .github/prompts/opsx-update.prompt.md
 local_deployed_file_hashes:
-  .agents/skills/acceptance-from-spec/SKILL.md: sha256:b08f1b2138bd8c25eeb048262a26ccdb19d75f627f2c1d55bc9293098116602f
+  .agents/skills/acceptance-from-spec/SKILL.md: sha256:e7356598174bb6f4b2d28136d8c07f293e6b65d3e58a51250e29ef77e6a1d260
   .agents/skills/architecture-fitness-functions/SKILL.md: sha256:125386113324fd42cb369c00767d961cf8239def9723588b10914f2d42f7f8f2
   .agents/skills/ci-automerge/SKILL.md: sha256:ba4848e8977266eb1988dda703229e30e53a64f15d53c73f18408511aaa27570
   .agents/skills/dev-harness-architect/SKILL.md: sha256:780b39fccaad446344f10e23a4a89db58ec12756c099a40b9e89473eab8a38e7
@@ -1507,8 +1507,8 @@ local_deployed_file_hashes:
   .agents/skills/spdd-sync/SKILL.md: sha256:c2f05f038be42c58ff80058c00e5096b0db5a9144ad436a979084964095eebe9
   .agents/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .claude/agents/sdlc-auditor.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
-  .claude/agents/sdlc-coder.md: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
-  .claude/agents/sdlc-planner.md: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
+  .claude/agents/sdlc-coder.md: sha256:914d9a5847f2e2501430faa5911960da410f28e708884cc0c0b0148942890c00
+  .claude/agents/sdlc-planner.md: sha256:300d5bd4ec6f71e40e9f6c96514cc4fab535315d40123daa56b9e1b8d4d32492
   .claude/agents/sdlc-reviewer.md: sha256:15f640d4ff2b39d0ea2a99846bc740044567516d06604b81cfafd56efb40bc1f
   .claude/commands/opsx-apply.md: sha256:cc529c6fc803294b6aaa167935edcc6cf29f5d6abfca5745cc6b2b66c52e4d1d
   .claude/commands/opsx-archive.md: sha256:7521ac8904458e2ee287015f009b6f7f5e55ca6b83849920bf2353e443853997
@@ -1524,7 +1524,7 @@ local_deployed_file_hashes:
   .claude/hooks/apm/.apm/hooks/scripts/session-start.py: sha256:eaab47414f6b8743b644c135849eb8875dc708d44e966759eeb2889480c4a55e
   .claude/hooks/apm/.apm/hooks/scripts/spec-trace.py: sha256:a5215762d6e4ef1e43ed2fa7bb68117394f211c96da47b565704fade618bc6b0
   .claude/hooks/apm/.apm/hooks/scripts/stop-sensors.py: sha256:0d4856d982916d10475d67ca26068c79c1336c2c08bebbea760a2f125dc5574e
-  .claude/skills/acceptance-from-spec/SKILL.md: sha256:b08f1b2138bd8c25eeb048262a26ccdb19d75f627f2c1d55bc9293098116602f
+  .claude/skills/acceptance-from-spec/SKILL.md: sha256:e7356598174bb6f4b2d28136d8c07f293e6b65d3e58a51250e29ef77e6a1d260
   .claude/skills/architecture-fitness-functions/SKILL.md: sha256:125386113324fd42cb369c00767d961cf8239def9723588b10914f2d42f7f8f2
   .claude/skills/ci-automerge/SKILL.md: sha256:ba4848e8977266eb1988dda703229e30e53a64f15d53c73f18408511aaa27570
   .claude/skills/dev-harness-architect/SKILL.md: sha256:780b39fccaad446344f10e23a4a89db58ec12756c099a40b9e89473eab8a38e7
@@ -1558,8 +1558,8 @@ local_deployed_file_hashes:
   .claude/skills/spdd-sync/SKILL.md: sha256:c2f05f038be42c58ff80058c00e5096b0db5a9144ad436a979084964095eebe9
   .claude/skills/spdd-sync/agents/openai.yaml: sha256:a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94
   .github/agents/sdlc-auditor.agent.md: sha256:a0bd35b0e19d1a56bed93752164ca35dcf80d092cdd0e62eba61eeaa3c8eda22
-  .github/agents/sdlc-coder.agent.md: sha256:ba1721f862e298a4b9346ad7cefd9d2d9d5fc12c593bc51398e81e13ad944e8f
-  .github/agents/sdlc-planner.agent.md: sha256:e85348510b5dbcbee5b91f432d3f336a2ea815c27a3660963618291bb5a6bd0e
+  .github/agents/sdlc-coder.agent.md: sha256:914d9a5847f2e2501430faa5911960da410f28e708884cc0c0b0148942890c00
+  .github/agents/sdlc-planner.agent.md: sha256:300d5bd4ec6f71e40e9f6c96514cc4fab535315d40123daa56b9e1b8d4d32492
   .github/agents/sdlc-reviewer.agent.md: sha256:15f640d4ff2b39d0ea2a99846bc740044567516d06604b81cfafd56efb40bc1f
   .github/hooks/apm-harness.json: sha256:6c7cb7784319d515cfbd646c1509c32a536e2e4409a7126300e6797dd136ae97
   .github/hooks/scripts/apm/.apm/hooks/scripts/_common.py: sha256:c274aa0f7b1539dd07197484c4416cb95e622d13dc7b8618fa6ab3ccfaf6b94f

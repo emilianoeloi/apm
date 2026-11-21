@@ -109,7 +109,16 @@ O skill `acceptance-from-spec` faz o `sdlc-coder`, na fase `apply`, escrever **p
 
 Para a aceitação valer como sensor, componha o teste ao `sensors_command` do `harness.config.json` do projeto.
 
-**Projetos na versão anterior.** Atualize a dependência do apm e rode `apm install`. A partir daí o coder exige o teste de aceitação antes do código; a primeira `apply` num projeto sem ferramenta de teste para e pede a sua escolha; e o `sensors_command` precisa rodar a aceitação. A única mudança de configuração é compor a aceitação ao `sensors_command`. Se o projeto já tem specs do OpenSpec, o sensor de Gherkin falha até cada requisito ganhar o bloco `gherkin` (na prova, 14 requisitos): faça o retrofit numa change própria, só com o bloco, e arquive-a antes da próxima feature.
+**Projetos que ainda não usam o skill (migração para a aceitação).** Atualize a dependência do apm e rode `apm install`. A partir daí o coder exige o teste de aceitação antes do código; a primeira `apply` num projeto sem ferramenta de teste para e pede a sua escolha; e o `sensors_command` precisa rodar a aceitação. A única mudança de configuração é compor a aceitação ao `sensors_command`. Se o projeto já tem specs do OpenSpec, o sensor de Gherkin falha até cada requisito ganhar o bloco `gherkin` (na prova, 14 requisitos): faça o retrofit numa change própria, só com o bloco, e arquive-a antes da próxima feature.
+
+**Convenções afinadas (skill 1.1).**
+- **Vermelho pela asserção.** O vermelho precisa vir da asserção do `Então`, não de erro do ambiente: um programa ausente costuma sair com código de erro genérico e fazer passar um teste que só confere o código. Teste que passa sem o programa existir é **falso verde**; rode-o antes de o programa existir ou afirme o conteúdo, não só o código de saída. Em linguagem compilada, símbolo de produção ausente declarado vale como vermelho.
+- **`#### Scenario:` extras.** Um extra com comportamento distinto leva a linha `Extra: <capability> / <requisito> / <título>`, nunca `Spec:`; o `spec-trace` ignora o rótulo `Extra:` e o extra não vira `ORFAO`.
+- **Fixtures.** Monte a linha `Spec:` de exemplo por constante, em tempo de execução, para não criar `ORFAO` no próprio teste.
+- **Cenário só de prova humana.** Um cenário que descreve o comportamento do modelo e só uma prova humana cobre fica como `SEM_TESTE` conhecido, com a decisão do humano registrada no `design.md`; não ligue um teste de texto que finja cobri-lo.
+- **Tasks do planner.** O `sdlc-planner` gera as tasks de teste com um teste por `Cenário:` do bloco; extras só se distintos. Cenário idêntico ao da spec principal não exige teste novo e vai como informativo.
+
+**Migração para o skill 1.1.** Atualize a dependência do apm e rode `apm install`. Não há mudança de configuração; as convenções acima passam a valer nas próximas changes, e o coder passa a reportar falso verde e cenário só de prova humana.
 
 **Prova.** O fluxo foi exercitado em dois projetos de prova (uma calculadora em Go, com ferramenta de teste, e um projeto mínimo sem nenhuma, onde o coder parou, propôs opções e só retomou depois da aprovação); veja `docs/roteiro-de-teste.md`. Os testes do pacote provam o texto do skill e do agente; o comportamento do modelo foi observado só nessas duas provas.
 

@@ -204,6 +204,33 @@ class BlocoGherkinTest(unittest.TestCase):
                 self.assertEqual(deployed.read_text(encoding="utf-8"), source.read_text(encoding="utf-8"))
 
 
+class AfinacaoDosAgentesTest(unittest.TestCase):
+    """Coder e planner apontam as convenções afinadas do skill de aceitação (texto, sem rodar modelo)."""
+
+    NEEDLES = {
+        "sdlc-coder": (("falso verde", "asserção"), ("Extra:",), ("herdado",), ("prova humana",)),
+        "sdlc-planner": (("um teste por `Cenário:`",), ("Extra:",), ("Cenários só de prova humana",)),
+    }
+
+    def check(self, name: str) -> None:
+        path = AGENTS / f"{name}.agent.md"
+        front, body = split_agent(path)
+        for alternatives in self.NEEDLES[name]:
+            with self.subTest(agente=name, trecho=alternatives):
+                self.assertTrue(any(needle in body for needle in alternatives), f"falta um de {alternatives}")
+        self.assertEqual(tool_set(front), TOOLS[name])
+        self.assertIsNone(STACK_TERMS.search(path.read_text(encoding="utf-8")))
+        self.assertLessEqual(len(body.splitlines()), 300)
+
+    # Spec: sdlc-agent-roles / Coder aplica as convenções afinadas do skill / Texto do coder cita as convenções
+    def test_texto_do_coder_cita_as_convencoes(self):
+        self.check("sdlc-coder")
+
+    # Spec: sdlc-agent-roles / Planner gera tasks coerentes com o skill / Texto do planner cita a regra das tasks
+    def test_texto_do_planner_cita_a_regra_das_tasks(self):
+        self.check("sdlc-planner")
+
+
 class ImplantacaoTest(unittest.TestCase):
     def test_copias_implantadas_identicas_a_fonte(self):
         for name in NAMES:

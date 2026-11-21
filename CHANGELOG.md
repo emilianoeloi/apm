@@ -1,5 +1,25 @@
 # Changelog
 
+## Onda 3, F5 — afinar o skill acceptance-from-spec (2026-11-21)
+
+Change `afinar-skill-aceitacao` (follow-up das provas, fora da spec V2.0). Empilhada sobre a F4 (PR #38 aberto). Sem push; PR e merge são do Elói.
+
+### O que muda
+
+* Skill `acceptance-from-spec` na versão 1.1 (112 linhas, teto de 150): o vermelho precisa vir da asserção do `Então`, não de erro do ambiente; teste que passa sem o programa é falso verde; `#### Scenario:` extra leva `Extra: <capability> / <requisito> / <título>`, nunca `Spec:`; a linha `Spec:` de fixture é montada por constante; cenário só de prova humana fica `SEM_TESTE` conhecido; cenário idêntico ao da spec principal é informativo.
+* `sdlc-coder` aponta para o skill no Entregável e `sdlc-planner` ganha a seção "Tasks de teste" (um teste por `Cenário:` do bloco). README: convenções afinadas e aviso para projetos na versão anterior.
+* 9 requisitos novos em `acceptance-from-spec`, `sdlc-agent-roles` e `pacote-generico`.
+
+### Decisão do Elói
+
+Dois cenários de `sdlc-agent-roles` ("Coder real aplica as convenções" e "Planner real gera tasks coerentes") só prova humana cobre e ficam `SEM_TESTE` conhecidos; o `spec-trace` sai 2 na change por isso.
+
+### Verificação
+
+* 213 testes; `openspec validate --strict`; sensor de Gherkin; neutralidade. `spec-trace` na change: 9 cobertos, 2 `SEM_TESTE` conhecidos, 0 órfãos, 4 extras.
+* Vermelho natural pela asserção: 48 testes, 29 falhas em 11 métodos, todas por trecho ausente. Os testes de caracterização do `spec-trace` não têm vermelho (o script já se comportava assim).
+* **Não verificado:** o coder e o planner reais seguindo as convenções (task 6.4).
+
 ## Onda 2, F4 — reviewer confere cenário contra teste (2026-11-21)
 
 Change `reviewer-confere-cenarios`, arquivada. Empilhada sobre a F3 (PRs #33 a #36 abertos). Sem push; PR e merge são do Elói.
