@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/emilianoeloi/apm/compare/v2.0.0...v2.1.0) (2026-11-22)
+
+
+### Features
+
+* **skills:** atualizar install-dev-harness, ci-automerge e skill-retrospective ([#45](https://github.com/emilianoeloi/apm/issues/45)) ([82a28f6](https://github.com/emilianoeloi/apm/commit/82a28f6b62d2a5894f6dd394dd2a6f900d2196a9))
+
 ## [2.0.0](https://github.com/emilianoeloi/apm/compare/v1.5.0...v2.0.0) (2026-11-21)
 
 
