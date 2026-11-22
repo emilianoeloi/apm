@@ -129,6 +129,12 @@ faltar, informe ao usuário e pare — não instale ferramentas globais sem pedi
    tiver arquivos locais, e confira que cada evento aparece uma vez no
    `.claude/settings.json` (se o projeto já registrava hooks parecidos à mão,
    remova o registro antigo para não duplicar).
+   Se um pacote privado falhar com HTTP 401 mesmo com `gh auth status` válido,
+   confira se há um `GITHUB_TOKEN` expirado no ambiente — rodar com
+   `unset GITHUB_TOKEN` faz o APM usar a credencial ativa do `gh`.
+   Ao montar o `.gitignore` de artefatos implantados pelo APM, inclua também
+   `.claude/apm-hooks.json` e `.github/hooks/apm-harness.json` além das pastas
+   implantadas (mantendo `.claude/settings.json` versionado no git).
 
 4. **Crie o estado do OpenSpec** (só `openspec/`; os comandos já vieram do APM):
    ```bash

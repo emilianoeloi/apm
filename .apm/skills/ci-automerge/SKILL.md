@@ -39,10 +39,11 @@ O título do PR vira a mensagem do commit de *squash* na `main` e alimenta o cá
 
 ### b) Bot de release (`release-please.yml`)
 
-- Dispare em `push` na `main`.
+- Dispare em `push` na branch padrão do repositório (`main`, ou `develop` se o repositório usar `develop` como padrão).
 - Permissões mínimas: `contents: write` e `pull-requests: write`.
+- **Pré-requisito no GitHub:** habilite *"Allow GitHub Actions to create and approve pull requests"* (`can_approve_pull_request_reviews: true`) em **Settings → Actions → General → Workflow permissions**; sem isso, o bot falha ao abrir o PR de release.
 - Use `concurrency` com `group: release-please` e `cancel-in-progress: false` para que dois
-  merges próximos na `main` não cancelem a atualização do PR de release no meio.
+  merges próximos na branch padrão não cancelem a atualização do PR de release no meio.
 - Fixe a action por **SHA de commit** (com comentário da tag, ex.: `# v5.0.0`), não por tag
   mutável.
 - Passe `config-file: release-please-config.json` e
