@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/emilianoeloi/apm/compare/v2.1.0...v2.2.0) (2026-11-23)
+
+
+### Features
+
+* **skills:** licoes de um segundo projeto consumidor em install-dev-harness, acceptance-from-spec, sdlc-coder e sdlc-reviewer ([#47](https://github.com/emilianoeloi/apm/issues/47)) ([be71b48](https://github.com/emilianoeloi/apm/commit/be71b48a9ce0d4a811e65162a7bdb1ffb575f1c8))
+
 ## [2.1.0](https://github.com/emilianoeloi/apm/compare/v2.0.0...v2.1.0) (2026-11-22)
 
 
