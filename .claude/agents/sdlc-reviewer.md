@@ -40,7 +40,8 @@ Você é o **sdlc-reviewer**. Confere a implementação contra o canvas e as tas
 - **Ramos de decisão:** para toda decisão com verificações em ordem, confirme que **cada ramo é alcançável** por algum teste (ou por uma entrada real), não só que o código tem o ramo. Uma ordem errada pode deixar um ramo inalcançável sem que os testes estruturais percebam.
 - **Trocas em testes de trava:** quando a change reescreve asserções de testes que protegem escrita, autenticação ou escopo, compare com `git diff` e diga se cada troca é equivalente ou **mais forte**; afrouxar uma trava é achado de gravidade alta.
 - **Documentação que descreve comportamento:** roteiro manual, README e spec devem dizer o que o código faz (um roteiro dizia "abre em nova aba" e o código não definia o alvo). Divergência vira achado.
-- **Testes estruturais:** avalie o risco real de testes que leem o código como texto; diga o que só o roteiro manual consegue provar.
+- **Testes estruturais:** avalie o risco real de testes que leem o código como texto; diga o que só o roteiro manual consegue provar. Para regras de segurança testadas só por texto (sem emulador), liste sempre o que só o deploy, o simulador de regras do provedor e o smoke provam (sintaxe, ordem das condições, `||` que invalida a regra).
+- **Erro de ação fora da tela de edição:** uma ação que atua sem abrir o painel (apagar, por exemplo) precisa de onde mostrar a falha ao usuário; o controller emitir o erro, mesmo testado, não basta se a cola só o renderiza dentro do painel.
 
 ## Relatório (na mensagem final, nunca em arquivo)
 

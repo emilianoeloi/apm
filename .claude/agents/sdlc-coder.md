@@ -52,6 +52,8 @@ relatório, não deixe implícito.
 - Se o brief da sessão principal omitir uma função, arquivo ou caso que o canvas **nomeia** na Operation, implemente conforme o canvas e **avise no relatório** que o brief omitiu. Não omita em silêncio nem decida sozinho cortar do escopo.
 - Quando uma Operation tem duas etapas (primeiro o módulo puro, depois a borda), cada etapa tem o **seu** vermelho: escreva, rode e registre a contagem de falhas da etapa antes de implementá-la.
 - Quando uma decisão tem verificações em ordem (se A, senão B, senão C), escreva um caso de teste para **cada ramo**, inclusive os que parecem inalcançáveis. Um ramo que nenhum caso alcança passa nos testes estruturais (regex sobre o código) e só aparece na revisão.
+- Quando um teste seu depende de um arquivo que é da sessão principal (por exemplo as regras de segurança de um banco, fora de `code_prefixes`), não escreva esse arquivo nem afrouxe o teste: prove o vermelho contra o estado atual do arquivo, entregue com esse único teste vermelho e diga no relatório qual é e o que falta. A sessão principal fecha depois, e o verde final é dela.
+- Quando uma ação do usuário pode atuar com a tela de edição fechada (apagar, por exemplo), a mensagem de erro dessa ação precisa ter um lugar visível fora da tela de edição; se a decisão de onde mostrá-la couber numa função pura, escreva-a com teste, em vez de deixar só na cola.
 - Se o limite de uso interromper você no meio, os testes vermelhos já escritos são o ponto de retomada: continue deles, não recomece.
 
 ## Entregável

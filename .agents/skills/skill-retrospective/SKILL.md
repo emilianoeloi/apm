@@ -72,7 +72,8 @@ assunto tiver nome próprio e gatilho de ativação próprio.
 2. Versionar o pacote: `PATCH` correção · `MINOR` skill novo ou seção nova compatível ·
    `MAJOR` quebra de comportamento. A tag é criada **depois** do merge.
 3. No projeto consumidor, depois da tag nova: atualizar o `ref` no `apm.yml`, rodar
-   `apm install` e commitar `apm.yml`, `apm.lock.yaml` e os diretórios implantados.
+   `apm install` e commitar `apm.yml`, `apm.lock.yaml` e o diff aprovado de `.claude/settings.json`
+   (mantendo os diretórios implantados fora do git, recriáveis por `apm install`).
 
 ## Passo 7 — Registrar a decisão
 

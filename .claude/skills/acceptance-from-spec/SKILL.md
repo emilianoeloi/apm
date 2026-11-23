@@ -106,6 +106,12 @@ Cenário cujo comportamento é do modelo e só uma prova humana cobre: relate co
 (`SEM_TESTE` conhecido), com a decisão do humano; não crie teste que finja cobri-lo
 nem o ligue por `Spec:`. Liste à parte os extras anotados, os herdados (informativo) e as provas humanas.
 
+## Armadilhas
+
+- **O `spec-trace` lê qualquer linha com `Spec:` como cenário.** Uma constante de rótulo em teste (por exemplo `const SPEC = 'Spec: cap / req / '`) vira cenário órfão no relatório. Monte o rótulo sem o prefixo literal na mesma linha (por exemplo `ROTULO = 'Spec'` e `` `${ROTULO}: cap / req / ${cenario}` ``) e deixe a linha `Spec:` completa só no comentário acima de cada teste.
+- **Vermelho de módulo que ainda não existe.** `ERR_MODULE_NOT_FOUND` prova só a ausência do módulo, não a asserção de cada cenário, e criar um stub no projeto é proibido. Para contar falhas por asserção, copie o projeto para uma pasta temporária fora do repositório, ponha lá um módulo descartável cujas funções devolvam `undefined` e rode os testes na cópia: o vermelho vem das asserções, e a cópia some. Relate os dois vermelhos (módulo ausente e por asserção) e diga que o segundo foi na cópia.
+- **Teste que espera "vazio" passa com o stub.** Cenários cujo `Então` é lista vazia, `null` ou mensagem em branco passam mesmo com o stub descartável; eles só provam algo junto com um caso que exija conteúdo. Diga quais passaram no vermelho e por quê.
+
 ## Limites
 
 - Escreva só em `code_prefixes`. Não instale ferramenta, não mude fase, canvas, spec nem hooks.
