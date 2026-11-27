@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0](https://github.com/emilianoeloi/apm/compare/v2.2.0...v2.3.0) (2026-11-27)
+
+
+### Features
+
+* **skills:** estado de módulo, verificação de carga e garantias de rede ([#49](https://github.com/emilianoeloi/apm/issues/49)) ([01d7008](https://github.com/emilianoeloi/apm/commit/01d70081dc5b7dac2ef05da24e7ce3cd9b8d2fc9))
+
 ## [2.2.0](https://github.com/emilianoeloi/apm/compare/v2.1.0...v2.2.0) (2026-11-23)
 
 
