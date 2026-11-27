@@ -116,3 +116,7 @@ nem o ligue por `Spec:`. Liste à parte os extras anotados, os herdados (informa
 
 - Escreva só em `code_prefixes`. Não instale ferramenta, não mude fase, canvas, spec nem hooks.
 - Este skill prova o texto do ciclo; o comportamento do modelo só se prova num projeto real.
+
+## Garantias de rede ou desempenho
+
+Quando o cenário garante ausência de requisição, de cache ou de custo (por exemplo, "voltar sem nova leitura"), o teste estrutural só prova a forma do código, não o comportamento na rede. No cenário, marque a prova manual que é bloqueante (por exemplo, a aba Rede do navegador sem requisição nova) e não trate o teste estrutural como suficiente.

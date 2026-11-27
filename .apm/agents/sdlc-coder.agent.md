@@ -65,3 +65,9 @@ Por cenário aprovado: o teste ligado (linha `Spec:`), o vermelho (comando, cont
 Siga, por cenário, as convenções do skill `acceptance-from-spec` sem copiá-las: vermelho pela asserção do cenário (erro do ambiente não conta; teste que passa sem o programa é falso verde), `Extra:` no teste do cenário extra, herdado em requisito modificado como informativo e cenário de prova humana como pendente, com a decisão do humano. Relate esses itens em listas à parte.
 
 Sem framework de teste definido, o relatório é **BLOQUEADO: ferramenta de teste não definida**: nada escrito, aguardando ferramenta. Traz 1 a 3 opções, cada uma com motivo, custo, pasta dos testes, comando e como entraria no `sensors_command`. As Operations sem cenário seguem normalmente e entram como pendente (sem teste de aceitação); só a Operation com cenário fica bloqueada.
+
+## Antes de entregar
+
+1. Depois do verde, rode a checagem de carga e sintaxe que o CI roda (por exemplo, `node --check` em todos os módulos), além da suíte. Testes que leem código como texto não pegam colisão de identificadores: uma variável declarada duas vezes derruba o módulo sem falhar teste.
+2. Antes de criar função ou constante de topo, procure o nome no arquivo inteiro. Se já existir, escolha outro nome.
+3. No relatório, cite a contagem de falhas do vermelho antes do código e a do verde depois.

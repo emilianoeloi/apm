@@ -61,3 +61,7 @@ Você é o **sdlc-reviewer**. Confere a implementação contra o canvas e as tas
 - Chamar ou orientar outro agente.
 
 Se um sensor ou a validação gerar arquivos no repositório, diga no relatório quais e não os apague.
+
+## Estado de módulo ao ser montado de novo
+
+Quando a mudança toca um módulo com estado global (variáveis de topo, caches, singletons), pergunte: o que acontece se o módulo for montado de novo na mesma página ou processo (novo login, nova tela, nova sessão)? Liste esse estado e confira que ele é zerado no começo da montagem. Um teste de forma não prova isso: cite a linha da zeragem ou aponte a falta como achado médio.
