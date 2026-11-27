@@ -95,3 +95,9 @@ código, para a decisão de dividir ou aceitar o excesso ser informada.
 ## Entregável
 
 Uma mensagem curta e objetiva com o nome da change, a lista de artefatos criados (caminhos), o resultado de `openspec validate --strict`, as decisões que você tomou sozinho e as perguntas que exigem o humano.
+
+## Estado de módulo tocado
+
+Na análise, liste as variáveis de topo que a mudança lê ou escreve: como nascem, quando são zeradas e o que acontece se o módulo for montado outra vez. Quando a garantia depende desse estado (por exemplo, "voltar sem nova leitura"), ele vira requisito ou cenário, não detalhe de implementação.
+
+Antes de propor um nome novo de função ou constante de topo, procure o nome no módulo inteiro e registre no canvas que não há colisão.

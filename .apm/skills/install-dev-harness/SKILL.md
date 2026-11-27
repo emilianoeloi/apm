@@ -320,3 +320,10 @@ Aprendido ao instalar o harness num segundo projeto consumidor (app web estátic
 - **Remoto novo e vazio: o primeiro PR precisa de uma base.** Sem `main` no remoto não há contra o que abrir PR. Com o ok do humano, publique a `main` (o preparo) antes e depois a branch da funcionalidade.
 - **`sensors_command` como `npm test` (ou `node --test tests/`) falha enquanto `tests/` não existir**, e o hook de Stop bloqueia o encerramento. Deixe o comando vazio até existir o primeiro teste, ou crie o primeiro teste antes de preenchê-lo.
 - **`code_prefixes` "não informado" deixa o `sdlc-coder` sem onde escrever.** Defina as pastas de código e de testes com o humano antes da primeira funcionalidade; o Preparo pode deixá-las vazias, a primeira Onda não.
+
+## Armadilhas de Windows e do apm install
+
+- **CRLF:** com `core.autocrlf=true`, a cópia de trabalho sai em CRLF e testes que cortam código por quebra de linha falham só nessa máquina. No preparo, crie `.gitattributes` com `* text=auto eol=lf`.
+- **Hooks duplicados:** depois do `apm install`, o `.claude/settings.json` pode receber grupos de hook idênticos (mesmo matcher e mesmo comando). Avise e pare. Só com o ok do humano, remova as duplicatas e confira o diff.
+- **Arquivos implantados e troca de branch:** trocar de branch pode apagar do disco arquivos implantados que a outra branch ainda versiona. Depois, rode `apm install` e confira os hooks.
+- **Fase proposal:** o hook de fase bloqueia `git merge` (inclusive `merge-tree` e `merge-base`). Traga a main com a fase em `apply` ou `done`, ou numa worktree.

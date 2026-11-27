@@ -138,3 +138,9 @@ CI e proteja os invariantes da configuração:
   `Release-As:` no commit de *squash*.
 - Habilitar auto-merge no PR de release ou editar a versão do manifesto à mão, quebrando a
   sincronia com `.release-please-manifest.json`.
+
+## Repositório com CHANGELOG escrito à mão
+
+Se o CHANGELOG é escrito à mão, o release-please passa a escrevê-lo também. A seção "Não lançado" fica só com o que ainda não saiu; o detalhe de cada onda vai para a versão já lançada depois do primeiro release. Enquanto a seção não for limpa, pode haver entrada duplicada (commit e merge).
+
+Antes do primeiro release, confirme "Allow GitHub Actions to create and approve pull requests" nas configurações do repositório. Escolha o `release-type` pela stack: `node` para pacotes Node, `simple` só quando não há manifesto de linguagem.
